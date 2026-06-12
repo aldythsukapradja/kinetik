@@ -1,0 +1,11 @@
+{
+  "name": "Padel Americano",
+  "short_name": "Padel",
+  "start_url": "./App_PadelAmericano.html",
+  "display": "standalone",
+  "background_color": "#070d1a",
+  "theme_color": "#0ea5e9",
+  "icons": [
+    { "src": "icon_padel.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

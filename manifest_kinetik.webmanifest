@@ -1,0 +1,11 @@
+{
+  "name": "Kinetik — Plans. People. Play.",
+  "short_name": "Kinetik",
+  "start_url": "./Kinetik.html",
+  "display": "standalone",
+  "background_color": "#070b16",
+  "theme_color": "#070b16",
+  "icons": [
+    { "src": "icon_kinetik.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

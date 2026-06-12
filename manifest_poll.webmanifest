@@ -1,0 +1,11 @@
+{
+  "name": "Event Poll",
+  "short_name": "Poll",
+  "start_url": "./App_EventPoll.html",
+  "display": "standalone",
+  "background_color": "#0a0716",
+  "theme_color": "#8b5cf6",
+  "icons": [
+    { "src": "icon_poll.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

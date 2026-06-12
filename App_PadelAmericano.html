@@ -1,0 +1,240 @@
+<!doctype html>
+<!--
+KINETIK APP STANDARD v1.0 — App_PadelAmericano.html
+
+Modular single-file app inside the Kinetik ecosystem.
+Works A) embedded in Kinetik.html via iframe + AppBridge, B) standalone (PWA) with localStorage.
+Rules: circle-based logic (circleId/personId), data stored in AppRecords via bridge
+(collection "tournaments"), no direct backend coupling, light/dark via CSS vars,
+premium mobile-first UI. Share result card = canvas PNG export (§72.4).
+
+APP BRIDGE: receives {type:"INIT_APP",payload:{circleId,circleType,personId,theme,appId,people[]}}
+Sends: DATA_LIST/DATA_CREATE/DATA_UPDATE {appId,collection,reqId,...}, ADD_TO_CALENDAR, SHOW_TOAST.
+
+React/TS scale-up: becomes a feature module; keep AppBridge/DataAPI contracts.
+-->
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Padel Americano</title>
+<link rel="manifest" href="manifest_padel.webmanifest">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="apple-touch-icon" href="icon_padel.svg"><link rel="icon" href="icon_padel.svg">
+<style>
+:root{--r:16px;--font:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;--acc:#0ea5e9;--acc2:#22d3ee}
+html[data-theme="dark"]{--bg:#070d1a;--bg2:#0d1730;--text:#eef2ff;--dim:rgba(228,234,255,.6);--glass:rgba(17,26,52,.66);--brd:rgba(255,255,255,.1);--chip:rgba(255,255,255,.07);color-scheme:dark}
+html[data-theme="light"]{--bg:#eaf0fb;--bg2:#dfe9fa;--text:#101729;--dim:rgba(20,28,52,.6);--glass:rgba(255,255,255,.72);--brd:rgba(255,255,255,.8);--chip:rgba(20,40,90,.06);color-scheme:light}
+*{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent}
+body{font-family:var(--font);color:var(--text);min-height:100vh;font-size:15px;line-height:1.5;
+background:radial-gradient(110% 80% at 85% -5%,color-mix(in srgb,var(--acc) 17%,transparent),transparent 55%),linear-gradient(165deg,var(--bg2),var(--bg));-webkit-font-smoothing:antialiased}
+#app{max-width:560px;margin:0 auto;padding:18px 18px 60px}
+h1{font-size:23px;letter-spacing:-.02em;display:flex;align-items:center;gap:9px}
+h1 small{font-size:11px;font-weight:700;letter-spacing:.12em;color:var(--acc);text-transform:uppercase}
+.card{background:var(--glass);backdrop-filter:blur(20px);border:1px solid var(--brd);border-radius:var(--r);padding:16px;margin:13px 0;box-shadow:0 18px 50px rgba(0,0,0,.25)}
+.lbl{font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:9px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;border:none;border-radius:999px;padding:12px 22px;font-weight:700;font-size:14px;font-family:var(--font);color:#fff;cursor:pointer;background:linear-gradient(135deg,var(--acc),var(--acc2));box-shadow:0 8px 24px color-mix(in srgb,var(--acc) 35%,transparent);transition:transform .15s}
+.btn:active{transform:scale(.96)}.btn.ghost{background:var(--chip);color:var(--text);box-shadow:none;border:1px solid var(--brd)}
+.btn.sm{padding:8px 15px;font-size:12.5px}
+.btn[disabled]{opacity:.4;pointer-events:none}
+.chip{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:8px 14px;font-size:13px;font-weight:600;background:var(--chip);border:1.5px solid transparent;color:var(--dim);cursor:pointer;font-family:var(--font);transition:.15s}
+.chip.on{border-color:var(--acc);color:var(--text);background:color-mix(in srgb,var(--acc) 14%,transparent)}
+.wrap{display:flex;flex-wrap:wrap;gap:8px}
+input.fld{width:100%;background:var(--chip);border:1px solid var(--brd);border-radius:12px;padding:12px 14px;color:var(--text);font-family:var(--font);font-size:15px;outline:none}
+input.fld:focus{border-color:var(--acc)}
+.match{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--brd)}
+.match:last-child{border:none}
+.team{flex:1;font-size:13.5px;font-weight:600}
+.team small{display:block;color:var(--dim);font-weight:500;font-size:11px}
+.sc{width:52px;text-align:center;background:var(--chip);border:1px solid var(--brd);border-radius:10px;padding:9px 4px;color:var(--text);font-size:16px;font-weight:700;font-family:var(--font);outline:none}
+.vs{font-size:10px;font-weight:800;color:var(--dim)}
+.lb{display:flex;align-items:center;gap:11px;padding:9px 0;border-bottom:1px solid var(--brd);font-size:14.5px}
+.lb:last-child{border:none}
+.lb .rk{width:26px;height:26px;border-radius:50%;background:var(--chip);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800}
+.lb:nth-child(1) .rk{background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#fff}
+.lb b{flex:1}.lb .pts{font-weight:800;font-variant-numeric:tabular-nums;color:var(--acc)}
+.hrow{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid var(--brd);font-size:13.5px}
+.hrow:last-child{border:none}.hrow span{color:var(--dim);font-size:12px}
+.tabs{display:flex;background:var(--chip);border-radius:999px;padding:4px;margin:14px 0}
+.tabs button{flex:1;border:none;border-radius:999px;padding:9px;font-weight:700;font-size:13px;font-family:var(--font);color:var(--dim);background:none;cursor:pointer}
+.tabs button.on{background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff}
+.rnd-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.rnd-h b{font-size:15px}.rnd-h span{font-size:11px;color:var(--dim);font-weight:700}
+.note{font-size:12px;color:var(--dim)}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+"use strict";
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const APP_ID="padel-americano";
+let CTX=null,embedded=false,tab="play",T=null,players=[],courts=1,history=[];
+
+/* ---- Bridge / storage ---- */
+const pend={};let rq=0;
+function bridge(msg){return new Promise(res=>{const id=++rq;pend[id]=res;msg.reqId=id;msg.appId=APP_ID;parent.postMessage(msg,"*");setTimeout(()=>{if(pend[id]){delete pend[id];res(null);}},2500);});}
+addEventListener("message",e=>{
+  const m=e.data||{};
+  if(m.type==="INIT_APP"){CTX=m.payload;embedded=true;document.documentElement.dataset.theme=CTX.theme||"dark";loadAll().then(render);}
+  if(m.type==="DATA_RESULT"&&pend[m.reqId]){pend[m.reqId](m.items);delete pend[m.reqId];}
+});
+const LS={get k(){return "padel_local_"+(CTX?CTX.circleId:"solo");},
+  load(){try{return JSON.parse(localStorage.getItem(this.k))||[]}catch(e){return[]}},
+  save(a){localStorage.setItem(this.k,JSON.stringify(a));}};
+async function listTournaments(){
+  if(embedded){const items=await bridge({type:"DATA_LIST",collection:"tournaments"});if(items)return items.map(r=>({recId:r.id,...r.payload}));}
+  return LS.load();
+}
+async function saveTournament(t){
+  if(embedded){const r=await bridge({type:"DATA_CREATE",collection:"tournaments",payload:t});if(r&&r[0])return;}
+  const a=LS.load();a.unshift(t);LS.save(a);
+}
+function toast(m){if(embedded)parent.postMessage({type:"SHOW_TOAST",message:m},"*");else{const t=document.createElement("div");t.textContent=m;t.style.cssText="position:fixed;left:50%;transform:translateX(-50%);bottom:30px;background:var(--glass);border:1px solid var(--brd);backdrop-filter:blur(14px);padding:10px 20px;border-radius:99px;font-size:13px;font-weight:600;z-index:99";document.body.appendChild(t);setTimeout(()=>t.remove(),2200);}}
+
+/* ---- Americano rounds (polygon rotation, 4 per court) ---- */
+function genRounds(names,nCourts){
+  const ps=[...names];if(ps.length%2)ps.push("— rest —");
+  const n=ps.length,rounds=[];
+  const arr=[...ps];
+  const total=Math.min(n-1,7);
+  for(let r=0;r<total;r++){
+    const order=[arr[0],...arr.slice(1)];
+    const matches=[];
+    const perRound=Math.min(nCourts,Math.floor(n/4));
+    for(let c=0;c<perRound;c++){
+      const g=order.slice(c*4,c*4+4);
+      if(g.length<4)break;
+      matches.push({court:c+1,a:[g[0],g[3]],b:[g[1],g[2]],sa:"",sb:""});
+    }
+    rounds.push(matches);
+    arr.splice(1,0,arr.pop()); /* rotate all but first */
+  }
+  return rounds;
+}
+function leaderboard(t){
+  const pts={};t.players.forEach(p=>pts[p]=0);
+  t.rounds.forEach(ms=>ms.forEach(m=>{
+    const sa=+m.sa||0,sb=+m.sb||0;
+    m.a.forEach(p=>{if(pts[p]!=null)pts[p]+=sa;});m.b.forEach(p=>{if(pts[p]!=null)pts[p]+=sb;});
+  }));
+  return Object.entries(pts).filter(([p])=>p!=="— rest —").sort((a,b)=>b[1]-a[1]);
+}
+
+/* ---- UI ---- */
+async function loadAll(){history=await listTournaments();}
+function render(){
+  const A=$("#app");
+  const standaloneHdr=!embedded?`<p class="note" style="margin:3px 0 6px">Standalone mode · data stays on this device</p>`:"";
+  A.innerHTML=`<h1>🎾 Padel Americano <small>Kinetik</small></h1>${standaloneHdr}
+  <div class="tabs"><button id="tbP" class="${tab==="play"?"on":""}">Play</button><button id="tbH" class="${tab==="hist"?"on":""}">History (${history.length})</button></div>
+  <div id="body"></div>`;
+  $("#tbP").onclick=()=>{tab="play";render();};
+  $("#tbH").onclick=()=>{tab="hist";render();};
+  tab==="play"?renderPlay():renderHist();
+}
+function renderPlay(){
+  const B=$("#body");
+  if(!T){ /* setup */
+    const known=CTX&&CTX.people?CTX.people.map(p=>p.name):[];
+    const sugg=[...new Set([...known,"Omar","Faisal","Rafi","Hassan","Sami","Karim","Tariq"])].filter(n=>!players.includes(n)).slice(0,8);
+    B.innerHTML=`
+    <div class="card"><div class="lbl">Players · ${players.length}</div>
+      <div class="wrap" id="pl">${players.map((p,i)=>`<button class="chip on" data-i="${i}">${esc(p)} ✕</button>`).join("")}</div>
+      <div style="display:flex;gap:8px;margin-top:11px"><input class="fld" id="np" placeholder="Add player name"><button class="btn sm" id="addP">Add</button></div>
+      ${sugg.length?`<div class="lbl" style="margin-top:13px">Quick add</div><div class="wrap">${sugg.map(s=>`<button class="chip" data-s="${esc(s)}">+ ${esc(s)}</button>`).join("")}</div>`:""}
+    </div>
+    <div class="card"><div class="lbl">Courts</div>
+      <div class="wrap">${[1,2,3].map(c=>`<button class="chip ${courts===c?"on":""}" data-c="${c}">${c} court${c>1?"s":""}</button>`).join("")}</div></div>
+    <button class="btn" id="go" ${players.length<4?"disabled":""}>Generate rounds (${players.length} players)</button>
+    ${players.length<4?'<p class="note" style="margin-top:8px">Need at least 4 players.</p>':""}`;
+    const add=n=>{n=n.trim();if(n&&!players.includes(n)){players.push(n);render();}};
+    $("#addP").onclick=()=>add($("#np").value);
+    $("#np").addEventListener("keydown",e=>{if(e.key==="Enter")add($("#np").value);});
+    B.querySelectorAll("[data-s]").forEach(b=>b.onclick=()=>add(b.dataset.s));
+    B.querySelectorAll("#pl [data-i]").forEach(b=>b.onclick=()=>{players.splice(+b.dataset.i,1);render();});
+    B.querySelectorAll("[data-c]").forEach(b=>b.onclick=()=>{courts=+b.dataset.c;render();});
+    $("#go").onclick=()=>{T={date:new Date().toISOString().slice(0,10),players:[...players],courts,rounds:genRounds(players,courts),saved:false};render();};
+    return;
+  }
+  /* live tournament */
+  const lb=leaderboard(T);
+  B.innerHTML=`
+  ${T.rounds.map((ms,ri)=>`<div class="card"><div class="rnd-h"><b>Round ${ri+1}</b><span>POINTS PER MATCH: 24</span></div>
+    ${ms.map((m,mi)=>`<div class="match"><div class="team">${esc(m.a.join(" + "))}<small>Court ${m.court}</small></div>
+      <input class="sc" inputmode="numeric" data-r="${ri}" data-m="${mi}" data-t="sa" value="${esc(m.sa)}" placeholder="0">
+      <span class="vs">VS</span>
+      <input class="sc" inputmode="numeric" data-r="${ri}" data-m="${mi}" data-t="sb" value="${esc(m.sb)}" placeholder="0">
+      <div class="team" style="text-align:right">${esc(m.b.join(" + "))}</div></div>`).join("")}
+  </div>`).join("")}
+  <div class="card"><div class="lbl">Leaderboard</div>
+    ${lb.map(([p,pts],i)=>`<div class="lb"><span class="rk">${i+1}</span><b>${esc(p)}</b><span class="pts">${pts}</span></div>`).join("")}
+  </div>
+  <div class="wrap">
+    <button class="btn" id="save">${T.saved?"Saved ✓":"Save tournament"}</button>
+    <button class="btn ghost" id="share">Share result card</button>
+    ${embedded?'<button class="btn ghost" id="cal">+ Add next session to Calendar</button>':""}
+    <button class="btn ghost" id="newT">New</button>
+  </div>`;
+  B.querySelectorAll(".sc").forEach(inp=>inp.oninput=()=>{
+    T.rounds[+inp.dataset.r][+inp.dataset.m][inp.dataset.t]=inp.value;
+    const lbEl=B.querySelectorAll(".lb");const fresh=leaderboard(T);
+    fresh.forEach(([p,pts],i)=>{if(lbEl[i]){lbEl[i].querySelector("b").textContent=p;lbEl[i].querySelector(".pts").textContent=pts;}});
+  });
+  $("#save").onclick=async()=>{T.saved=true;await saveTournament({date:T.date,players:T.players,courts:T.courts,rounds:T.rounds,leaderboard:leaderboard(T)});await loadAll();toast("Tournament saved ✓");render();};
+  $("#share").onclick=()=>shareCard(T);
+  $("#newT").onclick=()=>{T=null;render();};
+  const cal=$("#cal");if(cal)cal.onclick=()=>{
+    const d=new Date();d.setDate(d.getDate()+7);
+    parent.postMessage({type:"ADD_TO_CALENDAR",payload:{title:"Padel Americano",date:d.toISOString().slice(0,10),startTime:"20:00",endTime:"22:00",preparation:["Padel racket","Court shoes","Water"]}},"*");
+  };
+}
+function renderHist(){
+  const B=$("#body");
+  B.innerHTML=history.length?history.map(h=>{
+    const top=(h.leaderboard&&h.leaderboard[0])?h.leaderboard[0]:["—",0];
+    return `<div class="card"><div class="hrow"><b>${esc(h.date)} · ${h.players.length} players</b><span>🏆 ${esc(top[0])} · ${top[1]} pts</span></div>
+    <div class="note">${h.players.map(esc).join(", ")}</div></div>`;
+  }).join(""):`<div class="card" style="text-align:center;color:var(--dim)">No tournaments yet.<br>Play one and save it 🎾</div>`;
+}
+
+/* ---- Share result card (canvas PNG, §72.4) ---- */
+function shareCard(t){
+  const lb=leaderboard(t),W=1080,H=1350;
+  const cv=document.createElement("canvas");cv.width=W;cv.height=H;
+  const x=cv.getContext("2d");
+  const g=x.createLinearGradient(0,0,W,H);g.addColorStop(0,"#0a1530");g.addColorStop(1,"#04070f");
+  x.fillStyle=g;x.fillRect(0,0,W,H);
+  const g2=x.createRadialGradient(W*.85,0,50,W*.85,0,800);g2.addColorStop(0,"rgba(34,211,238,.35)");g2.addColorStop(1,"transparent");
+  x.fillStyle=g2;x.fillRect(0,0,W,H);
+  x.fillStyle="#22d3ee";x.font="800 38px Inter,system-ui,sans-serif";x.fillText("PADEL AMERICANO",70,120);
+  x.fillStyle="#fff";x.font="800 76px Inter,system-ui,sans-serif";x.fillText("Results",70,215);
+  x.fillStyle="rgba(255,255,255,.55)";x.font="500 34px Inter,system-ui,sans-serif";x.fillText(t.date+" · "+t.players.length+" players · "+t.courts+" court"+(t.courts>1?"s":""),70,275);
+  let y=390;
+  lb.slice(0,8).forEach(([p,pts],i)=>{
+    x.fillStyle=i===0?"rgba(251,191,36,.14)":"rgba(255,255,255,.05)";
+    roundRect(x,60,y-58,W-120,86,22);x.fill();
+    x.fillStyle=i===0?"#fbbf24":"rgba(255,255,255,.45)";x.font="800 38px Inter,system-ui,sans-serif";x.fillText(String(i+1),95,y);
+    x.fillStyle="#fff";x.font=(i===0?"800":"600")+" 40px Inter,system-ui,sans-serif";x.fillText(p,165,y);
+    x.fillStyle="#22d3ee";x.font="800 40px Inter,system-ui,sans-serif";const w=x.measureText(pts+" pts").width;x.fillText(pts+" pts",W-90-w,y);
+    y+=108;
+  });
+  x.fillStyle="rgba(255,255,255,.4)";x.font="600 30px Inter,system-ui,sans-serif";x.fillText("Made with Kinetik · Plans. People. Play.",70,H-70);
+  cv.toBlob(async b=>{
+    const f=new File([b],"padel_result.png",{type:"image/png"});
+    if(navigator.share&&navigator.canShare&&navigator.canShare({files:[f]})){try{await navigator.share({files:[f],title:"Padel Americano results"});return;}catch(e){}}
+    const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="padel_result.png";a.click();toast("Result card downloaded ✓");
+  },"image/png");
+}
+function roundRect(x,a,b,w,h,r){x.beginPath();x.moveTo(a+r,b);x.arcTo(a+w,b,a+w,b+h,r);x.arcTo(a+w,b+h,a,b+h,r);x.arcTo(a,b+h,a,b,r);x.arcTo(a,b,a+w,b,r);x.closePath();}
+
+/* ---- boot ---- */
+setTimeout(()=>{if(!embedded){ /* standalone */
+  if(matchMedia("(prefers-color-scheme: light)").matches)document.documentElement.dataset.theme="light";
+  loadAll().then(render);
+  if("serviceWorker"in navigator&&location.protocol.startsWith("http")){try{navigator.serviceWorker.register("PWA_SW.js")}catch(e){}}
+}},650);
+</script>
+</body>
+</html>
