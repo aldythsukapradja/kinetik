@@ -47,7 +47,7 @@ DO NOT:
   --font:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Segoe UI",sans-serif;
   --dur1:.2s;--dur2:.38s;--ease:cubic-bezier(.32,.72,.28,1);
   --sat:env(safe-area-inset-top,0px);--sab:env(safe-area-inset-bottom,0px);
-  --navb:calc(7px + var(--sab)*0.55);--navh:68px;
+  --navh:calc(64px + var(--sab));
 }
 html[data-theme="dark"]{
   --bg0:#05070f;--bg1:#0a1022;--bg2:#101a36;
@@ -68,7 +68,7 @@ html[data-theme="light"]{
 /* per-circle accent set by JS */
 html{--acc:#22d3ee;--acc2:#818cf8;}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html,body{height:100%;overscroll-behavior:none}
+html,body{height:100dvh;overscroll-behavior:none}
 body{font-family:var(--font);color:var(--text);background:
   radial-gradient(120% 90% at 80% -10%,color-mix(in srgb,var(--acc) 16%,transparent),transparent 55%),
   radial-gradient(120% 100% at 0% 100%,color-mix(in srgb,var(--acc2) 13%,transparent),transparent 55%),
@@ -92,6 +92,7 @@ input,select,textarea{font-family:var(--font);font-size:15px;color:var(--text)}
 .chip{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:7px 13px;font-size:12.5px;font-weight:600;
   background:var(--chip);border:1px solid transparent;color:var(--dim);transition:all var(--dur1);white-space:nowrap}
 .chip.on{background:color-mix(in srgb,var(--acc) 18%,transparent);color:var(--text);border-color:color-mix(in srgb,var(--acc) 45%,transparent)}
+.chip.pc.on{background:color-mix(in srgb,var(--pc) 18%,transparent);color:var(--text);border-color:color-mix(in srgb,var(--pc) 55%,transparent)}
 .chip:active{transform:scale(.95)}
 .lbl{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--faint)}
 .av{width:34px;height:34px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:700;color:#fff;flex:0 0 auto;border:2px solid rgba(255,255,255,.25)}
@@ -101,12 +102,27 @@ input,select,textarea{font-family:var(--font);font-size:15px;color:var(--text)}
 .hide{display:none!important}
 input.fld,select.fld,textarea.fld{width:100%;background:var(--chip);border:1px solid var(--brd2);border-radius:var(--radius-sm);padding:12px 14px;outline:none;transition:border-color var(--dur1)}
 input.fld:focus,select.fld:focus{border-color:var(--acc)}
-/* ============ SPLASH ============ */
+/* ============ SPLASH (sunrise mark + letter reveal) ============ */
 #splash{position:fixed;inset:0;z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:transparent}
+#splash .srise{position:relative;width:110px;height:62px;display:flex;align-items:flex-end;justify-content:center}
+#splash .srise svg{width:104px;height:61px;filter:drop-shadow(0 16px 36px rgba(99,102,241,.45))}
+#splash .ring{position:absolute;left:50%;bottom:-26px;width:130px;height:130px;border-radius:50%;transform:translateX(-50%) scale(.4);
+  border:1.5px solid color-mix(in srgb,var(--acc) 50%,transparent);opacity:0;pointer-events:none;animation:ripple 2.4s ease-out infinite .9s}
+#splash .ring.r2{animation-delay:1.7s}
+@keyframes ripple{0%{opacity:.65;transform:translateX(-50%) scale(.4)}100%{opacity:0;transform:translateX(-50%) scale(1.3)}}
 #splash .logo{font-size:clamp(38px,9vw,60px);font-weight:800;letter-spacing:-.03em;
   background:linear-gradient(110deg,var(--text) 30%,var(--acc) 60%,var(--acc2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+#splash .logo .ch{display:inline-block}
 #splash .tag{font-size:14px;letter-spacing:.34em;text-transform:uppercase;color:var(--dim);font-weight:600}
-#splash .pv{margin-top:18px;font-size:13.5px;color:var(--dim);padding:9px 18px;border-radius:999px;min-height:38px}
+#splash .pv{margin-top:18px;font-size:13.5px;color:var(--dim);padding:9px 18px;border-radius:999px;min-height:38px;position:relative;overflow:hidden}
+#splash .pv:after{content:"";position:absolute;inset:0;transform:translateX(-100%);
+  background:linear-gradient(110deg,transparent 32%,rgba(255,255,255,.4) 50%,transparent 68%);animation:shine 1.7s ease infinite .6s}
+@keyframes shine{to{transform:translateX(100%)}}
+/* thinking dots (Ask) */
+.tdots{display:flex;gap:5px;align-self:flex-start;padding:13px 16px;border-radius:18px;border-bottom-left-radius:6px}
+.tdots i{width:7px;height:7px;border-radius:50%;background:linear-gradient(135deg,var(--acc),var(--acc2));animation:tb 1s ease-in-out infinite}
+.tdots i:nth-child(2){animation-delay:.15s}.tdots i:nth-child(3){animation-delay:.3s}
+@keyframes tb{0%,100%{transform:translateY(0);opacity:.45}50%{transform:translateY(-5px);opacity:1}}
 /* ============ LOGIN ============ */
 #login{position:fixed;inset:0;z-index:90;display:flex;align-items:center;justify-content:center;padding:22px}
 #login .panel{width:100%;max-width:400px;border-radius:var(--radius-lg);padding:30px 26px;display:flex;flex-direction:column;gap:16px}
@@ -114,7 +130,7 @@ input.fld:focus,select.fld:focus{border-color:var(--acc)}
 #login .sub{color:var(--dim);font-size:13.5px;margin-top:-10px}
 .persona{display:flex;align-items:center;gap:13px;padding:13px 14px;border-radius:var(--radius-sm);background:var(--chip);border:1.5px solid transparent;width:100%;text-align:left;transition:all var(--dur1)}
 .persona.on{border-color:var(--acc);background:color-mix(in srgb,var(--acc) 12%,transparent)}
-.persona b{font-size:15px}.persona span{display:block;font-size:12px;color:var(--dim)}
+.persona b{font-size:15px}.persona span:not(.av){display:block;font-size:12px;color:var(--dim)}
 #login .priv{font-size:12px;color:var(--faint);text-align:center;line-height:1.5}
 /* ============ SHELL ============ */
 #shell{position:fixed;inset:0;z-index:10;display:flex;flex-direction:column;padding-top:var(--sat)}
@@ -125,31 +141,33 @@ input.fld:focus,select.fld:focus{border-color:var(--acc)}
 #circlePill .dot{width:9px;height:9px;border-radius:50%;background:var(--acc);box-shadow:0 0 10px var(--acc)}
 #circlePill em{font-style:normal;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 #views{flex:1;position:relative;overflow:hidden}
-.view{position:absolute;inset:0;overflow-y:auto;padding:4px 18px calc(var(--navb) + var(--navh) + 20px);display:none;-webkit-overflow-scrolling:touch}
+.view{position:absolute;inset:0;overflow-y:auto;padding:4px 18px calc(var(--navh) + 20px);display:none;-webkit-overflow-scrolling:touch}
 .view.on{display:block}
 .view-inner{max-width:560px;margin:0 auto}
 #view-calendar .view-inner{max-width:980px}
-/* bottom nav — WhatsApp-style glass bar, cradle notch, sliding pill */
-#nav{position:fixed;left:12px;right:12px;bottom:var(--navb);z-index:40;height:var(--navh);
-  display:flex;align-items:stretch;justify-content:space-between;padding:8px 10px;border-radius:34px;
+/* bottom nav — WhatsApp-style: hugs the screen bottom, bg bleeds into the
+   home-bar zone (env safe-area), glass + cradle notch + sliding pill */
+#nav{position:fixed;left:0;right:0;bottom:0;z-index:40;height:var(--navh);
+  display:flex;align-items:stretch;justify-content:center;gap:2px;
+  padding:7px 12px calc(var(--sab) + 6px);border-radius:26px 26px 0 0;
   background:var(--glass2);backdrop-filter:blur(28px) saturate(1.5);-webkit-backdrop-filter:blur(28px) saturate(1.5);
-  border:1px solid var(--brd);box-shadow:0 14px 44px rgba(20,35,70,.18);
+  border-top:1px solid var(--brd);box-shadow:0 -10px 40px rgba(20,35,70,.14);
   -webkit-mask:radial-gradient(circle 34px at 50% -10px,transparent 33px,#000 34px);
   mask:radial-gradient(circle 34px at 50% -10px,transparent 33px,#000 34px)}
-@media(min-width:600px){#nav{left:50%;right:auto;width:540px;margin-left:-270px}}
-#nav button{position:relative;z-index:2;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
-  border-radius:24px;font-size:10px;font-weight:700;color:var(--faint);transition:color var(--dur2) var(--ease)}
+#nav button{position:relative;z-index:2;flex:1;max-width:112px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+  border-radius:22px;font-size:10px;font-weight:700;color:var(--faint);transition:color var(--dur2) var(--ease)}
 #nav button svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;transition:transform var(--dur2) var(--ease)}
 #nav button.on{color:var(--acc)}
 #nav button.on svg{transform:translateY(-1px) scale(1.07)}
 #nav button:active svg{transform:scale(.86)}
-#nav button[data-tab="moments"]{justify-content:flex-end;padding-bottom:10px}
-#nav button[data-tab="moments"] svg{width:18px;height:18px}
-#navPill{position:absolute;z-index:1;top:8px;bottom:8px;left:10px;width:64px;border-radius:24px;
+#nav button[data-tab="moments"]{justify-content:flex-end;padding-bottom:6px}
+#nav button[data-tab="moments"] svg{width:25px;height:16px;stroke:none;transition:transform var(--dur2) var(--ease),filter var(--dur2)}
+#nav button[data-tab="moments"].on svg{filter:drop-shadow(0 3px 8px rgba(139,92,246,.5))}
+#navPill{position:absolute;z-index:1;top:7px;height:50px;left:12px;width:64px;border-radius:22px;
   background:color-mix(in srgb,var(--acc) 14%,transparent);opacity:0;
   transition:left .34s var(--ease),width .34s var(--ease),opacity .25s}
 /* Ask orb — docked in the cradle above Moments */
-#askOrb{position:fixed;left:calc(50% - 29px);bottom:calc(var(--navb) + 56px);z-index:41;
+#askOrb{position:fixed;left:calc(50% - 29px);bottom:calc(var(--navh) - 19px);z-index:41;
   width:58px;height:58px;border-radius:50%;padding:0;
   background:radial-gradient(circle at 32% 28%,color-mix(in srgb,var(--acc) 88%,#fff),var(--acc2) 75%);
   box-shadow:0 10px 28px color-mix(in srgb,var(--acc2) 52%,transparent),inset 0 1px 3px rgba(255,255,255,.55);
@@ -163,7 +181,7 @@ input.fld:focus,select.fld:focus{border-color:var(--acc)}
 /* ============ TODAY (non-scroll) ============ */
 #view-today{overflow:hidden!important;display:none}
 #view-today.on{display:flex;flex-direction:column}
-#view-today .view-inner{display:flex;flex-direction:column;gap:12px;height:100%;width:100%;max-width:560px;padding-bottom:calc(86px + var(--sab))}
+#view-today .view-inner{display:flex;flex-direction:column;gap:12px;height:100%;width:100%;max-width:560px;padding-bottom:calc(var(--navh) + 12px)}
 .greet h2{font-size:clamp(21px,5.5vw,27px);letter-spacing:-.02em}
 .greet p{color:var(--dim);font-size:13px}
 .hero{border-radius:var(--radius-md);padding:17px;position:relative;overflow:hidden;border:1px solid color-mix(in srgb,var(--acc) 35%,var(--brd))}
@@ -189,7 +207,7 @@ input.fld:focus,select.fld:focus{border-color:var(--acc)}
 .tmrw b{color:var(--text)}
 .allset{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;color:var(--dim);text-align:center}
 .allset .big{font-size:44px}
-#fab{position:fixed;right:18px;bottom:calc(var(--navb) + var(--navh) + 14px);z-index:39;width:54px;height:54px;border-radius:50%;
+#fab{position:fixed;right:18px;bottom:calc(var(--navh) + 14px);z-index:39;width:54px;height:54px;border-radius:50%;
   background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;font-size:26px;font-weight:300;box-shadow:0 12px 32px color-mix(in srgb,var(--acc) 45%,transparent);transition:transform var(--dur1) var(--ease)}
 #fab:active{transform:scale(.9) rotate(90deg)}
 /* ============ CALENDAR ============ */
@@ -209,10 +227,12 @@ input.fld:focus,select.fld:focus{border-color:var(--acc)}
 .board .bday.wknd{color:var(--warn)}
 .board .bday small{font-weight:600;font-size:9.5px;letter-spacing:.04em;color:var(--faint)}
 .board .wknd-row{background:color-mix(in srgb,var(--warn) 5%,transparent)}
-.evchip{border-radius:8px;padding:3px 6px;font-size:10px;font-weight:600;line-height:1.25;color:var(--text);background:var(--chip);border-left:3px solid var(--acc);text-align:left;width:100%;overflow:hidden}
+.evchip{border-radius:7px;padding:4px 7px;font-size:10px;font-weight:600;line-height:1.25;color:#fff;text-align:left;width:100%;overflow:hidden;
+  box-shadow:0 3px 9px rgba(20,30,60,.18);transition:opacity var(--dur1)}
+.evchip:active{opacity:.8}
 .evchip b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:700}
-.evchip small{display:block;font-weight:500;color:var(--faint);font-size:9px;font-variant-numeric:tabular-nums}
-.evchip.cf{border-left-color:var(--warn);background:color-mix(in srgb,var(--warn) 12%,transparent)}
+.evchip small{display:block;font-weight:600;color:rgba(255,255,255,.85);font-size:9px;font-variant-numeric:tabular-nums}
+.evchip.cf{outline:2px solid var(--warn);outline-offset:-1px}
 .dayblock{border-radius:var(--radius-md);padding:13px 15px;margin-bottom:11px}
 .dayblock h4{font-size:13px;display:flex;gap:8px;align-items:center;margin-bottom:7px}
 .dayblock h4 .dnum{font-size:17px}
@@ -327,10 +347,13 @@ input.fld:focus,select.fld:focus{border-color:var(--acc)}
 .mcell:active{transform:scale(.92)}
 .mcell.out{opacity:.3}
 .mcell.wkndc{background:color-mix(in srgb,var(--warn) 8%,transparent)}
-.mcell .md{font-size:12.5px;font-weight:700;width:25px;height:25px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
-.mcell .md.today{background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;box-shadow:0 4px 12px color-mix(in srgb,var(--acc) 45%,transparent)}
+.mcell .md{font-size:12.5px;font-weight:700;width:27px;height:27px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:0 0 auto;line-height:1}
+.mcell .md.today{background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;font-weight:800;
+  border:2px solid rgba(255,255,255,.7);transform:translateY(-2px);
+  box-shadow:0 5px 16px color-mix(in srgb,var(--acc) 55%,transparent),inset 0 1px 0 rgba(255,255,255,.4)}
 .mcell .marks{display:flex;gap:2.5px;align-items:center;flex-wrap:wrap;justify-content:center;padding:0 3px}
 .mcell .marks i{width:5.5px;height:5.5px;border-radius:50%}
+.mcell .marks .mi{font-size:10px;font-weight:800;letter-spacing:.04em;line-height:1.1}
 .mcell .marks em{font-style:normal;font-size:8.5px;font-weight:800;color:var(--dim)}
 .mleg{display:flex;gap:13px;flex-wrap:wrap;justify-content:center;margin-top:14px;font-size:11px;color:var(--dim);font-weight:600}
 .mleg i{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:5px}
@@ -368,7 +391,7 @@ input.fld:focus,select.fld:focus{border-color:var(--acc)}
 /* ============ ME ============ */
 .me-prof{display:flex;align-items:center;gap:15px;border-radius:var(--radius-md);padding:18px;margin-bottom:13px}
 .me-prof .av{width:54px;height:54px;font-size:19px}
-.me-prof b{font-size:18px}.me-prof span{display:block;font-size:12.5px;color:var(--dim)}
+.me-prof b{font-size:18px}.me-prof span:not(.av){display:block;font-size:12.5px;color:var(--dim)}
 .me-sec{border-radius:var(--radius-md);padding:6px 15px;margin-bottom:13px}
 .me-row{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--brd2);font-size:14.5px;width:100%;text-align:left}
 .me-row:last-child{border-bottom:none}
@@ -393,6 +416,11 @@ input.fld:focus,select.fld:focus{border-color:var(--acc)}
 .memtile small{font-size:11px;font-weight:600;color:var(--dim);max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .memtile .sq.add{background:var(--chip);color:var(--acc);border:1.5px dashed color-mix(in srgb,var(--acc) 40%,var(--brd2));box-shadow:none;font-size:23px;font-weight:400}
 .memtile .sq.more{background:var(--chip);color:var(--dim);box-shadow:none;font-size:14px}
+.cmenu{width:34px;height:34px;border-radius:50%;background:var(--chip);font-size:16px;font-weight:800;color:var(--dim);flex:0 0 auto;transition:transform var(--dur1)}
+.cmenu:active{transform:scale(.88)}
+.swatches{display:grid;grid-template-columns:repeat(4,1fr);gap:11px}
+.sw{aspect-ratio:1;border-radius:14px;border:3px solid transparent;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:17px;transition:all var(--dur1);box-shadow:inset 0 1px 0 rgba(255,255,255,.3)}
+.sw.on{border-color:var(--text);transform:scale(1.09)}
 #logoutBtn{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;margin:8px 0 28px;padding:15px;border-radius:999px;font-weight:700;font-size:14.5px;color:#fff;
   background:linear-gradient(135deg,#f43f5e,#fb7185);box-shadow:0 10px 28px rgba(244,63,94,.32);transition:transform var(--dur1)}
 #logoutBtn:active{transform:scale(.97)}
@@ -405,11 +433,14 @@ input.fld:focus,select.fld:focus{border-color:var(--acc)}
 #sheet .grab{width:42px;height:5px;border-radius:3px;background:var(--brd2);margin:4px auto 13px;flex:0 0 auto}
 #sheet h3{font-size:18px;margin-bottom:13px;flex:0 0 auto;letter-spacing:-.01em}
 #sheetBody{overflow-y:auto;display:flex;flex-direction:column;gap:11px;-webkit-overflow-scrolling:touch}
+/* sheet content is appended as ONE wrapper div — give its children the same
+   rhythm so fields/cards never touch (invite, edit, quick add, …) */
+#sheetBody>div{display:flex;flex-direction:column;gap:11px}
 @media(min-width:768px){
   #sheet{left:50%;right:auto;bottom:auto;top:50%;transform:translate(-50%,-50%);width:460px;border-radius:var(--radius-lg);max-height:78%}
   #sheet .grab{display:none}
 }
-#toasts{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(var(--navb) + var(--navh) + 16px);z-index:95;display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none}
+#toasts{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(var(--navh) + 16px);z-index:95;display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none}
 .toast{border-radius:999px;padding:11px 20px;font-size:13.5px;font-weight:600;animation:tpop .3s var(--ease)}
 @keyframes tpop{from{opacity:0;transform:translateY(12px) scale(.92)}to{opacity:1}}
 /* circle switcher cards */
@@ -431,7 +462,16 @@ input.fld:focus,select.fld:focus{border-color:var(--acc)}
 <canvas id="bg3d"></canvas>
 
 <div id="splash">
-  <div class="logo">KINETIK</div>
+  <div class="srise">
+    <svg viewBox="0 0 48 28" aria-hidden="true">
+      <defs><linearGradient id="sgrad" x1="0%" y1="100%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#06B6D4"/><stop offset="100%" stop-color="#8B5CF6"/>
+      </linearGradient></defs>
+      <path d="M4 24A20 20 0 0 1 44 24Z" fill="url(#sgrad)" stroke="none"/>
+    </svg>
+    <span class="ring"></span><span class="ring r2"></span>
+  </div>
+  <div class="logo" id="splashLogo">KINETIK</div>
   <div class="tag">Plans · People · Play</div>
   <div class="pv glass" id="splashPv"></div>
 </div>
@@ -467,7 +507,7 @@ input.fld:focus,select.fld:focus{border-color:var(--acc)}
     <div id="navPill"></div>
     <button data-tab="today"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Today</button>
     <button data-tab="calendar"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Calendar</button>
-    <button data-tab="moments"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="3.6"/><circle cx="17.2" cy="6.8" r=".55" fill="currentColor"/></svg>Moments</button>
+    <button data-tab="moments"><svg viewBox="0 0 48 28"><defs><linearGradient id="mgrad" x1="0%" y1="100%" x2="100%" y2="0%"><stop offset="0%" stop-color="#06B6D4"/><stop offset="100%" stop-color="#8B5CF6"/></linearGradient></defs><path d="M4 24A20 20 0 0 1 44 24Z" fill="url(#mgrad)" stroke="none"/></svg>Moments</button>
     <button data-tab="apps"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="2"/><rect x="13" y="4" width="7" height="7" rx="2"/><rect x="4" y="13" width="7" height="7" rx="2"/><rect x="13" y="13" width="7" height="7" rx="2"/></svg>Apps</button>
     <button data-tab="me"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5"/></svg>Me</button>
   </nav>
@@ -648,7 +688,8 @@ const SyncEngine={status:"idle",
 };
 
 /* ---------------- State + Session ---------------- */
-const S={userId:null,personId:null,circleId:null,tab:"today",calMode:"board",calWeekOffset:0,calFilter:"all",askStarted:false};
+/* calSel: null = everyone visible; otherwise array of personIds (multi-select) */
+const S={userId:null,personId:null,circleId:null,tab:"today",calMode:"board",calWeekOffset:0,calSel:null,askStarted:false};
 const Session={KEY:"kinetik_session",
   save(){localStorage.setItem(this.KEY,JSON.stringify({userId:S.userId,personId:S.personId,circleId:S.circleId}));},
   restore(){try{const s=JSON.parse(localStorage.getItem(this.KEY));if(s&&s.userId&&DataAPI.get("users",s.userId)&&DataAPI.get("people",s.personId)&&DataAPI.get("circles",s.circleId)){Object.assign(S,s);return true;}}catch(e){}return false;},
@@ -893,12 +934,18 @@ window.openDetail=key=>{
   ${it.prep.length?`<div style="font-size:13px"><span class="lbl">Prepare</span><br>${it.prep.map(esc).join(" · ")}</div>`:""}
   <div class="row" style="margin-top:8px;gap:8px;flex-wrap:wrap">
     <button class="btn ghost" id="dEdit">Edit</button>
-    ${it.recurring?`<button class="btn ghost" id="dSkip">Skip this ${DOWS[new Date(it.date+"T00:00").getDay()]}</button>`:`<button class="btn danger" id="dDel">Delete</button>`}
-    <button class="btn" id="dOk">Close</button></div>`;
+    ${it.recurring?`<button class="btn ghost" id="dSkip">Skip this ${DOWS[new Date(it.date+"T00:00").getDay()]}</button>`:""}
+    <button class="btn danger" id="dDel">${it.recurring?"Delete routine":"Delete"}</button>
+    <button class="btn" id="dOk">Close</button></div>
+  ${it.recurring?'<p style="font-size:11.5px;color:var(--faint)">Skip cancels just this week · Delete removes the routine from every week.</p>':""}`;
   Sheet.open(it.title,w);
   w.querySelector("#dEdit").onclick=()=>openEdit(it);
   const sk=w.querySelector("#dSkip");if(sk)sk.onclick=()=>{DataAPI.create("exceptions",{circleId:S.circleId,routineId:it.routineId,date:it.date,action:"cancelled"});Sheet.close();Toast.show("Skipped this week");renderAll();};
-  const dl=w.querySelector("#dDel");if(dl)dl.onclick=()=>{DataAPI.remove("events",it.eventId);Sheet.close();Toast.show("Deleted");renderAll();};
+  w.querySelector("#dDel").onclick=()=>{
+    if(it.recurring)DataAPI.remove("routines",it.routineId);
+    else DataAPI.remove("events",it.eventId);
+    Sheet.close();Toast.show(it.recurring?"Routine deleted":"Deleted");renderAll();
+  };
   w.querySelector("#dOk").onclick=()=>Sheet.close();
 };
 window.openEdit=it=>{
@@ -944,7 +991,30 @@ window.openQuickAdd=dateIso=>{
 };
 $("#fab").onclick=()=>openQuickAdd(iso(new Date()));
 
-/* ---------------- CALENDAR (Board + full-screen Month; Week removed — redundant) ---------------- */
+/* ---------------- CALENDAR (Board + full-screen Month; Week removed — redundant) ----------------
+   Filter pills are MULTI-SELECT (spec §4/§5): All resets, tapping members toggles
+   any combination; pills tint with the member's color when selected. */
+const selHas=pid=>!S.calSel||S.calSel.includes(pid);
+function selToggle(pid){
+  const all=circlePeople().map(p=>p.id);
+  /* from "All", tapping a member FOCUSES just that member;
+     afterwards taps add/remove members from the selection */
+  let s=S.calSel?(S.calSel.includes(pid)?S.calSel.filter(x=>x!==pid):[...S.calSel,pid]):[pid];
+  S.calSel=(!s.length||s.length===all.length)?null:s;
+}
+function filterPills(id){
+  const ppl=circlePeople();
+  return `<div class="filters" id="${id}">
+    <button class="chip ${!S.calSel?"on":""}" data-f="all">All</button>
+    ${ppl.map(p=>`<button class="chip pc ${selHas(p.id)&&S.calSel?"on":""}" style="--pc:${p.color}" data-f="${p.id}">${esc(String(p.displayName).split(" ")[0])}</button>`).join("")}
+  </div>`;
+}
+function bindFilterPills(id,rerender){
+  $$("#"+id+" .chip").forEach(c=>c.onclick=()=>{
+    if(c.dataset.f==="all")S.calSel=null;else selToggle(c.dataset.f);
+    rerender();
+  });
+}
 function renderCal(){
   const week=Cal.week(S.circleId,S.calWeekOffset);
   const ppl=circlePeople();
@@ -956,18 +1026,15 @@ function renderCal(){
     <div class="seg" style="min-width:170px"><button id="mBoard" class="on">Board</button><button id="mMonth">Month</button></div>
     <div class="wknav"><button id="wPrev">‹</button><span>${S.calWeekOffset===0?"This week":rangeTxt}</span><button id="wNext">›</button></div>
   </div>
-  <div class="filters" id="calF">
-    <button class="chip ${S.calFilter==="all"?"on":""}" data-f="all">All</button>
-    ${ppl.map(p=>`<button class="chip ${S.calFilter===p.id?"on":""}" data-f="${p.id}">${esc(p.displayName)}</button>`).join("")}
-  </div>
+  ${filterPills("calF")}
   <div id="calGrid"></div>`;
   $("#mMonth").onclick=()=>MonthScreen.open();
   $("#wPrev").onclick=()=>{S.calWeekOffset--;renderCal();};
   $("#wNext").onclick=()=>{S.calWeekOffset++;renderCal();};
-  $$("#calF .chip").forEach(c=>c.onclick=()=>{S.calFilter=c.dataset.f;renderCal();});
+  bindFilterPills("calF",renderCal);
   const G=$("#calGrid");
   /* transposed board: people = columns (no horizontal scroll), days = rows; inline + per day */
-  const cols=ppl.filter(p=>S.calFilter==="all"||p.id===S.calFilter);
+  const cols=ppl.filter(p=>selHas(p.id));
   let html=`<div class="boardwrap glass"><div class="board" style="grid-template-columns:54px repeat(${cols.length},1fr)">`;
   html+=`<div class="bcell bday" style="border-top:none"></div>`;
   cols.forEach(p=>{html+=`<div class="bcell bhead"><span class="av" style="background:${p.color};width:30px;height:30px;font-size:11px">${esc(p.displayName[0])}</span>${esc(p.displayName)}</div>`;});
@@ -976,7 +1043,7 @@ function renderCal(){
     html+=`<div class="bcell bday ${today?"today":""} ${wk?"wknd":""}">${DOWS[d.dow]}<small>${d.date.getDate()}</small><button class="dayadd" onclick="openQuickAdd('${d.iso}')" aria-label="Add on ${DOWS[d.dow]}">+</button></div>`;
     cols.forEach(p=>{
       const its=d.items.filter(i=>i.participants.includes(p.id));
-      html+=`<div class="bcell ${wk?"wknd-row":""}">${its.map(i=>`<button class="evchip ${i.conflict?"cf":""}" style="border-left-color:${i.conflict?"var(--warn)":p.color}" onclick="openDetail('${i.key}')"><b>${esc(i.title)}</b><small>${fmtT(i.start)}</small></button>`).join("")}</div>`;
+      html+=`<div class="bcell ${wk?"wknd-row":""}">${its.map(i=>`<button class="evchip ${i.conflict?"cf":""}" style="background:${p.color}" onclick="openDetail('${i.key}')"><b>${esc(i.title)}</b><small>${fmtT(i.start)}</small></button>`).join("")}</div>`;
     });
   });
   html+="</div></div>";G.innerHTML=html;
@@ -1003,24 +1070,28 @@ const MonthScreen={off:0,
       if(r&&d.getMonth()!==mo)break;
       for(let i=0;i<7;i++){
         const dIso=iso(d),inM=d.getMonth()===mo,wk=Cal.isWeekend(d.getDay());
-        const items=Cal.instancesForDate(S.circleId,d);
+        const items=Cal.instancesForDate(S.circleId,d).filter(it=>it.participants.some(selHas));
+        /* colored member INITIALS per cell (spec §4), max 4 then +N */
+        const who=[...new Set(items.map(it=>it.participants[0]))];
         cells+=`<button class="mcell ${inM?"":"out"} ${wk?"wkndc":""}" onclick="MonthScreen.day('${dIso}')">
           <span class="md ${dIso===todayIso?"today":""}">${d.getDate()}</span>
-          <span class="marks">${items.slice(0,4).map(it=>`<i style="background:${personColor(it.participants[0])}"></i>`).join("")}${items.length>4?`<em>+${items.length-4}</em>`:""}</span></button>`;
+          <span class="marks">${who.slice(0,4).map(pid=>`<b class="mi" style="color:${personColor(pid)}">${esc(String(personName(pid)||"?")[0])}</b>`).join("")}${who.length>4?`<em>+${who.length-4}</em>`:""}</span></button>`;
         d=addDays(d,1);
       }
     }
     $("#monthInner").innerHTML=`
     <div class="mnav"><button id="mPrev">‹</button><b>${title}</b><button id="mNext">›</button></div>
+    ${filterPills("monF")}
     <div class="mhead">${heads}</div>
     <div class="mgrid">${cells}</div>
-    <div class="mleg">${circlePeople().map(p=>`<span><i style="background:${p.color}"></i>${esc(p.displayName)}</span>`).join("")}</div>`;
+    <div class="mleg">${circlePeople().map(p=>`<span><i style="background:${p.color}"></i>${esc(String(p.displayName).split(" ")[0])}</span>`).join("")}</div>`;
     $("#mPrev").onclick=()=>{this.off--;this.render();};
     $("#mNext").onclick=()=>{this.off++;this.render();};
+    bindFilterPills("monF",()=>this.render());
   },
   day(dateIso){
     const d=new Date(dateIso+"T00:00");
-    const items=Cal.instancesForDate(S.circleId,d);
+    const items=Cal.instancesForDate(S.circleId,d).filter(it=>it.participants.some(selHas));
     const w=document.createElement("div");
     w.innerHTML=`${items.length?items.map(tlRow).join(""):'<div class="empty-day">Free day 🎉</div>'}
     <button class="btn" id="mdAdd" style="margin-top:8px">+ Add on ${DOWS[d.getDay()]} ${d.getDate()}</button>`;
@@ -1043,7 +1114,7 @@ function renderMoments(){
   const B=$("#momentsBody"),ppl=circlePeople();
   const colorOf=n=>{const p=ppl.find(x=>x.displayName.toLowerCase()===n.toLowerCase());return p?p.color:"#64748b";};
   B.innerHTML=`
-  <div class="spread" style="margin:2px 0 10px"><div><h2 style="font-size:22px;letter-spacing:-.02em">Moments</h2>
+  <div class="spread" style="margin:2px 0 10px"><div><h2 style="font-size:22px;letter-spacing:-.02em;display:flex;align-items:center;gap:9px"><svg viewBox="0 0 48 28" style="width:34px;height:21px" aria-hidden="true"><path d="M4 24A20 20 0 0 1 44 24Z" fill="url(#mgrad)" stroke="none"/></svg>Moments</h2>
     <p style="font-size:12.5px;color:var(--dim)">${esc(c.name)} · private to your circle</p></div>
     <span class="mompill">PREVIEW</span></div>
   <div class="stories">
@@ -1085,10 +1156,11 @@ const Ask={
     S.askStarted=true;$("#askClear").classList.remove("hide");
     const stream=$("#askStream");
     if(stream.querySelector(".orbwrap")&&stream.children.length===1)stream.innerHTML='<div class="orbwrap" style="padding:8px 0"><div id="orb" style="width:40px;height:40px"></div></div>';
-    stream.insertAdjacentHTML("beforeend",`<div class="msg user">${esc(text)}</div>`);
+    stream.insertAdjacentHTML("beforeend",`<div class="msg user">${esc(text)}</div>
+    <div class="tdots glass" id="tdTmp"><i></i><i></i><i></i></div>`);
     $("#askInput").value="";$("#askSend").disabled=true;
     const orb=$("#orb");if(orb)orb.classList.add("think");
-    setTimeout(()=>{if(orb)orb.classList.remove("think");this.respond(text);stream.scrollTop=stream.scrollHeight;},480);
+    setTimeout(()=>{if(orb)orb.classList.remove("think");const td=document.getElementById("tdTmp");if(td)td.remove();this.respond(text);stream.scrollTop=stream.scrollHeight;},620);
     stream.scrollTop=stream.scrollHeight;
   },
   respond(text){
@@ -1331,14 +1403,16 @@ function renderMe(){
     const more=mems.length>MAX?`<button class="memtile" onclick="setCircle('${c.id}')"><span class="sq more">+${mems.length-MAX}</span><small>more</small></button>`:"";
     const inv=canMng?`<button class="memtile" onclick="inviteTo('${c.id}')"><span class="sq add">+</span><small>Invite</small></button>`:"";
     const act=c.id===S.circleId;
-    return `<div class="circard glass">
+    const isLeader=Perm.role(S.userId,c.id)==="owner";
+    return `<div class="circard glass" style="border-top:3px solid ${c.accent?c.accent[0]:"var(--acc)"}">
       <div class="chd"><div><h3>${esc(c.name)}</h3><div class="csub">${c.type==="family"?"home team":"friends circle"} · ${mems.length} member${mems.length!==1?"s":""}</div></div>
-      <button class="opnbtn ${act?"act":""}" onclick="setCircle('${c.id}')">${act?"Active":"Open"}</button></div>
+      <div class="row" style="gap:8px">${isLeader?`<button class="cmenu" onclick="circleMenu('${c.id}')" aria-label="Circle options">⋮</button>`:""}
+      <button class="opnbtn ${act?"act":""}" onclick="setCircle('${c.id}')">${act?"Active":"Open"}</button></div></div>
       <div class="memgrid">${tiles}${more}${inv}</div></div>`;
   };
   B.innerHTML=`
-  <div class="me-prof glass"><span class="av" style="background:${m.color};width:54px;height:54px;font-size:19px">${esc(m.displayName[0])}</span>
-    <div><b>${esc(m.displayName)}</b><span>${esc(ROLE_LABEL[myRole]||"Member")} · ${esc(circle().name)}</span></div></div>
+  <div class="me-prof glass"><span class="av" style="background:${m?m.color:"#6366f1"};width:54px;height:54px;font-size:19px">${esc(m?m.displayName[0]:"?")}</span>
+    <div><b>${esc(m?m.displayName:"You")}</b><span>${circle()?esc(ROLE_LABEL[myRole]||"Member")+" · "+esc(circle().name):"No circle yet — create one"}</span></div></div>
 
   <div class="spread" style="margin:10px 2px 11px"><span class="lbl">Circles</span>
     <button id="newCircle" style="color:var(--acc);font-weight:700;font-size:13px">+ Circle</button></div>
@@ -1410,6 +1484,73 @@ function logoutFlow(){
   w.querySelector("#loYes").onclick=()=>{Session.clear();EventBus.emit("auth:logout");location.reload();};
   w.querySelector("#loNo").onclick=()=>Sheet.close();
 }
+/* circle edit & delete — Leader only (spec §2/§3) */
+const CIRCLE_COLORS=[
+  ["Cobalt","#0057FF","#22d3ee"],["Cyan","#06B6D4","#8B5CF6"],["Emerald","#10B981","#34d399"],["Violet","#8B5CF6","#d946ef"],
+  ["Amber","#F59E0B","#F97316"],["Orange","#F97316","#fb7185"],["Rose","#F43F5E","#fb7185"],["Fuchsia","#EC4899","#8B5CF6"]];
+window.circleMenu=cid=>{
+  const c=DataAPI.get("circles",cid);if(!c)return;
+  const w=document.createElement("div");
+  w.innerHTML=`
+  <button class="me-row" id="cmEdit">✏️&nbsp; Edit circle<span class="end">›</span></button>
+  <button class="me-row" id="cmDel" style="color:var(--bad);font-weight:700">🗑&nbsp; Delete circle<span class="end" style="color:var(--bad)">›</span></button>`;
+  Sheet.open(c.name,w);
+  w.querySelector("#cmEdit").onclick=()=>{Sheet.close();setTimeout(()=>editCircle(cid),180);};
+  w.querySelector("#cmDel").onclick=()=>{Sheet.close();setTimeout(()=>deleteCircle(cid),180);};
+};
+window.editCircle=cid=>{
+  const c=DataAPI.get("circles",cid);if(!c)return;
+  let sel=CIRCLE_COLORS.find(x=>c.accent&&x[1].toLowerCase()===String(c.accent[0]).toLowerCase())||CIRCLE_COLORS[0];
+  const w=document.createElement("div");
+  w.innerHTML=`
+  <div class="lbl">Circle name</div>
+  <input class="fld" id="ecName" value="${esc(c.name)}" maxlength="50">
+  <div class="lbl" style="margin-top:6px">Circle color</div>
+  <div class="swatches" id="ecSw">${CIRCLE_COLORS.map(x=>`<button class="sw ${x===sel?"on":""}" data-c="${x[1]}" style="background:linear-gradient(135deg,${x[1]},${x[2]})" title="${x[0]}">${x===sel?"✓":""}</button>`).join("")}</div>
+  <p id="ecSel" style="font-size:12px;color:var(--dim)">Selected: ${sel[0]}</p>
+  <button class="btn" id="ecGo">Save</button>`;
+  Sheet.open("Edit circle",w);
+  w.querySelectorAll(".sw").forEach(b=>b.onclick=()=>{
+    sel=CIRCLE_COLORS.find(x=>x[1]===b.dataset.c);
+    w.querySelectorAll(".sw").forEach(x=>{x.classList.toggle("on",x===b);x.textContent=x===b?"✓":"";});
+    w.querySelector("#ecSel").textContent="Selected: "+sel[0];
+  });
+  w.querySelector("#ecGo").onclick=()=>{
+    const name=w.querySelector("#ecName").value.trim();
+    if(!name)return Toast.show("Name cannot be empty");
+    if(name.length<3)return Toast.show("Minimum 3 characters");
+    DataAPI.update("circles",cid,{name,accent:[sel[1],sel[2]],color:sel[1]});
+    Sheet.close();if(cid===S.circleId)Theme.apply();
+    Toast.show("Circle updated ✓");renderAll();
+  };
+};
+window.deleteCircle=cid=>{
+  const c=DataAPI.get("circles",cid);if(!c)return;
+  if(Perm.role(S.userId,cid)!=="owner")return Toast.show("Only the Leader can delete a circle");
+  const w=document.createElement("div");
+  w.innerHTML=`
+  <p style="font-size:13.5px;color:var(--bad);font-weight:600">⚠️ This cannot be undone.</p>
+  <p style="font-size:13px;color:var(--dim)">All routines, events and app data in <b>${esc(c.name)}</b> will be permanently removed for every member.</p>
+  <div class="lbl" style="margin-top:4px">Type the circle name to confirm</div>
+  <input class="fld" id="dcName" placeholder="${esc(c.name)}" autocapitalize="none">
+  <button class="btn danger" id="dcGo" disabled>Delete circle</button>`;
+  Sheet.open("Delete circle",w);
+  const go=w.querySelector("#dcGo"),inp=w.querySelector("#dcName");
+  inp.oninput=()=>{go.disabled=inp.value.trim().toLowerCase()!==c.name.trim().toLowerCase();};
+  go.onclick=()=>{
+    ["routines","events","exceptions","circleApps"].forEach(col=>
+      DataAPI.list(col,{circleId:cid}).slice().forEach(r=>DataAPI.remove(col,r.id)));
+    DB.d.appRecords.filter(r=>r.circleId===cid).slice().forEach(r=>DataAPI.remove("appRecords",r.id));
+    DB.d.circleMembers.filter(m=>m.circleId===cid).slice().forEach(m=>DataAPI.remove("circleMembers",m.id));
+    DataAPI.remove("circles",cid);
+    Sheet.close();Toast.show("Circle “"+c.name+"” deleted");
+    if(S.circleId===cid){
+      const left=Perm.allowedCircleIds(S.userId);
+      if(left.length)setCircle(left[0]);
+      else{S.circleId=null;Session.save();renderAll();}
+    }else renderAll();
+  };
+};
 window.manageMember=memId=>{
   const mem=DataAPI.get("circleMembers",memId);if(!mem||mem.role==="owner")return;
   const p=DataAPI.get("people",mem.personId);
@@ -1432,7 +1573,7 @@ window.manageMember=memId=>{
 };
 window.setCircle=cid=>{
   S.circleId=cid;Session.save();Theme.apply();EventBus.emit("circle:changed");
-  S.askStarted=false;S.calFilter="all";S.calWeekOffset=0;
+  S.askStarted=false;S.calSel=null;S.calWeekOffset=0;
   renderAll();Toast.show(circle().name);
 };
 
@@ -1585,17 +1726,22 @@ async function boot(){
     const nx=ag.find(a=>mins(a.end)>new Date().getHours()*60+new Date().getMinutes());
     $("#splashPv").textContent=circle().name+" · "+ag.length+" today"+(nx?" · next: "+nx.title+" "+fmtT(nx.start):"");
   }else $("#splashPv").textContent=DB.error?"Live Sheets unavailable":"Private circles for family & friends";
+  /* splash: sunrise mark rises, letters cascade in, rings ripple */
+  $("#splashLogo").innerHTML=[..."KINETIK"].map(ch=>`<span class="ch">${ch}</span>`).join("");
   if(Motion.ok()){
-    gsap.fromTo("#splash .logo",{opacity:0,y:18,filter:"blur(8px)"},{opacity:1,y:0,filter:"blur(0px)",duration:.7,ease:"power3.out"});
-    gsap.fromTo("#splash .tag,#splash .pv",{opacity:0},{opacity:1,duration:.6,delay:.35,stagger:.15});
+    gsap.timeline()
+      .fromTo("#splash .srise svg",{y:50,opacity:0,scale:.4,transformOrigin:"50% 100%"},{y:0,opacity:1,scale:1,duration:.85,ease:"back.out(2)"})
+      .fromTo("#splash .logo .ch",{y:30,opacity:0,filter:"blur(7px)"},{y:0,opacity:1,filter:"blur(0px)",duration:.5,stagger:.055,ease:"power3.out"},"-=.4")
+      .fromTo("#splash .tag",{opacity:0,letterSpacing:".7em"},{opacity:1,letterSpacing:".34em",duration:.6,ease:"power2.out"},"-=.25")
+      .fromTo("#splash .pv",{opacity:0,y:12},{opacity:1,y:0,duration:.4,ease:"power2.out"},"-=.3");
   }
   setTimeout(()=>{
     const sp=$("#splash");
     const done=()=>{if(sp.style.display==="none")return;sp.style.display="none";has?enterShell():showLogin();};
-    if(Motion.ok())gsap.to(sp,{opacity:0,duration:.45,ease:"power2.in",onComplete:done});
+    if(Motion.ok())gsap.to(sp,{opacity:0,scale:1.07,duration:.5,ease:"power2.in",onComplete:done});
     /* rAF (and GSAP) throttles in background tabs — never let the splash hang */
-    setTimeout(done,600);
-  },has?1300:1500);
+    setTimeout(done,650);
+  },has?1750:1950);
   /* refresh listeners */
   ["calendar:eventCreated","calendar:routineCreated","circle:changed","app:installed"].forEach(e=>EventBus.on(e,()=>{if(S.tab==="today")renderToday();}));
   $$("#nav button").forEach(b=>b.onclick=()=>switchTab(b.dataset.tab));
