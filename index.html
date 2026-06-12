@@ -5,7 +5,9 @@ KINETIK MAIN SHELL STANDARD v1.0
 PRODUCT:
 Kinetik is a private life app for Family and Friends circles. Plans. People. Play.
 
-MAIN TABS: 1.Today 2.Calendar 3.Ask 4.Apps 5.Me
+MAIN TABS: 1.Today 2.Calendar 3.Moments 4.Apps 5.Me — plus the Ask orb docked in the
+nav cradle (opens full-screen with back button, WhatsApp pattern). Kinetik Store is its
+own full-screen app opened from the Apps grid.
 
 ARCHITECTURE:
 - Main shell is a single HTML file. Modular apps are separate single HTML files (App_*.html)
@@ -45,6 +47,7 @@ DO NOT:
   --font:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Segoe UI",sans-serif;
   --dur1:.2s;--dur2:.38s;--ease:cubic-bezier(.32,.72,.28,1);
   --sat:env(safe-area-inset-top,0px);--sab:env(safe-area-inset-bottom,0px);
+  --navb:calc(7px + var(--sab)*0.55);--navh:68px;
 }
 html[data-theme="dark"]{
   --bg0:#05070f;--bg1:#0a1022;--bg2:#101a36;
@@ -122,17 +125,41 @@ input.fld:focus,select.fld:focus{border-color:var(--acc)}
 #circlePill .dot{width:9px;height:9px;border-radius:50%;background:var(--acc);box-shadow:0 0 10px var(--acc)}
 #circlePill em{font-style:normal;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 #views{flex:1;position:relative;overflow:hidden}
-.view{position:absolute;inset:0;overflow-y:auto;padding:4px 18px calc(96px + var(--sab));display:none;-webkit-overflow-scrolling:touch}
+.view{position:absolute;inset:0;overflow-y:auto;padding:4px 18px calc(var(--navb) + var(--navh) + 20px);display:none;-webkit-overflow-scrolling:touch}
 .view.on{display:block}
 .view-inner{max-width:560px;margin:0 auto}
 #view-calendar .view-inner{max-width:980px}
-/* bottom nav */
-#nav{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(12px + var(--sab));z-index:40;display:flex;gap:2px;
-  border-radius:999px;padding:7px}
-#nav button{display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px 15px;border-radius:999px;font-size:10px;font-weight:700;color:var(--faint);transition:all var(--dur1)}
-#nav button svg{width:21px;height:21px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-#nav button.on{color:var(--text);background:color-mix(in srgb,var(--acc) 16%,transparent)}
-#nav button.on svg{stroke:var(--acc)}
+/* bottom nav — WhatsApp-style glass bar, cradle notch, sliding pill */
+#nav{position:fixed;left:12px;right:12px;bottom:var(--navb);z-index:40;height:var(--navh);
+  display:flex;align-items:stretch;justify-content:space-between;padding:8px 10px;border-radius:34px;
+  background:var(--glass2);backdrop-filter:blur(28px) saturate(1.5);-webkit-backdrop-filter:blur(28px) saturate(1.5);
+  border:1px solid var(--brd);box-shadow:0 14px 44px rgba(20,35,70,.18);
+  -webkit-mask:radial-gradient(circle 34px at 50% -10px,transparent 33px,#000 34px);
+  mask:radial-gradient(circle 34px at 50% -10px,transparent 33px,#000 34px)}
+@media(min-width:600px){#nav{left:50%;right:auto;width:540px;margin-left:-270px}}
+#nav button{position:relative;z-index:2;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+  border-radius:24px;font-size:10px;font-weight:700;color:var(--faint);transition:color var(--dur2) var(--ease)}
+#nav button svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;transition:transform var(--dur2) var(--ease)}
+#nav button.on{color:var(--acc)}
+#nav button.on svg{transform:translateY(-1px) scale(1.07)}
+#nav button:active svg{transform:scale(.86)}
+#nav button[data-tab="moments"]{justify-content:flex-end;padding-bottom:5px}
+#nav button[data-tab="moments"] svg{width:19px;height:19px}
+#navPill{position:absolute;z-index:1;top:8px;bottom:8px;left:10px;width:64px;border-radius:24px;
+  background:color-mix(in srgb,var(--acc) 14%,transparent);opacity:0;
+  transition:left .34s var(--ease),width .34s var(--ease),opacity .25s}
+/* Ask orb — docked in the cradle above Moments */
+#askOrb{position:fixed;left:calc(50% - 29px);bottom:calc(var(--navb) + 56px);z-index:41;
+  width:58px;height:58px;border-radius:50%;padding:0;
+  background:radial-gradient(circle at 32% 28%,color-mix(in srgb,var(--acc) 88%,#fff),var(--acc2) 75%);
+  box-shadow:0 10px 28px color-mix(in srgb,var(--acc2) 52%,transparent),inset 0 1px 3px rgba(255,255,255,.55);
+  display:flex;align-items:center;justify-content:center;color:#fff;
+  transition:transform var(--dur1) var(--ease),box-shadow var(--dur1)}
+#askOrb:before{content:"";position:absolute;inset:-7px;border-radius:50%;
+  background:radial-gradient(circle,color-mix(in srgb,var(--acc) 35%,transparent),transparent 70%);
+  animation:breathe 4.6s ease-in-out infinite;z-index:-1}
+#askOrb:active{transform:scale(.86)}
+#askOrb svg{width:25px;height:25px;stroke:#fff;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
 /* ============ TODAY (non-scroll) ============ */
 #view-today{overflow:hidden!important;display:none}
 #view-today.on{display:flex;flex-direction:column}
@@ -162,7 +189,7 @@ input.fld:focus,select.fld:focus{border-color:var(--acc)}
 .tmrw b{color:var(--text)}
 .allset{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;color:var(--dim);text-align:center}
 .allset .big{font-size:44px}
-#fab{position:fixed;right:18px;bottom:calc(86px + var(--sab));z-index:39;width:54px;height:54px;border-radius:50%;
+#fab{position:fixed;right:18px;bottom:calc(var(--navb) + var(--navh) + 14px);z-index:39;width:54px;height:54px;border-radius:50%;
   background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;font-size:26px;font-weight:300;box-shadow:0 12px 32px color-mix(in srgb,var(--acc) 45%,transparent);transition:transform var(--dur1) var(--ease)}
 #fab:active{transform:scale(.9) rotate(90deg)}
 /* ============ CALENDAR ============ */
@@ -191,10 +218,23 @@ input.fld:focus,select.fld:focus{border-color:var(--acc)}
 .dayblock h4 .dnum{font-size:17px}
 .dayblock h4 .wkb{font-size:9.5px;font-weight:800;color:var(--warn);border:1px solid color-mix(in srgb,var(--warn) 45%,transparent);border-radius:99px;padding:1px 7px}
 .empty-day{font-size:12.5px;color:var(--faint);padding:3px 0}
-/* ============ ASK ============ */
-#view-ask.on{display:flex;flex-direction:column}
-#view-ask .view-inner{display:flex;flex-direction:column;height:100%;max-width:620px;width:100%}
-#askStream{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:13px;padding:6px 2px 14px;-webkit-overflow-scrolling:touch}
+/* ============ ASK (full-screen overlay, WhatsApp pattern) ============ */
+#askScreen{position:fixed;inset:0;z-index:60;display:none;flex-direction:column;
+  background:radial-gradient(120% 80% at 80% -10%,color-mix(in srgb,var(--acc) 13%,transparent),transparent 55%),
+  radial-gradient(110% 90% at 0% 100%,color-mix(in srgb,var(--acc2) 10%,transparent),transparent 55%),var(--bg0)}
+#askScreen.on{display:flex}
+.fsbar{display:flex;align-items:center;gap:11px;padding:calc(10px + var(--sat)) 14px 10px;flex:0 0 auto;
+  background:var(--glass);backdrop-filter:blur(24px) saturate(1.4);-webkit-backdrop-filter:blur(24px) saturate(1.4);border-bottom:1px solid var(--brd2)}
+.fsbar .backbtn{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--chip);flex:0 0 auto;transition:transform var(--dur1)}
+.fsbar .backbtn:active{transform:scale(.88)}
+.fsbar .backbtn svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2.1;stroke-linecap:round;stroke-linejoin:round}
+.fsbar .t{min-width:0}
+.fsbar .t b{font-size:15.5px;display:block;line-height:1.2;letter-spacing:-.01em}
+.fsbar .t span{font-size:11.5px;color:var(--dim);display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fsbar .orbmini{width:34px;height:34px;border-radius:50%;flex:0 0 auto;
+  background:radial-gradient(circle at 32% 28%,color-mix(in srgb,var(--acc) 88%,#fff),var(--acc2) 75%);
+  box-shadow:0 4px 14px color-mix(in srgb,var(--acc) 40%,transparent)}
+#askStream{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:13px;padding:14px 16px;max-width:620px;width:100%;margin:0 auto;-webkit-overflow-scrolling:touch}
 .orbwrap{display:flex;flex-direction:column;align-items:center;gap:13px;padding:26px 0 8px}
 #orb{width:84px;height:84px;border-radius:50%;position:relative;
   background:radial-gradient(circle at 32% 30%,color-mix(in srgb,var(--acc) 85%,#fff),var(--acc2) 70%);
@@ -213,10 +253,8 @@ input.fld:focus,select.fld:focus{border-color:var(--acc)}
 .pvcard h4{font-size:17px;margin:5px 0 2px}
 .pvcard .kv{font-size:13px;color:var(--dim);display:flex;flex-direction:column;gap:2px;margin:7px 0}
 .pvcard .acts{display:flex;gap:8px;margin-top:11px}
-#view-ask{padding-bottom:0}
-#composer{display:flex;gap:9px;align-items:flex-end;padding:10px 0 calc(82px + var(--sab))}
-#askHead{display:flex;justify-content:flex-end;padding:4px 0 2px;min-height:34px}
-#askClear{font-size:12px;font-weight:700;color:var(--dim);background:var(--chip);border-radius:99px;padding:6px 14px;border:1px solid var(--brd2)}
+#composer{display:flex;gap:9px;align-items:flex-end;padding:10px 14px calc(12px + var(--sab));max-width:620px;width:100%;margin:0 auto;flex:0 0 auto}
+#askClear{margin-left:auto;font-size:12px;font-weight:700;color:var(--dim);background:var(--chip);border-radius:99px;padding:7px 14px;border:1px solid var(--brd2);flex:0 0 auto}
 .askcard{align-self:flex-start;width:100%;max-width:430px;border-radius:var(--radius-md);padding:14px 16px;display:flex;flex-direction:column;gap:5px}
 .askcard .ah{font-size:10.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--acc);margin-bottom:3px}
 .askcard .arow{display:flex;align-items:center;gap:10px;font-size:13.5px;padding:4px 0}
@@ -248,6 +286,37 @@ input.fld:focus,select.fld:focus{border-color:var(--acc)}
 .getbtn{margin-left:auto;flex:0 0 auto;border-radius:999px;padding:7px 20px;font-size:13px;font-weight:800;letter-spacing:.03em;background:color-mix(in srgb,var(--acc) 14%,transparent);color:var(--acc);transition:all var(--dur1)}
 .getbtn:active{transform:scale(.94)}
 .getbtn.soon{opacity:.45;pointer-events:none}
+/* store — full-screen app (back button, nav hidden) */
+#storeScreen{position:fixed;inset:0;z-index:60;display:none;flex-direction:column;
+  background:radial-gradient(120% 80% at 80% -10%,color-mix(in srgb,var(--acc) 10%,transparent),transparent 55%),var(--bg0)}
+#storeScreen.on{display:flex}
+#storeBody{flex:1;overflow-y:auto;padding:16px 18px calc(28px + var(--sab));-webkit-overflow-scrolling:touch}
+#storeBody .inner{max-width:560px;margin:0 auto}
+/* ============ MOMENTS (visual preview) ============ */
+.stories{display:flex;gap:13px;overflow-x:auto;padding:4px 2px 14px;scrollbar-width:none}
+.stories::-webkit-scrollbar{display:none}
+.story{display:flex;flex-direction:column;align-items:center;gap:5px;flex:0 0 auto;width:64px}
+.story .ring{display:block;width:60px;height:60px;border-radius:50%;padding:3px;background:linear-gradient(135deg,var(--acc),var(--acc2) 55%,#f472b6)}
+.story .ring.seen{background:var(--brd2)}
+.story .ring>span{display:flex;width:100%;height:100%;border-radius:50%;align-items:center;justify-content:center;font-weight:700;color:#fff;font-size:17px;border:2.5px solid var(--bg0)}
+.story small{font-size:10.5px;color:var(--dim);max-width:64px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.post{border-radius:var(--radius-md);overflow:hidden;margin-bottom:16px}
+.post .ph{display:flex;align-items:center;gap:10px;padding:11px 14px}
+.post .ph b{font-size:13.5px;display:block;line-height:1.25}
+.post .ph small{font-size:11px;color:var(--dim)}
+.post .pimg{aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;font-size:64px;position:relative;overflow:hidden}
+.post .pimg:after{content:"";position:absolute;inset:0;background:radial-gradient(120% 90% at 30% 20%,rgba(255,255,255,.22),transparent 55%)}
+.post .pimg .big{filter:drop-shadow(0 10px 24px rgba(0,0,0,.28));position:relative;z-index:1}
+.post .pacts{display:flex;align-items:center;gap:17px;padding:10px 14px 2px}
+.post .pacts button{display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;color:var(--dim);transition:transform var(--dur1)}
+.post .pacts button:active{transform:scale(.86)}
+.post .pacts svg{width:23px;height:23px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;transition:all var(--dur1)}
+.post .pacts .liked{color:#f43f5e}
+.post .pacts .liked svg{fill:#f43f5e;stroke:#f43f5e}
+.post .cap{padding:4px 14px 13px;font-size:13.5px;line-height:1.5}
+.post .cap .likes{font-size:12.5px;font-weight:700;display:block;margin-bottom:2px}
+.post .cap small{display:block;color:var(--faint);font-size:10.5px;margin-top:4px;text-transform:uppercase;letter-spacing:.07em;font-weight:700}
+.mompill{font-size:10px;font-weight:800;letter-spacing:.08em;padding:4px 10px;border-radius:99px;background:color-mix(in srgb,var(--acc) 14%,transparent);color:var(--acc);flex:0 0 auto}
 /* app host */
 #appHost{position:fixed;inset:0;z-index:70;display:none;flex-direction:column;background:var(--bg0)}
 #appHost.on{display:flex}
@@ -264,6 +333,7 @@ input.fld:focus,select.fld:focus{border-color:var(--acc)}
 .me-row .end{margin-left:auto;color:var(--dim);font-size:13px;display:flex;align-items:center;gap:7px}
 .me-row select{background:var(--chip);border:1px solid var(--brd2);border-radius:10px;padding:6px 10px;font-size:13px;outline:none}
 .rolechip{font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:3px 9px;border-radius:99px;background:var(--chip);color:var(--dim)}
+.rolechip.lead{background:color-mix(in srgb,var(--acc) 16%,transparent);color:var(--acc)}
 #logoutBtn{width:100%;margin:4px 0 26px;padding:14px;border-radius:var(--radius-sm);font-weight:700;color:var(--bad);background:color-mix(in srgb,var(--bad) 9%,transparent);border:1px solid color-mix(in srgb,var(--bad) 25%,transparent)}
 /* ============ SHEETS & TOAST ============ */
 #sheetLayer{position:fixed;inset:0;z-index:80;display:none}
@@ -277,7 +347,7 @@ input.fld:focus,select.fld:focus{border-color:var(--acc)}
   #sheet{left:50%;right:auto;bottom:auto;top:50%;transform:translate(-50%,-50%);width:460px;border-radius:var(--radius-lg);max-height:78%}
   #sheet .grab{display:none}
 }
-#toasts{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(92px + var(--sab));z-index:95;display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none}
+#toasts{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(var(--navb) + var(--navh) + 16px);z-index:95;display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none}
 .toast{border-radius:999px;padding:11px 20px;font-size:13.5px;font-weight:600;animation:tpop .3s var(--ease)}
 @keyframes tpop{from{opacity:0;transform:translateY(12px) scale(.92)}to{opacity:1}}
 /* circle switcher cards */
@@ -326,25 +396,42 @@ input.fld:focus,select.fld:focus{border-color:var(--acc)}
   <div id="views">
     <div class="view" id="view-today"><div class="view-inner" id="todayBody"></div></div>
     <div class="view" id="view-calendar"><div class="view-inner" id="calBody"></div></div>
-    <div class="view" id="view-ask"><div class="view-inner">
-        <div id="askHead"><button id="askClear" class="hide">Clear chat</button></div>
-        <div id="askStream"></div>
-        <div id="composer">
-          <textarea id="askInput" rows="1" placeholder="Message Kinetik…"></textarea>
-          <button id="askSend" disabled><svg viewBox="0 0 24 24"><path d="M3.4 20.4l17.4-7.5c.9-.4.9-1.6 0-2L3.4 3.6c-.8-.3-1.6.4-1.4 1.2L3.6 11l9.4 1-9.4 1-1.6 6.2c-.2.8.6 1.5 1.4 1.2z"/></svg></button>
-        </div>
-    </div></div>
+    <div class="view" id="view-moments"><div class="view-inner" id="momentsBody"></div></div>
     <div class="view" id="view-apps"><div class="view-inner" id="appsBody"></div></div>
     <div class="view" id="view-me"><div class="view-inner" id="meBody"></div></div>
   </div>
   <button id="fab" class="hide">+</button>
-  <nav id="nav" class="glass">
+  <nav id="nav">
+    <div id="navPill"></div>
     <button data-tab="today"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Today</button>
     <button data-tab="calendar"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Calendar</button>
-    <button data-tab="ask"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/></svg>Ask</button>
+    <button data-tab="moments"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="3.6"/><circle cx="17.2" cy="6.8" r=".55" fill="currentColor"/></svg>Moments</button>
     <button data-tab="apps"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="2"/><rect x="13" y="4" width="7" height="7" rx="2"/><rect x="4" y="13" width="7" height="7" rx="2"/><rect x="13" y="13" width="7" height="7" rx="2"/></svg>Apps</button>
     <button data-tab="me"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5"/></svg>Me</button>
   </nav>
+  <button id="askOrb" aria-label="Ask Kinetik"><svg viewBox="0 0 24 24"><path d="M12 3.5l1.9 5.4 5.4 1.9-5.4 1.9L12 18.1l-1.9-5.4-5.4-1.9 5.4-1.9z"/><path d="M18.8 15.6l.65 1.85 1.85.65-1.85.65-.65 1.85-.65-1.85-1.85-.65 1.85-.65z"/></svg></button>
+</div>
+
+<div id="askScreen">
+  <div class="fsbar">
+    <button class="backbtn" id="askBack" aria-label="Back"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <span class="orbmini"></span>
+    <div class="t"><b>Ask Kinetik</b><span id="askSub">—</span></div>
+    <button id="askClear" class="hide">Clear</button>
+  </div>
+  <div id="askStream"></div>
+  <div id="composer">
+    <textarea id="askInput" rows="1" placeholder="Message Kinetik…"></textarea>
+    <button id="askSend" disabled><svg viewBox="0 0 24 24"><path d="M3.4 20.4l17.4-7.5c.9-.4.9-1.6 0-2L3.4 3.6c-.8-.3-1.6.4-1.4 1.2L3.6 11l9.4 1-9.4 1-1.6 6.2c-.2.8.6 1.5 1.4 1.2z"/></svg></button>
+  </div>
+</div>
+
+<div id="storeScreen">
+  <div class="fsbar">
+    <button class="backbtn" id="storeBack" aria-label="Back"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <div class="t"><b>Kinetik Store</b><span id="storeSub">Apps for your circle</span></div>
+  </div>
+  <div id="storeBody"><div class="inner" id="storeInner"></div></div>
 </div>
 
 <div id="appHost"><div id="appHostBar"><b id="appHostTitle">App</b><button class="btn ghost" style="padding:7px 16px" id="appHostDone">Done</button></div><iframe id="appFrame" title="app"></iframe></div>
@@ -493,11 +580,17 @@ const Session={KEY:"kinetik_session",
   clear(){localStorage.removeItem(this.KEY);}
 };
 
-/* ---------------- PermissionEngine / CircleAccessGuard ---------------- */
+/* ---------------- PermissionEngine / CircleAccessGuard ----------------
+   Everyone has a personal account (Users). Each circle has exactly ONE Leader
+   (role "owner"); the Leader can appoint Co-leaders. Roles map 1:1 to a future
+   TS `Role` union + Firestore security rules. */
+const ROLE_LABEL={owner:"Leader",coleader:"Co-leader",admin:"Co-leader",adult:"Member",member:"Member",viewer:"Viewer",child:"Viewer"};
+const ROLE_PERM={owner:"full_control",coleader:"manage",member:"edit_own",viewer:"read_only"};
 const Perm={
   allowedCircleIds(userId){return DB.d.circleMembers.filter(m=>m.userId===userId).map(m=>m.circleId);},
   role(userId,circleId){const m=DB.d.circleMembers.find(m=>m.userId===userId&&m.circleId===circleId);return m?m.role:null;},
-  canEditCalendar(userId,circleId){return["owner","admin","adult","member"].includes(this.role(userId,circleId));}
+  canEditCalendar(userId,circleId){return["owner","coleader","admin","adult","member"].includes(this.role(userId,circleId));},
+  canManageMembers(userId,circleId){return["owner","coleader","admin"].includes(this.role(userId,circleId));}
 };
 
 /* ---------------- CalendarEngine ---------------- */
@@ -614,16 +707,26 @@ $("#scrim").onclick=()=>Sheet.close();
 /* =================================================================
    VIEWS
 ================================================================= */
+function movePill(){
+  const pill=$("#navPill");if(!pill)return;
+  const b=$$("#nav button").find(x=>x.classList.contains("on"));
+  if(!b||!b.offsetWidth){pill.style.opacity=0;return;}
+  /* offsetLeft is transform-immune (GSAP reveal animates translateY) */
+  requestAnimationFrame(()=>{
+    pill.style.left=b.offsetLeft+"px";pill.style.width=b.offsetWidth+"px";pill.style.opacity=1;
+  });
+}
 function switchTab(tab){
   S.tab=tab;
   $$("#nav button").forEach(b=>b.classList.toggle("on",b.dataset.tab===tab));
   $$(".view").forEach(v=>v.classList.toggle("on",v.id==="view-"+tab));
   $("#fab").classList.toggle("hide",tab!=="today");
+  movePill();
   render(tab);
   const v=$("#view-"+tab+" .view-inner");if(v)Motion.reveal(v);
 }
 function render(tab){
-  ({today:renderToday,calendar:renderCal,ask:renderAsk,apps:renderApps,me:renderMe}[tab]||renderToday)();
+  ({today:renderToday,calendar:renderCal,moments:renderMoments,apps:renderApps,me:renderMe}[tab]||renderToday)();
   $("#circleName").textContent=circle()?circle().name:"—";
   const m=me();const av=$("#meAv");if(m){av.textContent=m.displayName[0];av.style.background=m.color;}
 }
@@ -815,6 +918,43 @@ function renderCal(){
   Motion.stagger("#calGrid .dayblock, #calGrid .boardwrap");
 }
 
+/* ---------------- MOMENTS (visual preview — no backend yet) ---------------- */
+const MomentsDemo={liked:{},posts:[
+  {id:"mp1",who:"Kinara",emoji:"🎾",grad:["#0ea5e9","#22d3ee"],cap:"Padel sunrise session — 6 games, 2 wins, 1 very sore arm 😅",likes:12,when:"2h ago"},
+  {id:"mp2",who:"Aldyth",emoji:"🍕",grad:["#f59e0b","#f97316"],cap:"Family Friday: pizza, charades, and Baginda's undefeated streak continues",likes:23,when:"Yesterday"},
+  {id:"mp3",who:"Baginda",emoji:"🏊",grad:["#10b981","#34d399"],cap:"25m freestyle badge with Coach Sae! 🏅",likes:31,when:"2 days ago"},
+  {id:"mp4",who:"Keyla",emoji:"🤸",grad:["#8b5cf6","#d946ef"],cap:"New gymnastics routine almost ready for the show ✨",likes:18,when:"3 days ago"}
+]};
+function renderMoments(){
+  const c=circle();if(!c)return;
+  const B=$("#momentsBody"),ppl=circlePeople();
+  const colorOf=n=>{const p=ppl.find(x=>x.displayName.toLowerCase()===n.toLowerCase());return p?p.color:"#64748b";};
+  B.innerHTML=`
+  <div class="spread" style="margin:2px 0 10px"><div><h2 style="font-size:22px;letter-spacing:-.02em">Moments</h2>
+    <p style="font-size:12.5px;color:var(--dim)">${esc(c.name)} · private to your circle</p></div>
+    <span class="mompill">PREVIEW</span></div>
+  <div class="stories">
+    <button class="story" onclick="Toast.show('Posting arrives in the next build')"><span class="ring" style="background:var(--brd2)"><span style="background:var(--glass2);color:var(--acc);font-size:24px">+</span></span><small>Your story</small></button>
+    ${ppl.map((p,i)=>`<button class="story" onclick="Toast.show('Stories arrive in the next build')"><span class="ring ${i>1?"seen":""}"><span style="background:${p.color}">${esc(p.displayName[0])}</span></span><small>${esc(p.displayName)}</small></button>`).join("")}
+  </div>
+  ${MomentsDemo.posts.map(po=>{
+    const liked=MomentsDemo.liked[po.id],n=po.likes+(liked?1:0);
+    return `<article class="post glass">
+    <div class="ph"><span class="av" style="background:${colorOf(po.who)};width:32px;height:32px;font-size:12px">${esc(po.who[0])}</span>
+      <div><b>${esc(po.who)}</b><small>${esc(c.name)}</small></div></div>
+    <div class="pimg" style="background:linear-gradient(135deg,${po.grad[0]},${po.grad[1]})"><span class="big">${po.emoji}</span></div>
+    <div class="pacts">
+      <button class="${liked?"liked":""}" onclick="momLike('${po.id}')"><svg viewBox="0 0 24 24"><path d="M12 20s-7-4.6-9.2-8.8C1.2 8 3 4.5 6.6 4.5c2 0 3.6 1.1 4.4 2.6.8-1.5 2.4-2.6 4.4-2.6 3.6 0 5.4 3.5 3.8 6.7C19 15.4 12 20 12 20z"/></svg>${n}</button>
+      <button onclick="Toast.show('Comments arrive in the next build')"><svg viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-8 8H4l2.2-2.8A8 8 0 1 1 21 12z"/></svg></button>
+      <button onclick="Toast.show('Sharing arrives in the next build')"><svg viewBox="0 0 24 24"><path d="M22 3L11 13M22 3l-7 18-4-8-8-4z"/></svg></button>
+    </div>
+    <div class="cap"><span class="likes">${n} likes</span><b>${esc(po.who)}</b> ${esc(po.cap)}<small>${esc(po.when)}</small></div>
+    </article>`;}).join("")}
+  <p style="text-align:center;font-size:12px;color:var(--faint);padding:6px 0 14px">Visual preview — posting &amp; comments connect in the next build</p>`;
+  Motion.stagger("#momentsBody .post");
+}
+window.momLike=id=>{MomentsDemo.liked[id]=!MomentsDemo.liked[id];renderMoments();};
+
 /* ---------------- ASK ---------------- */
 const Ask={
   hello(){
@@ -902,51 +1042,81 @@ function parseTime(s){
   if(m[3]){if(/pm/i.test(m[3])&&h<12)h+=12;if(/am/i.test(m[3])&&h===12)h=0;}
   return pad(h)+":"+mn;
 }
-function renderAsk(){if(!S.askStarted)Ask.hello();$("#askClear").classList.toggle("hide",!S.askStarted);}
+/* Ask = full-screen overlay (WhatsApp pattern): orb opens it, back returns to last tab */
+const AskScreen={
+  open(){
+    $("#askSub").textContent=circle()?circle().name:"";
+    if(!S.askStarted)Ask.hello();
+    $("#askClear").classList.toggle("hide",!S.askStarted);
+    $("#askScreen").classList.add("on");
+    if(Motion.ok())gsap.fromTo("#askScreen",{y:26,opacity:0},{y:0,opacity:1,duration:.36,ease:"power3.out"});
+    setTimeout(()=>{const s=$("#askStream");s.scrollTop=s.scrollHeight;},60);
+  },
+  close(){$("#askScreen").classList.remove("on");}
+};
+$("#askOrb").onclick=()=>AskScreen.open();
+$("#askBack").onclick=()=>AskScreen.close();
 $("#askClear").onclick=()=>{S.askStarted=false;$("#askClear").classList.add("hide");Ask.hello();};
 const askIn=$("#askInput");
 askIn.addEventListener("input",()=>{$("#askSend").disabled=!askIn.value.trim();askIn.style.height="auto";askIn.style.height=Math.min(110,askIn.scrollHeight)+"px";});
 askIn.addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();Ask.send(askIn.value);}});
 $("#askSend").onclick=()=>Ask.send(askIn.value);
 
-/* ---------------- APPS ---------------- */
+/* ---------------- APPS (iPhone home grid) + STORE (full-screen app) ---------------- */
 function renderApps(){
-  const c=circle(),B=$("#appsBody");
+  const c=circle();if(!c)return;
+  const B=$("#appsBody");
   const installed=DB.d.circleApps.filter(a=>a.circleId===S.circleId&&a.installed).map(a=>DataAPI.get("appCatalog",a.appId)).filter(Boolean);
-  const avail=DB.d.appCatalog.filter(a=>a.allowed.includes(c.type));
-  const isInst=id=>!!installed.find(i=>i.id===id);
-  const featured=avail.find(a=>a.status==="live"&&!isInst(a.id))||avail.find(a=>a.status==="live");
-  const storeRows=avail.length?avail.map(a=>{
-    const inst=isInst(a.id),soon=a.status==="soon";
-    return `<div class="strow"><span class="ic" style="background:linear-gradient(135deg,${a.gradient[0]},${a.gradient[1]})">${a.glyph}</span>
-    <div style="min-width:0"><b>${esc(a.name)}</b><p>${esc(a.tagline)}</p>${inst&&!soon?`<button class="rm" onclick="storeRm('${a.id}')">Remove from circle</button>`:""}</div>
-    <button class="getbtn ${soon?"soon":""}" onclick="${inst?`storeOpen('${a.id}')`:`storeGet('${a.id}')`}">${soon?"SOON":inst?"OPEN":"GET"}</button></div>`;
-  }).join(""):`<p style="padding:12px 0;color:var(--dim);font-size:13.5px">No apps are available for this circle type yet.</p>`;
   B.innerHTML=`
-  <div class="lbl" style="margin:8px 0 16px">My Apps</div>
-  <div class="appgrid" style="margin-bottom:10px">${installed.map(a=>`
-    <button class="appico" onclick="AppHost.open('${a.id}')"><span class="ic" style="background:linear-gradient(135deg,${a.gradient[0]},${a.gradient[1]})">${a.glyph}</span><span>${esc(a.name)}</span></button>`).join("")||'<p style="grid-column:1/-1;color:var(--dim);font-size:13.5px">No apps yet — get one from the Store below.</p>'}</div>
-
-  <h2 style="font-size:25px;letter-spacing:-.02em;margin:26px 0 2px">Kinetik Store</h2>
-  <p style="font-size:12.5px;color:var(--dim);margin-bottom:14px">Apps for ${esc(c.name)}</p>
-  ${featured?`<div class="feat" style="background:linear-gradient(135deg,${featured.gradient[0]},${featured.gradient[1]})">
-    <span class="k">FEATURED</span><h3>${esc(featured.name)}</h3><p>${esc(featured.tagline)}</p>
-    <div class="fr"><span class="ic">${featured.glyph}</span>
-    <button class="getbtn" style="background:rgba(255,255,255,.94);color:#0d1426" onclick="${isInst(featured.id)?`storeOpen('${featured.id}')`:`storeGet('${featured.id}')`}">${isInst(featured.id)?"OPEN":"GET"}</button></div></div>`:""}
-  <div class="me-sec glass" style="padding:4px 16px">${storeRows}</div>
-  <p style="font-size:11.5px;color:var(--faint);margin-top:12px;text-align:center">Apps install per circle · removing keeps your data</p>`;
-  Motion.stagger("#appsBody .appico, #appsBody .feat");
+  <div class="lbl" style="margin:8px 0 18px">${esc(c.name)} · Apps</div>
+  <div class="appgrid">${installed.map(a=>`
+    <button class="appico" onclick="AppHost.open('${a.id}')"><span class="ic" style="background:linear-gradient(135deg,${a.gradient[0]},${a.gradient[1]})">${a.glyph}</span><span>${esc(a.name)}</span></button>`).join("")}
+    <button class="appico" onclick="Store.open()"><span class="ic" style="background:linear-gradient(135deg,#1b2540,#39435e);color:#fff;font-size:27px">◎</span><span>Kinetik Store</span></button>
+  </div>
+  ${installed.length?"":'<p style="color:var(--dim);font-size:13.5px;margin-top:14px;text-align:center">No apps yet — open the Kinetik Store to get one.</p>'}`;
+  Motion.stagger("#appsBody .appico");
 }
+const Store={
+  open(){
+    $("#storeSub").textContent="Apps for "+(circle()?circle().name:"your circle");
+    this.render();
+    $("#storeScreen").classList.add("on");
+    if(Motion.ok())gsap.fromTo("#storeScreen",{y:26,opacity:0},{y:0,opacity:1,duration:.36,ease:"power3.out"});
+  },
+  close(){$("#storeScreen").classList.remove("on");renderApps();},
+  render(){
+    const c=circle(),B=$("#storeInner");
+    const avail=DB.d.appCatalog.filter(a=>a.allowed.includes(c.type));
+    const isInst=id=>!!DB.d.circleApps.find(x=>x.circleId===S.circleId&&x.appId===id&&x.installed);
+    const featured=avail.find(a=>a.status==="live"&&!isInst(a.id))||avail.find(a=>a.status==="live");
+    const rows=avail.length?avail.map(a=>{
+      const inst=isInst(a.id),soon=a.status==="soon";
+      return `<div class="strow"><span class="ic" style="background:linear-gradient(135deg,${a.gradient[0]},${a.gradient[1]})">${a.glyph}</span>
+      <div style="min-width:0"><b>${esc(a.name)}</b><p>${esc(a.tagline)}</p>${inst&&!soon?`<button class="rm" onclick="storeRm('${a.id}')">Remove from circle</button>`:""}</div>
+      <button class="getbtn ${soon?"soon":""}" onclick="${inst?`storeOpen('${a.id}')`:`storeGet('${a.id}')`}">${soon?"SOON":inst?"OPEN":"GET"}</button></div>`;
+    }).join(""):`<p style="padding:12px 0;color:var(--dim);font-size:13.5px">No apps are available for this circle type yet.</p>`;
+    B.innerHTML=`
+    ${featured?`<div class="feat" style="background:linear-gradient(135deg,${featured.gradient[0]},${featured.gradient[1]})">
+      <span class="k">FEATURED</span><h3>${esc(featured.name)}</h3><p>${esc(featured.tagline)}</p>
+      <div class="fr"><span class="ic">${featured.glyph}</span>
+      <button class="getbtn" style="background:rgba(255,255,255,.94);color:#0d1426" onclick="${isInst(featured.id)?`storeOpen('${featured.id}')`:`storeGet('${featured.id}')`}">${isInst(featured.id)?"OPEN":"GET"}</button></div></div>`:""}
+    <div class="me-sec glass" style="padding:4px 16px">${rows}</div>
+    <p style="font-size:11.5px;color:var(--faint);margin-top:12px;text-align:center">Apps install per circle · removing keeps your data</p>`;
+    Motion.stagger("#storeInner .feat, #storeInner .strow");
+  }
+};
+$("#storeBack").onclick=()=>Store.close();
 window.storeGet=appId=>{
   let ca=DB.d.circleApps.find(a=>a.circleId===S.circleId&&a.appId===appId);
-  if(ca)ca.installed=true;else DataAPI.create("circleApps",{circleId:S.circleId,appId,installed:true});
-  DB.save();Toast.show("Installed ✓");EventBus.emit("app:installed");renderApps();
+  if(ca){ca.installed=true;DB.save();SyncEngine.queue("circleApps","update",ca);}
+  else DataAPI.create("circleApps",{circleId:S.circleId,appId,installed:true});
+  Toast.show("Installed ✓");EventBus.emit("app:installed");Store.render();
 };
 window.storeOpen=appId=>AppHost.open(appId);
 window.storeRm=appId=>{
   const ca=DB.d.circleApps.find(a=>a.circleId===S.circleId&&a.appId===appId);
-  if(ca){ca.installed=false;DB.save();}
-  Toast.show("Removed — app data kept");EventBus.emit("app:uninstalled");renderApps();
+  if(ca){ca.installed=false;DB.save();SyncEngine.queue("circleApps","update",ca);}
+  Toast.show("Removed — app data kept");EventBus.emit("app:uninstalled");Store.render();
 };
 
 /* ---------------- App Host + Bridge ---------------- */
@@ -993,9 +1163,11 @@ function renderMe(){
   const myCircles=Perm.allowedCircleIds(S.userId).map(id=>DataAPI.get("circles",id)).filter(Boolean);
   const ppl=circlePeople();
   const st=DB.d.settings;
+  const myRole=Perm.role(S.userId,S.circleId);
+  const canManage=Perm.canManageMembers(S.userId,S.circleId);
   B.innerHTML=`
   <div class="me-prof glass"><span class="av" style="background:${m.color};width:54px;height:54px;font-size:19px">${esc(m.displayName[0])}</span>
-    <div><b>${esc(m.displayName)}</b><span>${esc(Perm.role(S.userId,S.circleId)||"member")} · ${esc(circle().name)}</span></div></div>
+    <div><b>${esc(m.displayName)}</b><span>${esc(ROLE_LABEL[myRole]||"Member")} · ${esc(circle().name)}</span></div></div>
 
   <div class="lbl" style="margin:4px 0 9px">My Circles</div>
   <div class="me-sec glass">${myCircles.map(c=>`
@@ -1006,8 +1178,12 @@ function renderMe(){
   <div class="lbl" style="margin:4px 0 9px">People · ${esc(circle().name)}</div>
   <div class="me-sec glass">${ppl.map(p=>{
     const mem=DB.d.circleMembers.find(x=>x.circleId===S.circleId&&x.personId===p.id);
-    return `<div class="me-row">${avHtml(p.id)} ${esc(p.displayName)}<span class="end"><span class="rolechip">${esc(mem?mem.role:"member")}</span></span></div>`;}).join("")}
+    const role=mem?mem.role:"member",tag=ROLE_LABEL[role]||"Member";
+    return canManage&&mem&&role!=="owner"
+      ?`<button class="me-row" onclick="manageMember('${mem.id}')">${avHtml(p.id)} ${esc(p.displayName)}<span class="end"><span class="rolechip">${tag}</span> ›</span></button>`
+      :`<div class="me-row">${avHtml(p.id)} ${esc(p.displayName)}<span class="end"><span class="rolechip ${role==="owner"?"lead":""}">${tag}</span></span></div>`;}).join("")}
     <button class="me-row" id="invBtn" style="color:var(--acc);font-weight:600">+ Invite member (existing account)</button></div>
+  <p style="font-size:11.5px;color:var(--faint);margin:-5px 2px 13px;line-height:1.5">Everyone has a personal account. Each circle has <b>one Leader</b>; the Leader can appoint Co-leaders to help manage people and plans.</p>
 
   <div class="lbl" style="margin:4px 0 9px">Settings</div>
   <div class="me-sec glass">
@@ -1041,15 +1217,37 @@ function renderMe(){
   $("#invBtn").onclick=()=>{
     const w=document.createElement("div");
     const others=DB.d.users.filter(u2=>u2.id!==S.userId&&!DB.d.circleMembers.find(mm=>mm.circleId===S.circleId&&mm.userId===u2.id));
-    w.innerHTML=`<p style="font-size:13px;color:var(--dim)">First build: you can only add people who already have a Kinetik account. Email invite links arrive in the next build.</p>
-    ${others.length?others.map(u2=>`<button class="persona" data-u="${u2.id}"><span class="av" style="background:#64748b">${esc(u2.displayName[0])}</span><span><b>${esc(u2.displayName)}</b><span>@${esc(u2.username)}</span></span></button>`).join(""):'<p style="font-size:13.5px;color:var(--faint)">No other accounts exist yet.</p>'}
+    let selU=null,selRole="member";
+    w.innerHTML=`<p style="font-size:13px;color:var(--dim)">First build adds <b>existing accounts</b> only — email invite links arrive next build.</p>
+    ${others.length?`<input class="fld" id="invQ" placeholder="Search name or username" autocapitalize="none">
+    <div id="invList" style="display:flex;flex-direction:column;gap:8px"></div>
+    <div class="lbl" style="margin-top:2px">Role in ${esc(circle().name)}</div>
+    <div class="filters" id="invRoles">
+      <button class="chip on" data-r="member">Member</button>
+      <button class="chip" data-r="coleader">Co-leader</button>
+      <button class="chip" data-r="viewer">Viewer</button></div>
+    <button class="btn" id="invGo" disabled>Add to ${esc(circle().name)}</button>`
+    :'<p style="font-size:13.5px;color:var(--faint)">Everyone with a Kinetik account is already in this circle.</p>'}
     <p style="font-size:12px;color:var(--faint)">They will <b>only</b> see ${esc(circle().name)} — never your other circles.</p>`;
     Sheet.open("Invite member",w);
-    w.querySelectorAll(".persona").forEach(b=>b.onclick=()=>{
-      const u2=DataAPI.get("users",b.dataset.u);
-      DataAPI.create("circleMembers",{circleId:S.circleId,personId:u2.personId,userId:u2.id,role:"member"});
-      Sheet.close();Toast.show(u2.displayName+" added ✓");renderMe();
-    });
+    if(!others.length)return;
+    const listEl=w.querySelector("#invList");
+    const draw=q=>{
+      const hits=others.filter(u2=>!q||[u2.displayName,u2.username,u2.email].some(v=>String(v||"").toLowerCase().includes(q)));
+      listEl.innerHTML=hits.map(u2=>`<button class="persona${selU&&selU.id===u2.id?" on":""}" data-u="${u2.id}"><span class="av" style="background:${personColor(u2.personId)||"#64748b"}">${esc(u2.displayName[0])}</span><span><b>${esc(u2.displayName)}</b><span>@${esc(u2.username)}</span></span></button>`).join("")||'<p style="font-size:13px;color:var(--faint)">No matching account.</p>';
+      listEl.querySelectorAll(".persona").forEach(b=>b.onclick=()=>{selU=DataAPI.get("users",b.dataset.u);draw(q);w.querySelector("#invGo").disabled=false;});
+    };
+    draw("");
+    w.querySelector("#invQ").oninput=e=>draw(e.target.value.trim().toLowerCase());
+    w.querySelectorAll("#invRoles .chip").forEach(ch=>ch.onclick=()=>{
+      w.querySelectorAll("#invRoles .chip").forEach(x=>x.classList.remove("on"));ch.classList.add("on");selRole=ch.dataset.r;});
+    w.querySelector("#invGo").onclick=()=>{
+      if(!selU)return;
+      const pid=selU.personId||selU.defaultPersonId;
+      if(!pid)return Toast.show("That account has no person profile yet");
+      DataAPI.create("circleMembers",{circleId:S.circleId,personId:pid,userId:selU.id,role:selRole,permission:ROLE_PERM[selRole],joinedAt:new Date().toISOString(),active:true});
+      Sheet.close();Toast.show(selU.displayName+" added as "+ROLE_LABEL[selRole]+" ✓");renderMe();
+    };
   };
   $("#logoutBtn").onclick=()=>{
     const w=document.createElement("div");
@@ -1060,6 +1258,26 @@ function renderMe(){
     w.querySelector("#loNo").onclick=()=>Sheet.close();
   };
 }
+window.manageMember=memId=>{
+  const mem=DataAPI.get("circleMembers",memId);if(!mem||mem.role==="owner")return;
+  const p=DataAPI.get("people",mem.personId);
+  const name=p?p.displayName:"Member";
+  const w=document.createElement("div");
+  w.innerHTML=`<div class="row">${avHtml(mem.personId)}<b>${esc(name)}</b><span class="rolechip" style="margin-left:auto">${ROLE_LABEL[mem.role]||"Member"}</span></div>
+  <div class="lbl" style="margin-top:4px">Change role</div>
+  <div class="filters">${["coleader","member","viewer"].map(r=>`<button class="chip ${mem.role===r?"on":""}" data-r="${r}">${ROLE_LABEL[r]}</button>`).join("")}</div>
+  <p style="font-size:12px;color:var(--faint)">Each circle has one Leader. Co-leaders can invite people and manage plans; Viewers only see the calendar.</p>
+  <button class="btn danger" id="mmRm" style="margin-top:4px">Remove from circle</button>`;
+  Sheet.open("Manage member",w);
+  w.querySelectorAll(".filters .chip").forEach(ch=>ch.onclick=()=>{
+    DataAPI.update("circleMembers",memId,{role:ch.dataset.r,permission:ROLE_PERM[ch.dataset.r]});
+    Sheet.close();Toast.show(name+" → "+ROLE_LABEL[ch.dataset.r]+" ✓");renderMe();
+  });
+  w.querySelector("#mmRm").onclick=()=>{
+    DataAPI.remove("circleMembers",memId);
+    Sheet.close();Toast.show(name+" removed from circle");renderMe();
+  };
+};
 window.setCircle=cid=>{
   S.circleId=cid;Session.save();Theme.apply();EventBus.emit("circle:changed");
   S.askStarted=false;S.calFilter="all";S.calWeekOffset=0;
@@ -1085,13 +1303,27 @@ $("#circlePill").onclick=()=>{
 };
 $("#meAv").onclick=()=>switchTab("me");
 
-/* ---------------- LOGIN + SPLASH ---------------- */
+/* ---------------- LOGIN + SPLASH ----------------
+   No roster leak: show only the LAST signed-in user (welcome back card),
+   or a manual username/email field. All accounts stay private. */
 const userSlug=name=>String(name||"user").trim().toLowerCase().replace(/[^a-z0-9]+/g,"_").replace(/^_+|_+$/g,"").slice(0,32)||"user";
+const LastUser={KEY:"kinetik_last_user",
+  get(){try{return JSON.parse(localStorage.getItem(this.KEY))}catch(e){return null}},
+  save(u){localStorage.setItem(this.KEY,JSON.stringify({id:u.id}));},
+  clear(){localStorage.removeItem(this.KEY);}
+};
 function finishLogin(user){
   S.userId=user.id;S.personId=user.personId;
   S.circleId=Perm.allowedCircleIds(user.id)[0];
+  LastUser.save(user);
   Session.save();EventBus.emit("auth:login");
   $("#login").classList.add("hide");enterShell();
+}
+function tryLogin(u){
+  const pin=$("#pinFld").value.trim();
+  const savedPin=String(u.pin??"").trim();
+  if(savedPin&&pin!==savedPin)return Toast.show("Wrong PIN");
+  finishLogin(u);
 }
 function showSignup(list){
   $("#pinFld").value="";
@@ -1099,10 +1331,12 @@ function showSignup(list){
   $("#loginBtn").textContent="Create account";
   $("#loginBtn").disabled=false;
   list.innerHTML=`
-    <p style="font-size:13.5px;color:var(--faint);line-height:1.45;margin:0">No live users exist yet. Create the first account and circle.</p>
+    <p style="font-size:13.5px;color:var(--faint);line-height:1.45;margin:0">${DB.d.users.length?"Create your personal account. You become the Leader of your first circle.":"No accounts exist yet. Create the first account and circle."}</p>
     <input class="fld" id="suName" placeholder="Your name" autocomplete="name">
     <input class="fld" id="suEmail" type="email" placeholder="Email (optional)" autocomplete="email">
-    <input class="fld" id="suCircle" placeholder="First circle name" value="My Family">`;
+    <input class="fld" id="suCircle" placeholder="First circle name" value="My Family">
+    ${DB.d.users.length?'<button id="suBack" style="font-size:12.5px;font-weight:600;color:var(--acc);padding:2px 0;width:100%;text-align:center">‹ Back to sign in</button>':""}`;
+  const sb=$("#suBack");if(sb)sb.onclick=()=>showManualLogin(list);
   $("#loginBtn").onclick=async()=>{
     const name=$("#suName").value.trim();
     const email=$("#suEmail").value.trim();
@@ -1131,38 +1365,67 @@ function showSignup(list){
 function showLogin(){
   $("#login").classList.remove("hide");
   const list=$("#personaList");list.innerHTML="";
-  let sel=null;
-  if(!DB.d.users.length){
-    showSignup(list);
-    return;
-  }
-  $("#pinFld").placeholder="PIN";
-  $("#loginBtn").textContent="Continue";
-  $("#loginBtn").disabled=true;
-  DB.d.users.forEach(u=>{
-    const cids=Perm.allowedCircleIds(u.id);
-    const b=document.createElement("button");b.className="persona";
-    b.innerHTML=`<span class="av" style="background:${personColor(u.personId)}">${esc(u.displayName[0])}</span>
-    <span><b>${esc(u.displayName)}</b><span>${cids.length} circle${cids.length!==1?"s":""} · ${cids.map(c=>DataAPI.get("circles",c).name).join(", ")}</span></span>`;
-    b.onclick=()=>{[...list.children].forEach(x=>x.classList.remove("on"));b.classList.add("on");sel=u;$("#loginBtn").disabled=false;};
-    list.appendChild(b);
-  });
+  if(!DB.d.users.length){showSignup(list);return;}
+  const last=LastUser.get();
+  const lastUser=last&&DB.d.users.find(u=>u.id===last.id);
+  if(lastUser)showWelcomeBack(list,lastUser);else showManualLogin(list);
   Motion.reveal("#login .panel");
+}
+function showWelcomeBack(list,u){
+  $("#pinFld").value="";$("#pinFld").placeholder="PIN";
+  $("#loginBtn").textContent="Continue";$("#loginBtn").disabled=false;
+  const cids=Perm.allowedCircleIds(u.id);
+  list.innerHTML=`<div class="persona on" style="pointer-events:none">
+    <span class="av" style="background:${personColor(u.personId)||"#6366f1"}">${esc(u.displayName[0])}</span>
+    <span><b>${esc(u.displayName)}</b><span>Welcome back · ${cids.length} circle${cids.length!==1?"s":""}</span></span></div>
+    <button id="switchAcc" style="font-size:12.5px;font-weight:600;color:var(--acc);padding:2px 0;width:100%;text-align:center">Use a different account</button>`;
+  $("#switchAcc").onclick=()=>showManualLogin(list);
+  $("#loginBtn").onclick=()=>tryLogin(u);
+  setTimeout(()=>$("#pinFld").focus(),120);
+}
+function showManualLogin(list){
+  $("#pinFld").value="";$("#pinFld").placeholder="PIN";
+  $("#loginBtn").textContent="Continue";$("#loginBtn").disabled=false;
+  list.innerHTML=`<input class="fld" id="unameFld" placeholder="Username or email" autocomplete="username" autocapitalize="none">
+    <button id="newAcc" style="font-size:12.5px;font-weight:600;color:var(--acc);padding:2px 0;width:100%;text-align:center">New here? Create an account</button>`;
+  $("#newAcc").onclick=()=>showSignup(list);
   $("#loginBtn").onclick=()=>{
-    if(!sel)return;
-    const pin=$("#pinFld").value.trim();
-    const savedPin=String(sel.pin??"").trim();
-    if(savedPin&&pin!==savedPin)return Toast.show("Wrong PIN");
-    finishLogin(sel);
+    const q=$("#unameFld").value.trim().toLowerCase();
+    if(!q)return Toast.show("Type your username or email");
+    const u=DB.d.users.find(u2=>[u2.username,u2.email,u2.displayName].some(v=>String(v||"").toLowerCase()===q));
+    if(!u)return Toast.show("No account found — ask your circle Leader");
+    tryLogin(u);
   };
+  setTimeout(()=>$("#unameFld").focus(),120);
 }
 function enterShell(){
   $("#shell").classList.remove("hide");
   Theme.apply();switchTab("today");
   Motion.stagger("#topbar, #nav");
 }
+/* self-heal: legacy data wrote CircleMembers/Users rows whose People record
+   was never created (pre-fix invite bug / hand-edited sheet). Recreate the
+   missing People rows from the user account and relink — synced back live. */
+function repairMembers(){
+  const COLORS=["#6366f1","#0ea5e9","#10b981","#f59e0b","#ec4899","#8b5cf6"];
+  (DB.d.circleMembers||[]).forEach((mem,i)=>{
+    if(mem.personId&&DataAPI.get("people",mem.personId))return;
+    const u=mem.userId&&DataAPI.get("users",mem.userId);
+    if(!u)return;
+    const pid=mem.personId||u.personId||uid("person");
+    if(!DataAPI.get("people",pid)){
+      DataAPI.create("people",{id:pid,displayName:u.displayName,avatar:String(u.displayName||"?")[0].toUpperCase(),color:COLORS[i%COLORS.length],createdByUserId:u.id,active:true});
+    }
+    let dirty=false;
+    if(mem.personId!==pid){mem.personId=pid;dirty=true;}
+    if(!mem.role){mem.role="member";dirty=true;}
+    if(!mem.permission){mem.permission=ROLE_PERM[mem.role]||"edit_own";dirty=true;}
+    if(dirty){DB.save();SyncEngine.queue("circleMembers","update",mem);}
+    if(u.personId!==pid){u.personId=pid;DB.save();SyncEngine.queue("users","update",u);}
+  });
+}
 async function boot(){
-  await DB.load();Theme.apply();Scene.init();AppHost.init();
+  await DB.load();repairMembers();Theme.apply();Scene.init();AppHost.init();
   const has=Session.restore();
   /* splash preview line */
   if(has){
@@ -1182,6 +1445,7 @@ async function boot(){
   /* refresh listeners */
   ["calendar:eventCreated","calendar:routineCreated","circle:changed","app:installed"].forEach(e=>EventBus.on(e,()=>{if(S.tab==="today")renderToday();}));
   $$("#nav button").forEach(b=>b.onclick=()=>switchTab(b.dataset.tab));
+  addEventListener("resize",movePill);
   matchMedia("(prefers-color-scheme: light)").addEventListener("change",()=>Theme.apply());
   if("serviceWorker"in navigator&&location.protocol.startsWith("http")){try{navigator.serviceWorker.register("PWA_SW.js")}catch(e){}}
 }
