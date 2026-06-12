@@ -1,8 +1,9 @@
-/* KINETIK PWA SERVICE WORKER v1.0
-   Shared by Kinetik.html and all App_*.html. Cache-first for app shell files,
+/* KINETIK PWA SERVICE WORKER v1.1
+   Shared by index.html and all App_*.html. Cache-first for app shell files,
    network-first for everything else. Keep simple — replaced by Firebase Hosting later. */
-const CACHE = "kinetik-v1";
+const CACHE = "kinetik-v1.1";
 const SHELL = [
+  "./index.html",
   "./Kinetik.html",
   "./App_PadelAmericano.html",
   "./App_EventPoll.html",
