@@ -13,8 +13,7 @@ ARCHITECTURE:
 - Calendar is the source of truth (Board + Week in v1). Today is a NON-SCROLLING triage view
   (overflow opens bottom-sheet pop-ups, never page scroll).
 - Ask is a deterministic command layer with PREVIEW-BEFORE-APPLY. It never silently mutates data.
-- Backend: DataAPI adapter -> LocalDemoAdapter (localStorage) by default,
-  GoogleSheetsAdapter (Apps Script web app, see Code.gs) when configured in Me > Advanced.
+- Backend: DataAPI adapter -> GoogleSheetsAdapter (Apps Script web app) by default.
 - Use circleId / circleType / personId. NEVER familyId / memberId.
 - Weekend is configurable (default fri-sat, Middle East). Week starts Sunday for fri-sat.
 - First-build invitations: only existing accounts can be added. Email invite links = next build.
@@ -310,7 +309,7 @@ input.fld:focus,select.fld:focus{border-color:var(--acc)}
     <h1>Welcome to <i style="font-style:normal;background:linear-gradient(120deg,var(--acc),var(--acc2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent">Kinetik</i></h1>
     <p class="sub">Only the people you invite. Nothing else. No feed, no ads.</p>
     <div id="personaList" style="display:flex;flex-direction:column;gap:9px"></div>
-    <input class="fld" id="pinFld" type="password" inputmode="numeric" placeholder="PIN (demo: 0000)" maxlength="6">
+    <input class="fld" id="pinFld" type="password" inputmode="numeric" placeholder="PIN" maxlength="6">
     <button class="btn" id="loginBtn" disabled>Continue</button>
     <p class="priv">Private circles for family &amp; friends.<br>Members only ever see the circles they belong to.</p>
   </div>
@@ -373,128 +372,116 @@ const DOWS=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 /* ---------------- EventBus ---------------- */
 const EventBus={l:{},on(e,f){(this.l[e]=this.l[e]||[]).push(f);},emit(e,p){(this.l[e]||[]).forEach(f=>{try{f(p)}catch(x){console.warn(x)}});}};
 
-/* ---------------- Seed / DemoData (§72.11) ---------------- */
-function buildSeed(){
-  const P=(id,name,color,by)=>({id,displayName:name,color,birthYear:by||null,active:true});
-  const prepFor=t=>({Tennis:["Racket","Water bottle"],Padel:["Padel racket","Court shoes","Water"],Swim:["Swimwear","Goggles","Towel"],Gym:["Sports kit","Water"],Basket:["Jersey","Basketball shoes"],Ngaji:["Iqra book"],Math:["Worksheet","Pencil case"],English:["Notebook"],Gymnastic:["Leotard"],Gitar:["Guitar"],"Ingatan Gajah":["Activity book"]}[t]||[]);
-  let rid=0;
-  const R=(circleId,person,dow,title,start,end,coach)=>({id:"rt_"+(++rid),circleId,title,participantPersonIds:[person],responsiblePersonId:"p_aldyth",dayOfWeek:dow,startTime:start,endTime:end,category:"activity",teacherCoach:coach||"",preparation:prepFor(title.split(" ")[0]==="Ingatan"?"Ingatan Gajah":title),active:true});
-  const fam="c_family", pad="c_padel", doha="c_doha";
-  const routines=[
-    /* Baginda */
-    R(fam,"p_baginda",1,"Gitar","14:15","15:00","Cik Angga"),
-    R(fam,"p_baginda",1,"Ngaji","14:30","16:30","Miss Saida"),
-    R(fam,"p_baginda",1,"Tennis","17:00","18:00","Mr Wael"),
-    R(fam,"p_baginda",2,"Gitar","14:15","15:00","Cik Angga"),
-    R(fam,"p_baginda",2,"Basket","17:00","18:00","Pro-Sport"),
-    R(fam,"p_baginda",3,"Math","15:00","16:00","Miss Rani"),
-    R(fam,"p_baginda",3,"Ngaji","16:30","17:30","Miss Saida"),
-    R(fam,"p_baginda",4,"English","15:00","16:30","Miss Ratu"),
-    R(fam,"p_baginda",4,"Tennis","17:00","18:00","Mr Wael"),
-    R(fam,"p_baginda",5,"Ingatan Gajah","09:15","10:15",""),
-    R(fam,"p_baginda",5,"Ingatan Gajah","12:30","14:00",""),
-    R(fam,"p_baginda",6,"Math","09:00","10:00","Miss Rani"),
-    R(fam,"p_baginda",6,"Swim","13:00","14:00","Coach Sae"),
-    R(fam,"p_baginda",0,"Basket","17:00","18:00","Pro-Sport"),
-    /* Keyla */
-    R(fam,"p_keyla",1,"Math","14:15","15:15","Miss Risa"),
-    R(fam,"p_keyla",1,"Tennis","14:50","16:50","Mr Wael"),
-    R(fam,"p_keyla",1,"Gymnastic","17:15","18:15","Ms Diana"),
-    R(fam,"p_keyla",2,"Ngaji","15:00","16:00","Miss Alvy"),
-    R(fam,"p_keyla",2,"Math","16:15","17:15","Miss Rani"),
-    R(fam,"p_keyla",3,"English","15:00","16:00","Miss Ratu"),
-    R(fam,"p_keyla",4,"Math","14:30","15:30","Miss Risa"),
-    R(fam,"p_keyla",4,"Tennis","15:50","16:55","Mr Wael"),
-    R(fam,"p_keyla",4,"Gymnastic","17:15","18:15","Miss Diana"),
-    R(fam,"p_keyla",5,"Ngaji","15:00","16:00",""),
-    R(fam,"p_keyla",6,"Ngaji","15:00","16:00","Miss Ratu"),
-    R(fam,"p_keyla",0,"Gym","16:30","17:30","Miss Ratu"),
-    /* Kinara */
-    R(fam,"p_kinara",1,"Gym","08:00","09:00",""),
-    R(fam,"p_kinara",2,"Padel","08:00","09:00",""),
-    R(fam,"p_kinara",5,"Gym","08:00","09:00",""),
-    R(fam,"p_kinara",0,"Padel","08:00","09:00",""),
-    /* Padel friends */
-    R(pad,"p_aldyth",5,"Padel Night","20:00","22:00","")
-  ];
-  /* Family Time — all members, Friday 16:00–24:00 */
-  routines.push({id:"rt_famtime",circleId:fam,title:"Family Time",participantPersonIds:["p_aldyth","p_baginda","p_keyla","p_kinara"],responsiblePersonId:"p_aldyth",dayOfWeek:5,startTime:"16:00",endTime:"23:59",category:"family",teacherCoach:"",preparation:[],active:true});
-  routines.find(r=>r.id==="rt_"+routines.length); /* noop guard */
-  const padNight=routines[routines.length-2]; padNight.participantPersonIds=["p_aldyth","p_omar","p_faisal","p_rafi"];
-  return {
-    users:[
-      {id:"u_aldyth",username:"aldyth",displayName:"Aldyth",personId:"p_aldyth",pin:"0000"},
-      {id:"u_omar",username:"omar",displayName:"Omar",personId:"p_omar",pin:"0000"}
-    ],
-    people:[
-      P("p_aldyth","Aldyth","#6366f1"),P("p_baginda","Baginda","#0ea5e9"),
-      P("p_keyla","Keyla","#ec4899"),P("p_kinara","Kinara","#10b981"),
-      P("p_omar","Omar","#f59e0b"),P("p_faisal","Faisal","#8b5cf6"),P("p_rafi","Rafi","#14b8a6"),
-      P("p_sara","Sara","#f43f5e"),P("p_dina","Dina","#06b6d4")
-    ],
-    circles:[
-      {id:"c_family",name:"Sukapradja Family",type:"family",ownerUserId:"u_aldyth",accent:["#f59e0b","#f97316"],active:true},
-      {id:"c_padel",name:"Padel Friends",type:"friends",ownerUserId:"u_aldyth",accent:["#22d3ee","#34d399"],active:true},
-      {id:"c_doha",name:"Doha Friends",type:"friends",ownerUserId:"u_aldyth",accent:["#a78bfa","#f472b6"],active:true}
-    ],
-    circleMembers:[
-      {id:"m1",circleId:"c_family",personId:"p_aldyth",userId:"u_aldyth",role:"owner"},
-      {id:"m2",circleId:"c_family",personId:"p_baginda",userId:null,role:"child"},
-      {id:"m3",circleId:"c_family",personId:"p_keyla",userId:null,role:"child"},
-      {id:"m4",circleId:"c_family",personId:"p_kinara",userId:null,role:"child"},
-      {id:"m5",circleId:"c_padel",personId:"p_aldyth",userId:"u_aldyth",role:"owner"},
-      {id:"m6",circleId:"c_padel",personId:"p_omar",userId:"u_omar",role:"member"},
-      {id:"m7",circleId:"c_padel",personId:"p_faisal",userId:null,role:"member"},
-      {id:"m8",circleId:"c_padel",personId:"p_rafi",userId:null,role:"member"},
-      {id:"m9",circleId:"c_doha",personId:"p_aldyth",userId:"u_aldyth",role:"member"},
-      {id:"m10",circleId:"c_doha",personId:"p_sara",userId:null,role:"owner"},
-      {id:"m11",circleId:"c_doha",personId:"p_dina",userId:null,role:"member"}
-    ],
-    routines, events:[], exceptions:[],
-    appCatalog:[
-      {id:"padel-americano",name:"Padel Americano",file:"App_PadelAmericano.html",glyph:"🎾",gradient:["#0ea5e9","#22d3ee"],tagline:"Fair rounds. Real leaderboards.",status:"live",allowed:["family","friends"]},
-      {id:"event-poll",name:"Event Poll",file:"App_EventPoll.html",glyph:"🗳️",gradient:["#8b5cf6","#d946ef"],tagline:"Find the best time, fast.",status:"live",allowed:["family","friends"]},
-      {id:"times-quest",name:"Times Quest",file:"",glyph:"✖️",gradient:["#f59e0b","#f97316"],tagline:"Multiplication, mastered.",status:"soon",allowed:["family"]},
-      {id:"grocery",name:"Grocery",file:"",glyph:"🛒",gradient:["#10b981","#34d399"],tagline:"Shared family shopping.",status:"soon",allowed:["family","friends"]}
-    ],
-    circleApps:[
-      {id:"ca1",circleId:"c_family",appId:"padel-americano",installed:true},
-      {id:"ca2",circleId:"c_family",appId:"event-poll",installed:true},
-      {id:"ca3",circleId:"c_padel",appId:"padel-americano",installed:true},
-      {id:"ca4",circleId:"c_padel",appId:"event-poll",installed:true},
-      {id:"ca5",circleId:"c_doha",appId:"event-poll",installed:true}
-    ],
-    appRecords:[
-      {id:"ar1",circleId:"c_doha",appId:"event-poll",collection:"polls",payload:{question:"Dinner this week — which night?",options:["Wed 7pm","Thu 8pm","Sat 7pm"],votes:{"p_sara":"Thu 8pm"},open:true,createdBy:"p_sara"},createdAt:Date.now(),deleted:false}
-    ],
-    prepState:{},
-    settings:{theme:"light",weekendDays:"fri-sat",backendMode:"local-demo",apiUrl:""}
-  };
+/* ---------------- Live data shape ---------------- */
+/* ---------------- DB + DataAPI (Google Sheets live adapter) ---------------- */
+const LIVE_API_URL="https://script.google.com/macros/s/AKfycbxGyBDoHifn2JV98I6D5HSPrjLnZIt-6wa8GWUuVPlNNR41k-d7CCwymCUiWWlwyTlW/exec";
+const DEFAULT_SETTINGS={theme:"light",weekendDays:"fri-sat",backendMode:"sheets",apiUrl:LIVE_API_URL};
+const SHEET_COLLECTIONS={
+  users:"Users",people:"People",circles:"Circles",circleMembers:"CircleMembers",
+  routines:"Calendar_Routines",events:"Calendar_Events",exceptions:"Calendar_Exceptions",
+  appCatalog:"AppCatalog",circleApps:"CircleApps",appRecords:"AppRecords"
+};
+const BUILTIN_APP_CATALOG=[
+  {id:"padel-americano",name:"Padel Americano",file:"App_PadelAmericano.html",glyph:"🎾",gradient:["#0ea5e9","#22d3ee"],tagline:"Fair rounds. Real leaderboards.",status:"live",allowed:["family","friends"],active:true},
+  {id:"event-poll",name:"Event Poll",file:"App_EventPoll.html",glyph:"🗳️",gradient:["#8b5cf6","#d946ef"],tagline:"Find the best time, fast.",status:"live",allowed:["family","friends"],active:true},
+  {id:"times-quest",name:"Times Quest",file:"",glyph:"×",gradient:["#f59e0b","#f97316"],tagline:"Multiplication, mastered.",status:"soon",allowed:["family"],active:true},
+  {id:"grocery",name:"Grocery",file:"",glyph:"🛒",gradient:["#10b981","#34d399"],tagline:"Shared family shopping.",status:"soon",allowed:["family","friends"],active:true}
+];
+const EMPTY_DATA=()=>({
+  users:[],people:[],circles:[],circleMembers:[],routines:[],events:[],exceptions:[],
+  appCatalog:[],circleApps:[],appRecords:[],prepState:{},settings:{...DEFAULT_SETTINGS}
+});
+const boolVal=v=>v===true||String(v).toLowerCase()==="true";
+const jsonVal=(v,f)=>{if(Array.isArray(v)||v&&typeof v==="object")return v;if(v===""||v==null)return f;try{return JSON.parse(v)}catch(e){return f}};
+const dayVal=v=>{
+  const days={sunday:0,monday:1,tuesday:2,wednesday:3,thursday:4,friday:5,saturday:6};
+  if(typeof v==="number")return v;
+  const s=String(v||"").trim().toLowerCase();
+  return days[s]??(+s||0);
+};
+const splitGradient=v=>{
+  if(Array.isArray(v))return v;
+  const s=String(v||"").trim();
+  const hex=s.match(/#[0-9a-f]{3,8}/ig);
+  if(hex&&hex.length)return [hex[0],hex[1]||hex[0]];
+  return ["#6366f1","#22d3ee"];
+};
+const appGlyph=a=>({store:"◎","padel-americano":"🎾","event-poll":"🗳️",times:"×",grocery:"🛒"}[a.id]||"✦");
+const activeRow=r=>r.active===undefined||r.active===""||boolVal(r.active);
+function fromSheet(col,row){
+  const r={...row};
+  if(col==="users")return {...r,personId:r.personId||r.defaultPersonId,pin:String(r.pin??r.passwordDemo??"").trim()};
+  if(col==="circles")return {...r,accent:r.accent||splitGradient(r.color),active:activeRow(r)};
+  if(col==="routines")return {...r,participantPersonIds:jsonVal(r.participantPersonIdsJson,r.participantPersonIds||[]),dayOfWeek:dayVal(r.dayOfWeek),preparation:jsonVal(r.preparationJson,r.preparation||[]),active:activeRow(r)};
+  if(col==="events")return {...r,participantPersonIds:jsonVal(r.participantPersonIdsJson,r.participantPersonIds||[]),preparation:jsonVal(r.preparationJson,r.preparation||[]),active:activeRow(r)};
+  if(col==="appCatalog")return {...r,glyph:r.glyph||appGlyph(r),gradient:splitGradient(r.gradient),allowed:jsonVal(r.allowedCircleTypesJson,r.allowed||["family","friends"]),status:r.status==="active"?"live":(r.status||"live"),active:activeRow(r)};
+  if(col==="circleApps")return {...r,installed:boolVal(r.installed),pinned:boolVal(r.pinned)};
+  if(col==="appRecords")return {...r,payload:jsonVal(r.payloadJson,r.payload||{}),deleted:boolVal(r.deleted)};
+  if(col==="circleMembers")return {...r,userId:r.userId||null,active:activeRow(r)};
+  return r;
 }
-
-/* ---------------- DB + DataAPI (LocalDemoAdapter) ---------------- */
-const DB={KEY:"kinetik_db_v2",d:null,
-  load(){try{this.d=JSON.parse(localStorage.getItem(this.KEY))}catch(e){this.d=null}
-    if(!this.d||!this.d.circles){this.d=buildSeed();this.save();}},
+function toSheet(col,row){
+  const r={...row};
+  if(col==="users"){r.defaultPersonId=r.defaultPersonId||r.personId;r.passwordDemo=r.passwordDemo||r.pin;delete r.personId;delete r.pin;}
+  if(col==="circles"){r.color=r.color||(r.accent&&r.accent[0]);delete r.accent;}
+  if(col==="routines"||col==="events"){r.participantPersonIdsJson=JSON.stringify(r.participantPersonIds||[]);r.preparationJson=JSON.stringify(r.preparation||[]);delete r.participantPersonIds;delete r.preparation;}
+  if(col==="appCatalog"){r.gradient=Array.isArray(r.gradient)?`linear-gradient(135deg,${r.gradient[0]},${r.gradient[1]||r.gradient[0]})`:r.gradient;r.allowedCircleTypesJson=JSON.stringify(r.allowed||["family","friends"]);delete r.glyph;delete r.allowed;}
+  if(col==="appRecords"){r.payloadJson=JSON.stringify(r.payload||{});delete r.payload;}
+  return r;
+}
+const SheetsAPI={
+  async request(action,col,body={}){
+    const collection=SHEET_COLLECTIONS[col];
+    if(!collection)throw new Error("Unknown collection: "+col);
+    const payload={action,collection,userId:S.userId||"",circleId:S.circleId||body.circleId||body.payload?.circleId||"",...body};
+    const res=await fetch(LIVE_API_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(payload)});
+    const json=await res.json();
+    if(!json.ok)throw new Error(json.error||"Sheets request failed");
+    return json.data??json.items??json.item??json.record??null;
+  },
+  async list(col){const items=await this.request("list",col);return (items||[]).map(x=>fromSheet(col,x));},
+  async loadAll(){
+    const out=EMPTY_DATA();
+    await Promise.all(Object.keys(SHEET_COLLECTIONS).map(async col=>{out[col]=await this.list(col);}));
+    if(!out.appCatalog.length)out.appCatalog=BUILTIN_APP_CATALOG.map(a=>({...a,gradient:[...a.gradient],allowed:[...a.allowed]}));
+    out.settings={...DEFAULT_SETTINGS};
+    return out;
+  }
+};
+const DB={KEY:"kinetik_live_cache_v1",d:null,error:null,
+  async load(){
+    let cached=null;try{cached=JSON.parse(localStorage.getItem(this.KEY))}catch(e){}
+    this.d=cached&&cached.settings?cached:EMPTY_DATA();
+    try{this.d=await SheetsAPI.loadAll();this.error=null;this.save();}
+    catch(e){this.error=e.message||String(e);console.error(e);if(!cached)this.d=EMPTY_DATA();}
+  },
   save(){localStorage.setItem(this.KEY,JSON.stringify(this.d));},
-  reset(){this.d=buildSeed();this.save();}
+  async refresh(){await this.load();},
+  clearCache(){localStorage.removeItem(this.KEY);this.d=EMPTY_DATA();}
 };
 const DataAPI={
   list(col,f){let a=DB.d[col]||[];if(f)a=a.filter(r=>Object.keys(f).every(k=>r[k]===f[k]));return a;},
   get(col,id){return (DB.d[col]||[]).find(r=>r.id===id);},
-  create(col,p){p.id=p.id||uid(col.slice(0,2));p.createdAt=Date.now();(DB.d[col]=DB.d[col]||[]).push(p);DB.save();SyncEngine.queue(col,"create",p);return p;},
-  update(col,id,p){const r=this.get(col,id);if(r){Object.assign(r,p,{updatedAt:Date.now()});DB.save();SyncEngine.queue(col,"update",r);}return r;},
+  create(col,p){p.id=p.id||uid(col.slice(0,2));p.createdAt=p.createdAt||new Date().toISOString();(DB.d[col]=DB.d[col]||[]).push(p);DB.save();SyncEngine.queue(col,"create",p);return p;},
+  async createLive(col,p){
+    const local={...p,id:p.id||uid(col.slice(0,2)),createdAt:p.createdAt||new Date().toISOString()};
+    const result=await SheetsAPI.request("create",col,{id:local.id,payload:toSheet(col,local)});
+    const saved=fromSheet(col,Array.isArray(result)?result[0]:result)||local;
+    const row={...local,...saved};
+    (DB.d[col]=DB.d[col]||[]).push(row);DB.save();
+    return row;
+  },
+  update(col,id,p){const r=this.get(col,id);if(r){Object.assign(r,p,{updatedAt:new Date().toISOString()});DB.save();SyncEngine.queue(col,"update",r);}return r;},
   remove(col,id){DB.d[col]=(DB.d[col]||[]).filter(r=>r.id!==id);DB.save();SyncEngine.queue(col,"remove",{id});}
 };
-/* GoogleSheetsAdapter — optimistic background sync (§72.5) */
 const SyncEngine={status:"idle",
   queue(col,op,payload){
-    if(DB.d.settings.backendMode!=="sheets"||!DB.d.settings.apiUrl)return;
+    if(!SHEET_COLLECTIONS[col])return;
     this.status="syncing";EventBus.emit("backend:syncStarted");
-    fetch(DB.d.settings.apiUrl,{method:"POST",headers:{"Content-Type":"text/plain"},
-      body:JSON.stringify({action:op,collection:col,id:payload.id,payload})})
-      .then(r=>r.json()).then(()=>{this.status="synced";EventBus.emit("backend:syncFinished");})
-      .catch(()=>{this.status="failed";EventBus.emit("backend:syncFailed");Toast.show("Sync failed — saved locally");});
+    const body=op==="remove"?{id:payload.id}:{id:payload.id,payload:toSheet(col,payload)};
+    SheetsAPI.request(op,col,body)
+      .then(()=>{this.status="synced";EventBus.emit("backend:syncFinished");})
+      .catch(e=>{this.status="failed";EventBus.emit("backend:syncFailed");Toast.show("Live sync failed — cached locally");console.error(e);});
   }
 };
 
@@ -502,7 +489,7 @@ const SyncEngine={status:"idle",
 const S={userId:null,personId:null,circleId:null,tab:"today",calMode:"board",calWeekOffset:0,calFilter:"all",askStarted:false};
 const Session={KEY:"kinetik_session",
   save(){localStorage.setItem(this.KEY,JSON.stringify({userId:S.userId,personId:S.personId,circleId:S.circleId}));},
-  restore(){try{const s=JSON.parse(localStorage.getItem(this.KEY));if(s&&s.userId&&DataAPI.get("users",s.userId)){Object.assign(S,s);return true;}}catch(e){}return false;},
+  restore(){try{const s=JSON.parse(localStorage.getItem(this.KEY));if(s&&s.userId&&DataAPI.get("users",s.userId)&&DataAPI.get("people",s.personId)&&DataAPI.get("circles",s.circleId)){Object.assign(S,s);return true;}}catch(e){}return false;},
   clear(){localStorage.removeItem(this.KEY);}
 };
 
@@ -929,6 +916,12 @@ function renderApps(){
   const avail=DB.d.appCatalog.filter(a=>a.allowed.includes(c.type));
   const isInst=id=>!!installed.find(i=>i.id===id);
   const featured=avail.find(a=>a.status==="live"&&!isInst(a.id))||avail.find(a=>a.status==="live");
+  const storeRows=avail.length?avail.map(a=>{
+    const inst=isInst(a.id),soon=a.status==="soon";
+    return `<div class="strow"><span class="ic" style="background:linear-gradient(135deg,${a.gradient[0]},${a.gradient[1]})">${a.glyph}</span>
+    <div style="min-width:0"><b>${esc(a.name)}</b><p>${esc(a.tagline)}</p>${inst&&!soon?`<button class="rm" onclick="storeRm('${a.id}')">Remove from circle</button>`:""}</div>
+    <button class="getbtn ${soon?"soon":""}" onclick="${inst?`storeOpen('${a.id}')`:`storeGet('${a.id}')`}">${soon?"SOON":inst?"OPEN":"GET"}</button></div>`;
+  }).join(""):`<p style="padding:12px 0;color:var(--dim);font-size:13.5px">No apps are available for this circle type yet.</p>`;
   B.innerHTML=`
   <div class="lbl" style="margin:8px 0 16px">My Apps</div>
   <div class="appgrid" style="margin-bottom:10px">${installed.map(a=>`
@@ -940,11 +933,7 @@ function renderApps(){
     <span class="k">FEATURED</span><h3>${esc(featured.name)}</h3><p>${esc(featured.tagline)}</p>
     <div class="fr"><span class="ic">${featured.glyph}</span>
     <button class="getbtn" style="background:rgba(255,255,255,.94);color:#0d1426" onclick="${isInst(featured.id)?`storeOpen('${featured.id}')`:`storeGet('${featured.id}')`}">${isInst(featured.id)?"OPEN":"GET"}</button></div></div>`:""}
-  <div class="me-sec glass" style="padding:4px 16px">${avail.map(a=>{
-    const inst=isInst(a.id),soon=a.status==="soon";
-    return `<div class="strow"><span class="ic" style="background:linear-gradient(135deg,${a.gradient[0]},${a.gradient[1]})">${a.glyph}</span>
-    <div style="min-width:0"><b>${esc(a.name)}</b><p>${esc(a.tagline)}</p>${inst&&!soon?`<button class="rm" onclick="storeRm('${a.id}')">Remove from circle</button>`:""}</div>
-    <button class="getbtn ${soon?"soon":""}" onclick="${inst?`storeOpen('${a.id}')`:`storeGet('${a.id}')`}">${soon?"SOON":inst?"OPEN":"GET"}</button></div>`;}).join("")}</div>
+  <div class="me-sec glass" style="padding:4px 16px">${storeRows}</div>
   <p style="font-size:11.5px;color:var(--faint);margin-top:12px;text-align:center">Apps install per circle · removing keeps your data</p>`;
   Motion.stagger("#appsBody .appico, #appsBody .feat");
 }
@@ -1028,18 +1017,16 @@ function renderMe(){
 
   <div class="lbl" style="margin:4px 0 9px">Advanced</div>
   <div class="me-sec glass">
-    <div class="me-row">Backend<span class="end"><select id="setBk"><option value="local-demo"${st.backendMode==="local-demo"?" selected":""}>Demo (this device)</option><option value="sheets"${st.backendMode==="sheets"?" selected":""}>Google Sheets</option></select></span></div>
-    <div class="me-row" id="apiRow" style="${st.backendMode==="sheets"?"":"display:none"}"><input class="fld" id="setUrl" placeholder="Apps Script web app URL" value="${esc(st.apiUrl)}"></div>
-    <button class="me-row" id="expBtn">Export data (JSON)<span class="end">↓</span></button>
-    <button class="me-row" id="rstBtn" style="color:var(--warn)">Reset demo data</button>
+    <div class="me-row">Backend<span class="end">Google Sheets</span></div>
+    <div class="me-row">Endpoint<span class="end">Apps Script live</span></div>
+    <button class="me-row" id="expBtn">Export cached snapshot (JSON)<span class="end">↓</span></button>
+    <button class="me-row" id="refBtn">Refresh from Sheets<span class="end">↻</span></button>
   </div>
   <button id="logoutBtn">Log out</button>`;
   $("#setTheme").onchange=e=>{st.theme=e.target.value;DB.save();Theme.apply();};
   $("#setWknd").onchange=e=>{st.weekendDays=e.target.value;DB.save();Toast.show("Weekend updated");renderAll();};
-  $("#setBk").onchange=e=>{st.backendMode=e.target.value;DB.save();$("#apiRow").style.display=e.target.value==="sheets"?"":"none";};
-  const urlF=$("#setUrl");if(urlF)urlF.onchange=e=>{st.apiUrl=e.target.value.trim();DB.save();Toast.show("Backend URL saved");};
   $("#expBtn").onclick=()=>{const a=document.createElement("a");a.href="data:application/json,"+encodeURIComponent(JSON.stringify(DB.d,null,2));a.download="kinetik_export.json";a.click();};
-  $("#rstBtn").onclick=()=>{DB.reset();Toast.show("Demo data reset");renderAll();};
+  $("#refBtn").onclick=async()=>{await DB.refresh();Toast.show("Sheets refreshed");renderAll();};
   $("#newCircle").onclick=()=>{
     const w=document.createElement("div");
     w.innerHTML=`<input class="fld" id="ncN" placeholder="Circle name (e.g. Weekend Crew)"><button class="btn" id="ncGo">Create</button>`;
@@ -1099,10 +1086,59 @@ $("#circlePill").onclick=()=>{
 $("#meAv").onclick=()=>switchTab("me");
 
 /* ---------------- LOGIN + SPLASH ---------------- */
+const userSlug=name=>String(name||"user").trim().toLowerCase().replace(/[^a-z0-9]+/g,"_").replace(/^_+|_+$/g,"").slice(0,32)||"user";
+function finishLogin(user){
+  S.userId=user.id;S.personId=user.personId;
+  S.circleId=Perm.allowedCircleIds(user.id)[0];
+  Session.save();EventBus.emit("auth:login");
+  $("#login").classList.add("hide");enterShell();
+}
+function showSignup(list){
+  $("#pinFld").value="";
+  $("#pinFld").placeholder="Choose PIN (4-6 digits)";
+  $("#loginBtn").textContent="Create account";
+  $("#loginBtn").disabled=false;
+  list.innerHTML=`
+    <p style="font-size:13.5px;color:var(--faint);line-height:1.45;margin:0">No live users exist yet. Create the first account and circle.</p>
+    <input class="fld" id="suName" placeholder="Your name" autocomplete="name">
+    <input class="fld" id="suEmail" type="email" placeholder="Email (optional)" autocomplete="email">
+    <input class="fld" id="suCircle" placeholder="First circle name" value="My Family">`;
+  $("#loginBtn").onclick=async()=>{
+    const name=$("#suName").value.trim();
+    const email=$("#suEmail").value.trim();
+    const circleName=$("#suCircle").value.trim()||"My Family";
+    const pin=$("#pinFld").value.trim();
+    if(!name)return Toast.show("Add your name first");
+    if(!/^\d{4,6}$/.test(pin))return Toast.show("PIN must be 4-6 digits");
+    $("#loginBtn").disabled=true;$("#loginBtn").textContent="Creating...";
+    try{
+      const now=new Date().toISOString();
+      const color="#6366f1";
+      const person=await DataAPI.createLive("people",{id:uid("person"),displayName:name,avatar:name[0].toUpperCase(),color,createdAt:now,updatedAt:now,active:true});
+      const user=await DataAPI.createLive("users",{id:uid("user"),username:userSlug(name),displayName:name,email,passwordDemo:pin,avatar:name[0].toUpperCase(),defaultPersonId:person.id,createdAt:now,updatedAt:now,active:true});
+      const circle=await DataAPI.createLive("circles",{id:uid("circle"),name:circleName,type:"family",ownerUserId:user.id,icon:"family",color,description:"",createdAt:now,updatedAt:now,active:true});
+      await DataAPI.createLive("circleMembers",{id:uid("member"),circleId:circle.id,personId:person.id,userId:user.id,role:"owner",permission:"full_control",joinedAt:now,active:true});
+      const liveUser={...user,personId:person.id,pin};
+      Toast.show("Account created");
+      finishLogin(liveUser);
+    }catch(e){
+      console.error(e);Toast.show("Signup failed — check Apps Script access");
+      $("#loginBtn").disabled=false;$("#loginBtn").textContent="Create account";
+    }
+  };
+  Motion.reveal("#login .panel");
+}
 function showLogin(){
   $("#login").classList.remove("hide");
   const list=$("#personaList");list.innerHTML="";
   let sel=null;
+  if(!DB.d.users.length){
+    showSignup(list);
+    return;
+  }
+  $("#pinFld").placeholder="PIN";
+  $("#loginBtn").textContent="Continue";
+  $("#loginBtn").disabled=true;
   DB.d.users.forEach(u=>{
     const cids=Perm.allowedCircleIds(u.id);
     const b=document.createElement("button");b.className="persona";
@@ -1114,12 +1150,10 @@ function showLogin(){
   Motion.reveal("#login .panel");
   $("#loginBtn").onclick=()=>{
     if(!sel)return;
-    const pin=$("#pinFld").value;
-    if(pin&&pin!==sel.pin)return Toast.show("Wrong PIN (demo: 0000)");
-    S.userId=sel.id;S.personId=sel.personId;
-    S.circleId=Perm.allowedCircleIds(sel.id)[0];
-    Session.save();EventBus.emit("auth:login");
-    $("#login").classList.add("hide");enterShell();
+    const pin=$("#pinFld").value.trim();
+    const savedPin=String(sel.pin??"").trim();
+    if(savedPin&&pin!==savedPin)return Toast.show("Wrong PIN");
+    finishLogin(sel);
   };
 }
 function enterShell(){
@@ -1127,15 +1161,15 @@ function enterShell(){
   Theme.apply();switchTab("today");
   Motion.stagger("#topbar, #nav");
 }
-function boot(){
-  DB.load();Theme.apply();Scene.init();AppHost.init();
+async function boot(){
+  await DB.load();Theme.apply();Scene.init();AppHost.init();
   const has=Session.restore();
   /* splash preview line */
   if(has){
     const ag=Cal.agendaToday(S.circleId);
     const nx=ag.find(a=>mins(a.end)>new Date().getHours()*60+new Date().getMinutes());
     $("#splashPv").textContent=circle().name+" · "+ag.length+" today"+(nx?" · next: "+nx.title+" "+fmtT(nx.start):"");
-  }else $("#splashPv").textContent="Private circles for family & friends";
+  }else $("#splashPv").textContent=DB.error?"Live Sheets unavailable":"Private circles for family & friends";
   if(Motion.ok()){
     gsap.fromTo("#splash .logo",{opacity:0,y:18,filter:"blur(8px)"},{opacity:1,y:0,filter:"blur(0px)",duration:.7,ease:"power3.out"});
     gsap.fromTo("#splash .tag,#splash .pv",{opacity:0},{opacity:1,duration:.6,delay:.35,stagger:.15});
