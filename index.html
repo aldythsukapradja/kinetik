@@ -143,8 +143,8 @@ input.fld:focus,select.fld:focus{border-color:var(--acc)}
 #nav button.on{color:var(--acc)}
 #nav button.on svg{transform:translateY(-1px) scale(1.07)}
 #nav button:active svg{transform:scale(.86)}
-#nav button[data-tab="moments"]{justify-content:flex-end;padding-bottom:5px}
-#nav button[data-tab="moments"] svg{width:19px;height:19px}
+#nav button[data-tab="moments"]{justify-content:flex-end;padding-bottom:10px}
+#nav button[data-tab="moments"] svg{width:18px;height:18px}
 #navPill{position:absolute;z-index:1;top:8px;bottom:8px;left:10px;width:64px;border-radius:24px;
   background:color-mix(in srgb,var(--acc) 14%,transparent);opacity:0;
   transition:left .34s var(--ease),width .34s var(--ease),opacity .25s}
@@ -254,7 +254,7 @@ input.fld:focus,select.fld:focus{border-color:var(--acc)}
 .pvcard .kv{font-size:13px;color:var(--dim);display:flex;flex-direction:column;gap:2px;margin:7px 0}
 .pvcard .acts{display:flex;gap:8px;margin-top:11px}
 #composer{display:flex;gap:9px;align-items:flex-end;padding:10px 14px calc(12px + var(--sab));max-width:620px;width:100%;margin:0 auto;flex:0 0 auto}
-#askClear{margin-left:auto;font-size:12px;font-weight:700;color:var(--dim);background:var(--chip);border-radius:99px;padding:7px 14px;border:1px solid var(--brd2);flex:0 0 auto}
+#askClear,.fspill{margin-left:auto;font-size:12px;font-weight:700;color:var(--dim);background:var(--chip);border-radius:99px;padding:7px 14px;border:1px solid var(--brd2);flex:0 0 auto}
 .askcard{align-self:flex-start;width:100%;max-width:430px;border-radius:var(--radius-md);padding:14px 16px;display:flex;flex-direction:column;gap:5px}
 .askcard .ah{font-size:10.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--acc);margin-bottom:3px}
 .askcard .arow{display:flex;align-items:center;gap:10px;font-size:13.5px;padding:4px 0}
@@ -292,6 +292,48 @@ input.fld:focus,select.fld:focus{border-color:var(--acc)}
 #storeScreen.on{display:flex}
 #storeBody{flex:1;overflow-y:auto;padding:16px 18px calc(28px + var(--sab));-webkit-overflow-scrolling:touch}
 #storeBody .inner{max-width:560px;margin:0 auto}
+/* store detail (App Store product page) */
+.sdhead{display:flex;gap:16px;align-items:center;margin:4px 0 18px}
+.sdhead .ic{width:84px;height:84px;border-radius:24%;display:flex;align-items:center;justify-content:center;font-size:40px;flex:0 0 auto;box-shadow:0 14px 34px rgba(40,55,90,.22),inset 0 1px 0 rgba(255,255,255,.35)}
+.sdhead h2{font-size:22px;letter-spacing:-.02em;line-height:1.15}
+.sdhead p{font-size:13px;color:var(--dim);margin:2px 0 10px}
+.sdinfo{display:flex;border-radius:var(--radius-sm);overflow:hidden;margin-bottom:18px}
+.sdinfo>div{flex:1;text-align:center;padding:11px 4px;border-right:1px solid var(--brd2)}
+.sdinfo>div:last-child{border-right:none}
+.sdinfo .k{font-size:9px;font-weight:800;letter-spacing:.1em;color:var(--faint);text-transform:uppercase}
+.sdinfo .v{font-size:14px;font-weight:700;margin-top:2px}
+.sdinfo .v small{font-size:10px;color:var(--dim);font-weight:600}
+.shots{display:flex;gap:11px;overflow-x:auto;padding:2px 0 6px;scrollbar-width:none;margin-bottom:16px}
+.shots::-webkit-scrollbar{display:none}
+.shot{flex:0 0 72%;aspect-ratio:9/13;border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;font-size:56px;box-shadow:var(--shadow)}
+.sdsec{font-size:16px;font-weight:700;letter-spacing:-.01em;margin:4px 0 7px}
+.sdp{font-size:13.5px;color:var(--dim);line-height:1.6;margin-bottom:16px}
+/* board inline add */
+.dayadd{width:19px;height:19px;border-radius:50%;background:color-mix(in srgb,var(--acc) 13%,transparent);color:var(--acc);font-size:13px;font-weight:800;line-height:1;display:flex;align-items:center;justify-content:center;margin-top:3px}
+/* ============ MONTH (full-screen, HowAbout-style) ============ */
+#monthScreen{position:fixed;inset:0;z-index:60;display:none;flex-direction:column;
+  background:radial-gradient(120% 80% at 80% -10%,color-mix(in srgb,var(--acc) 11%,transparent),transparent 55%),var(--bg0)}
+#monthScreen.on{display:flex}
+#monthBody{flex:1;overflow-y:auto;padding:14px 14px calc(26px + var(--sab));-webkit-overflow-scrolling:touch}
+#monthBody .inner{max-width:560px;margin:0 auto}
+.mnav{display:flex;align-items:center;justify-content:space-between;margin:2px 2px 12px}
+.mnav b{font-size:18px;letter-spacing:-.02em}
+.mnav button{width:36px;height:36px;border-radius:50%;background:var(--chip);font-size:17px;font-weight:600}
+.mhead{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:5px}
+.mwd{font-size:10px;font-weight:800;color:var(--faint);text-align:center;text-transform:uppercase;letter-spacing:.05em}
+.mwd.wk{color:var(--warn)}
+.mgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.mcell{aspect-ratio:.74;border-radius:13px;background:var(--chip);display:flex;flex-direction:column;align-items:center;gap:3px;padding-top:6px;transition:transform var(--dur1);overflow:hidden}
+.mcell:active{transform:scale(.92)}
+.mcell.out{opacity:.3}
+.mcell.wkndc{background:color-mix(in srgb,var(--warn) 8%,transparent)}
+.mcell .md{font-size:12.5px;font-weight:700;width:25px;height:25px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.mcell .md.today{background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;box-shadow:0 4px 12px color-mix(in srgb,var(--acc) 45%,transparent)}
+.mcell .marks{display:flex;gap:2.5px;align-items:center;flex-wrap:wrap;justify-content:center;padding:0 3px}
+.mcell .marks i{width:5.5px;height:5.5px;border-radius:50%}
+.mcell .marks em{font-style:normal;font-size:8.5px;font-weight:800;color:var(--dim)}
+.mleg{display:flex;gap:13px;flex-wrap:wrap;justify-content:center;margin-top:14px;font-size:11px;color:var(--dim);font-weight:600}
+.mleg i{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:5px}
 /* ============ MOMENTS (visual preview) ============ */
 .stories{display:flex;gap:13px;overflow-x:auto;padding:4px 2px 14px;scrollbar-width:none}
 .stories::-webkit-scrollbar{display:none}
@@ -334,7 +376,27 @@ input.fld:focus,select.fld:focus{border-color:var(--acc)}
 .me-row select{background:var(--chip);border:1px solid var(--brd2);border-radius:10px;padding:6px 10px;font-size:13px;outline:none}
 .rolechip{font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:3px 9px;border-radius:99px;background:var(--chip);color:var(--dim)}
 .rolechip.lead{background:color-mix(in srgb,var(--acc) 16%,transparent);color:var(--acc)}
-#logoutBtn{width:100%;margin:4px 0 26px;padding:14px;border-radius:var(--radius-sm);font-weight:700;color:var(--bad);background:color-mix(in srgb,var(--bad) 9%,transparent);border:1px solid color-mix(in srgb,var(--bad) 25%,transparent)}
+/* circles & people cards */
+.circard{border-radius:var(--radius-md);padding:17px 16px;margin-bottom:14px}
+.circard .chd{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:14px}
+.circard h3{font-size:20px;letter-spacing:-.02em;line-height:1.15}
+.circard .csub{font-size:12px;color:var(--dim);font-weight:600;margin-top:1px}
+.opnbtn{border-radius:999px;padding:9px 21px;font-weight:700;font-size:13px;background:var(--chip);color:var(--text);flex:0 0 auto;transition:transform var(--dur1)}
+.opnbtn:active{transform:scale(.94)}
+.opnbtn.act{background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;box-shadow:0 6px 18px color-mix(in srgb,var(--acc) 35%,transparent)}
+.memgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:11px}
+.memtile{display:flex;flex-direction:column;align-items:center;gap:6px;padding:9px 4px 7px;border-radius:15px;transition:transform var(--dur1)}
+.memtile:active{transform:scale(.93)}
+.memtile.lead{background:color-mix(in srgb,var(--acc) 8%,transparent)}
+.memtile .sq{position:relative;width:54px;height:54px;border-radius:38%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:17px;box-shadow:0 8px 20px rgba(40,55,90,.18),inset 0 1px 0 rgba(255,255,255,.3)}
+.memtile .sq .st{position:absolute;right:-2px;bottom:-2px;width:15px;height:15px;border-radius:50%;border:2.5px solid var(--bg0)}
+.memtile small{font-size:11px;font-weight:600;color:var(--dim);max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.memtile .sq.add{background:var(--chip);color:var(--acc);border:1.5px dashed color-mix(in srgb,var(--acc) 40%,var(--brd2));box-shadow:none;font-size:23px;font-weight:400}
+.memtile .sq.more{background:var(--chip);color:var(--dim);box-shadow:none;font-size:14px}
+#logoutBtn{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;margin:8px 0 28px;padding:15px;border-radius:999px;font-weight:700;font-size:14.5px;color:#fff;
+  background:linear-gradient(135deg,#f43f5e,#fb7185);box-shadow:0 10px 28px rgba(244,63,94,.32);transition:transform var(--dur1)}
+#logoutBtn:active{transform:scale(.97)}
+#logoutBtn svg{width:18px;height:18px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 /* ============ SHEETS & TOAST ============ */
 #sheetLayer{position:fixed;inset:0;z-index:80;display:none}
 #sheetLayer.on{display:block}
@@ -434,6 +496,15 @@ input.fld:focus,select.fld:focus{border-color:var(--acc)}
   <div id="storeBody"><div class="inner" id="storeInner"></div></div>
 </div>
 
+<div id="monthScreen">
+  <div class="fsbar">
+    <button class="backbtn" id="monthBack" aria-label="Back"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <div class="t"><b>Calendar · Month</b><span id="monthSub">—</span></div>
+    <button id="monthToday" class="fspill">Today</button>
+  </div>
+  <div id="monthBody"><div class="inner" id="monthInner"></div></div>
+</div>
+
 <div id="appHost"><div id="appHostBar"><b id="appHostTitle">App</b><button class="btn ghost" style="padding:7px 16px" id="appHostDone">Done</button></div><iframe id="appFrame" title="app"></iframe></div>
 <div id="sheetLayer"><div id="scrim"></div><div id="sheet" class="glass"><div class="grab"></div><h3 id="sheetTitle"></h3><div id="sheetBody"></div></div></div>
 <div id="toasts"></div>
@@ -469,10 +540,14 @@ const SHEET_COLLECTIONS={
   appCatalog:"AppCatalog",circleApps:"CircleApps",appRecords:"AppRecords"
 };
 const BUILTIN_APP_CATALOG=[
-  {id:"padel-americano",name:"Padel Americano",file:"App_PadelAmericano.html",glyph:"🎾",gradient:["#0ea5e9","#22d3ee"],tagline:"Fair rounds. Real leaderboards.",status:"live",allowed:["family","friends"],active:true},
-  {id:"event-poll",name:"Event Poll",file:"App_EventPoll.html",glyph:"🗳️",gradient:["#8b5cf6","#d946ef"],tagline:"Find the best time, fast.",status:"live",allowed:["family","friends"],active:true},
-  {id:"times-quest",name:"Times Quest",file:"",glyph:"×",gradient:["#f59e0b","#f97316"],tagline:"Multiplication, mastered.",status:"soon",allowed:["family"],active:true},
-  {id:"grocery",name:"Grocery",file:"",glyph:"🛒",gradient:["#10b981","#34d399"],tagline:"Shared family shopping.",status:"soon",allowed:["family","friends"],active:true}
+  {id:"padel-americano",name:"Padel Americano",file:"App_PadelAmericano.html",glyph:"🎾",gradient:["#0ea5e9","#22d3ee"],tagline:"Fair rounds. Real leaderboards.",status:"live",allowed:["family","friends"],active:true,
+    category:"Sports",version:"1.2",rating:"4.9",desc:"Run a fair Americano in seconds: automatic partner rotation, live scoring per round and a leaderboard that updates as you play. Export a beautiful result card and share it with your circle — then push the next session straight to the calendar."},
+  {id:"event-poll",name:"Event Poll",file:"App_EventPoll.html",glyph:"🗳️",gradient:["#8b5cf6","#d946ef"],tagline:"Find the best time, fast.",status:"live",allowed:["family","friends"],active:true,
+    category:"Social",version:"1.1",rating:"4.8",desc:"Propose dates, let everyone in your circle vote with one tap, and watch the bars race. Close the poll and the winning time lands on the shared calendar automatically — no group-chat chaos."},
+  {id:"times-quest",name:"Times Quest",file:"",glyph:"×",gradient:["#f59e0b","#f97316"],tagline:"Multiplication, mastered.",status:"soon",allowed:["family"],active:true,
+    category:"Education",version:"—",rating:"—",desc:"Daily multiplication quests that adapt to each child. Streaks, badges and a parent view of progress. Coming soon."},
+  {id:"grocery",name:"Grocery",file:"",glyph:"🛒",gradient:["#10b981","#34d399"],tagline:"Shared family shopping.",status:"soon",allowed:["family","friends"],active:true,
+    category:"Lifestyle",version:"—",rating:"—",desc:"One shared list for the whole circle: tick items off in the aisle, see who added what, never double-buy milk again. Coming soon."}
 ];
 const EMPTY_DATA=()=>({
   users:[],people:[],circles:[],circleMembers:[],routines:[],events:[],exceptions:[],
@@ -730,7 +805,7 @@ function render(tab){
   $("#circleName").textContent=circle()?circle().name:"—";
   const m=me();const av=$("#meAv");if(m){av.textContent=m.displayName[0];av.style.background=m.color;}
 }
-function renderAll(){render(S.tab);}
+function renderAll(){render(S.tab);if(typeof MonthScreen!=="undefined"&&MonthScreen.isOpen())MonthScreen.render();}
 
 /* ---------------- TODAY (non-scrolling, §72.2.1) ---------------- */
 function renderToday(){
@@ -808,6 +883,8 @@ window.openTomorrow=()=>{
 window.openDetail=key=>{
   let it=null;for(const d of Cal.week(S.circleId,S.calWeekOffset)){it=d.items.find(x=>x.key===key);if(it)break;}
   if(!it)it=Cal.agendaToday(S.circleId).find(x=>x.key===key);
+  /* month view can reference items far outside the current board week */
+  if(!it)outer:for(let off=-6;off<=6;off++){for(const d of Cal.week(S.circleId,off)){it=d.items.find(x=>x.key===key);if(it)break outer;}}
   if(!it)return;
   const w=document.createElement("div");
   w.innerHTML=`<div class="row" style="gap:6px">${it.participants.map(p=>avHtml(p)).join("")}</div>
@@ -841,14 +918,14 @@ window.openEdit=it=>{
   };
 };
 
-/* Quick Add (FAB) */
-$("#fab").onclick=()=>{
+/* Quick Add (FAB + inline day buttons) */
+window.openQuickAdd=dateIso=>{
   const ppl=circlePeople();
   const w=document.createElement("div");
   w.innerHTML=`<input class="fld" id="qaT" placeholder="What's happening?">
   <div class="lbl" style="margin-top:4px">Who</div>
   <div class="filters" id="qaP">${ppl.map(p=>`<button class="chip" data-p="${p.id}">${esc(p.displayName)}</button>`).join("")}</div>
-  <div class="row"><input class="fld" id="qaD" type="date" value="${iso(new Date())}"><input class="fld" id="qaS" type="time" value="17:00"><input class="fld" id="qaE" type="time" value="18:00"></div>
+  <div class="row"><input class="fld" id="qaD" type="date" value="${dateIso||iso(new Date())}"><input class="fld" id="qaS" type="time" value="17:00"><input class="fld" id="qaE" type="time" value="18:00"></div>
   <label class="row" style="font-size:13.5px;gap:8px"><input type="checkbox" id="qaR"> Repeat weekly</label>
   <button class="btn" id="qaGo">Add</button>`;
   Sheet.open("Quick Add",w);
@@ -865,8 +942,9 @@ $("#fab").onclick=()=>{
     EventBus.emit("calendar:eventCreated");Sheet.close();Toast.show("Added ✓");renderAll();
   };
 };
+$("#fab").onclick=()=>openQuickAdd(iso(new Date()));
 
-/* ---------------- CALENDAR ---------------- */
+/* ---------------- CALENDAR (Board + full-screen Month; Week removed — redundant) ---------------- */
 function renderCal(){
   const week=Cal.week(S.circleId,S.calWeekOffset);
   const ppl=circlePeople();
@@ -875,48 +953,83 @@ function renderCal(){
   const B=$("#calBody");
   B.innerHTML=`
   <div class="spread" style="margin-bottom:11px;flex-wrap:wrap;gap:9px">
-    <div class="seg" style="min-width:170px"><button id="mBoard" class="${S.calMode==="board"?"on":""}">Board</button><button id="mWeek" class="${S.calMode==="week"?"on":""}">Week</button></div>
+    <div class="seg" style="min-width:170px"><button id="mBoard" class="on">Board</button><button id="mMonth">Month</button></div>
     <div class="wknav"><button id="wPrev">‹</button><span>${S.calWeekOffset===0?"This week":rangeTxt}</span><button id="wNext">›</button></div>
   </div>
   <div class="filters" id="calF">
     <button class="chip ${S.calFilter==="all"?"on":""}" data-f="all">All</button>
     ${ppl.map(p=>`<button class="chip ${S.calFilter===p.id?"on":""}" data-f="${p.id}">${esc(p.displayName)}</button>`).join("")}
   </div>
-  <div id="calGrid"></div>
-  <button class="btn" style="margin-top:13px" id="calAdd">+ Add Event</button>`;
-  $("#mBoard").onclick=()=>{S.calMode="board";renderCal();};
-  $("#mWeek").onclick=()=>{S.calMode="week";renderCal();};
+  <div id="calGrid"></div>`;
+  $("#mMonth").onclick=()=>MonthScreen.open();
   $("#wPrev").onclick=()=>{S.calWeekOffset--;renderCal();};
   $("#wNext").onclick=()=>{S.calWeekOffset++;renderCal();};
   $$("#calF .chip").forEach(c=>c.onclick=()=>{S.calFilter=c.dataset.f;renderCal();});
-  $("#calAdd").onclick=()=>$("#fab").onclick();
-  const filt=its=>S.calFilter==="all"?its:its.filter(i=>i.participants.includes(S.calFilter));
   const G=$("#calGrid");
-  if(S.calMode==="board"){
-    /* transposed: people = columns (fits screen, no horizontal scroll), days = rows */
-    const cols=ppl.filter(p=>S.calFilter==="all"||p.id===S.calFilter);
-    let html=`<div class="boardwrap glass"><div class="board" style="grid-template-columns:54px repeat(${cols.length},1fr)">`;
-    html+=`<div class="bcell bday" style="border-top:none"></div>`;
-    cols.forEach(p=>{html+=`<div class="bcell bhead"><span class="av" style="background:${p.color};width:30px;height:30px;font-size:11px">${esc(p.displayName[0])}</span>${esc(p.displayName)}</div>`;});
-    week.forEach(d=>{
-      const today=d.iso===iso(new Date()),wk=Cal.isWeekend(d.dow);
-      html+=`<div class="bcell bday ${today?"today":""} ${wk?"wknd":""}">${DOWS[d.dow]}<small>${d.date.getDate()}</small></div>`;
-      cols.forEach(p=>{
-        const its=d.items.filter(i=>i.participants.includes(p.id));
-        html+=`<div class="bcell ${wk?"wknd-row":""}">${its.map(i=>`<button class="evchip ${i.conflict?"cf":""}" style="border-left-color:${i.conflict?"var(--warn)":p.color}" onclick="openDetail('${i.key}')"><b>${esc(i.title)}</b><small>${fmtT(i.start)}</small></button>`).join("")}</div>`;
-      });
+  /* transposed board: people = columns (no horizontal scroll), days = rows; inline + per day */
+  const cols=ppl.filter(p=>S.calFilter==="all"||p.id===S.calFilter);
+  let html=`<div class="boardwrap glass"><div class="board" style="grid-template-columns:54px repeat(${cols.length},1fr)">`;
+  html+=`<div class="bcell bday" style="border-top:none"></div>`;
+  cols.forEach(p=>{html+=`<div class="bcell bhead"><span class="av" style="background:${p.color};width:30px;height:30px;font-size:11px">${esc(p.displayName[0])}</span>${esc(p.displayName)}</div>`;});
+  week.forEach(d=>{
+    const today=d.iso===iso(new Date()),wk=Cal.isWeekend(d.dow);
+    html+=`<div class="bcell bday ${today?"today":""} ${wk?"wknd":""}">${DOWS[d.dow]}<small>${d.date.getDate()}</small><button class="dayadd" onclick="openQuickAdd('${d.iso}')" aria-label="Add on ${DOWS[d.dow]}">+</button></div>`;
+    cols.forEach(p=>{
+      const its=d.items.filter(i=>i.participants.includes(p.id));
+      html+=`<div class="bcell ${wk?"wknd-row":""}">${its.map(i=>`<button class="evchip ${i.conflict?"cf":""}" style="border-left-color:${i.conflict?"var(--warn)":p.color}" onclick="openDetail('${i.key}')"><b>${esc(i.title)}</b><small>${fmtT(i.start)}</small></button>`).join("")}</div>`;
     });
-    html+="</div></div>";G.innerHTML=html;
-  }else{
-    G.innerHTML=week.map(d=>{
-      const its=filt(d.items);const today=d.iso===iso(new Date());
-      return `<div class="dayblock glass" style="${today?"border:1px solid color-mix(in srgb,var(--acc) 40%,var(--brd))":""}">
-      <h4><span class="dnum" style="${today?"color:var(--acc)":""}">${d.date.getDate()}</span> ${DOW[d.dow]} ${Cal.isWeekend(d.dow)?'<span class="wkb">WEEKEND</span>':""}</h4>
-      ${its.length?its.map(tlRow).join(""):'<div class="empty-day">Free</div>'}</div>`;
-    }).join("");
-  }
-  Motion.stagger("#calGrid .dayblock, #calGrid .boardwrap");
+  });
+  html+="</div></div>";G.innerHTML=html;
+  Motion.stagger("#calGrid .boardwrap");
 }
+
+/* ---------------- MONTH (full-screen overlay, HowAbout-style) ---------------- */
+const MonthScreen={off:0,
+  open(){this.off=0;$("#monthScreen").classList.add("on");this.render();
+    if(Motion.ok())gsap.fromTo("#monthScreen",{y:26,opacity:0},{y:0,opacity:1,duration:.36,ease:"power3.out"});},
+  close(){$("#monthScreen").classList.remove("on");},
+  isOpen(){return $("#monthScreen").classList.contains("on");},
+  render(){
+    const c=circle();if(!c)return;
+    $("#monthSub").textContent=c.name;
+    const base=new Date();base.setDate(1);base.setMonth(base.getMonth()+this.off);
+    const mo=base.getMonth();
+    const title=base.toLocaleDateString(undefined,{month:"long",year:"numeric"});
+    const ws=Cal.weekStartDow(),todayIso=iso(new Date());
+    const heads=[...Array(7)].map((_,i)=>{const dw=(ws+i)%7;return `<span class="mwd ${Cal.isWeekend(dw)?"wk":""}">${DOWS[dw]}</span>`;}).join("");
+    const start=Cal.startOfWeek(base);
+    let cells="",d=new Date(start);
+    for(let r=0;r<6;r++){
+      if(r&&d.getMonth()!==mo)break;
+      for(let i=0;i<7;i++){
+        const dIso=iso(d),inM=d.getMonth()===mo,wk=Cal.isWeekend(d.getDay());
+        const items=Cal.instancesForDate(S.circleId,d);
+        cells+=`<button class="mcell ${inM?"":"out"} ${wk?"wkndc":""}" onclick="MonthScreen.day('${dIso}')">
+          <span class="md ${dIso===todayIso?"today":""}">${d.getDate()}</span>
+          <span class="marks">${items.slice(0,4).map(it=>`<i style="background:${personColor(it.participants[0])}"></i>`).join("")}${items.length>4?`<em>+${items.length-4}</em>`:""}</span></button>`;
+        d=addDays(d,1);
+      }
+    }
+    $("#monthInner").innerHTML=`
+    <div class="mnav"><button id="mPrev">‹</button><b>${title}</b><button id="mNext">›</button></div>
+    <div class="mhead">${heads}</div>
+    <div class="mgrid">${cells}</div>
+    <div class="mleg">${circlePeople().map(p=>`<span><i style="background:${p.color}"></i>${esc(p.displayName)}</span>`).join("")}</div>`;
+    $("#mPrev").onclick=()=>{this.off--;this.render();};
+    $("#mNext").onclick=()=>{this.off++;this.render();};
+  },
+  day(dateIso){
+    const d=new Date(dateIso+"T00:00");
+    const items=Cal.instancesForDate(S.circleId,d);
+    const w=document.createElement("div");
+    w.innerHTML=`${items.length?items.map(tlRow).join(""):'<div class="empty-day">Free day 🎉</div>'}
+    <button class="btn" id="mdAdd" style="margin-top:8px">+ Add on ${DOWS[d.getDay()]} ${d.getDate()}</button>`;
+    Sheet.open(d.toLocaleDateString(undefined,{weekday:"long",day:"numeric",month:"long"}),w);
+    w.querySelector("#mdAdd").onclick=()=>{Sheet.close();openQuickAdd(dateIso);};
+  }
+};
+$("#monthBack").onclick=()=>MonthScreen.close();
+$("#monthToday").onclick=()=>{MonthScreen.off=0;MonthScreen.render();};
 
 /* ---------------- MOMENTS (visual preview — no backend yet) ---------------- */
 const MomentsDemo={liked:{},posts:[
@@ -1069,43 +1182,80 @@ function renderApps(){
   const installed=DB.d.circleApps.filter(a=>a.circleId===S.circleId&&a.installed).map(a=>DataAPI.get("appCatalog",a.appId)).filter(Boolean);
   B.innerHTML=`
   <div class="lbl" style="margin:8px 0 18px">${esc(c.name)} · Apps</div>
-  <div class="appgrid">${installed.map(a=>`
-    <button class="appico" onclick="AppHost.open('${a.id}')"><span class="ic" style="background:linear-gradient(135deg,${a.gradient[0]},${a.gradient[1]})">${a.glyph}</span><span>${esc(a.name)}</span></button>`).join("")}
+  <div class="appgrid">
     <button class="appico" onclick="Store.open()"><span class="ic" style="background:linear-gradient(135deg,#1b2540,#39435e);color:#fff;font-size:27px">◎</span><span>Kinetik Store</span></button>
+    ${installed.map(a=>`
+    <button class="appico" onclick="AppHost.open('${a.id}')"><span class="ic" style="background:linear-gradient(135deg,${a.gradient[0]},${a.gradient[1]})">${a.glyph}</span><span>${esc(a.name)}</span></button>`).join("")}
   </div>
   ${installed.length?"":'<p style="color:var(--dim);font-size:13.5px;margin-top:14px;text-align:center">No apps yet — open the Kinetik Store to get one.</p>'}`;
   Motion.stagger("#appsBody .appico");
 }
-const Store={
+const Store={view:"list",detailId:null,
   open(){
+    this.view="list";this.detailId=null;
     $("#storeSub").textContent="Apps for "+(circle()?circle().name:"your circle");
     this.render();
     $("#storeScreen").classList.add("on");
     if(Motion.ok())gsap.fromTo("#storeScreen",{y:26,opacity:0},{y:0,opacity:1,duration:.36,ease:"power3.out"});
   },
   close(){$("#storeScreen").classList.remove("on");renderApps();},
+  back(){if(this.view==="detail"){this.view="list";this.detailId=null;this.render();}else this.close();},
+  isInst(id){return !!DB.d.circleApps.find(x=>x.circleId===S.circleId&&x.appId===id&&x.installed);},
+  getBtn(a,light){
+    const inst=this.isInst(a.id),soon=a.status==="soon";
+    const style=light?'style="background:rgba(255,255,255,.94);color:#0d1426"':"";
+    return `<button class="getbtn ${soon?"soon":""}" ${style} onclick="event.stopPropagation();${inst?`storeOpen('${a.id}')`:`storeGet('${a.id}')`}">${soon?"SOON":inst?"OPEN":"GET"}</button>`;
+  },
   render(){
+    if(this.view==="detail")return this.renderDetail();
     const c=circle(),B=$("#storeInner");
     const avail=DB.d.appCatalog.filter(a=>a.allowed.includes(c.type));
-    const isInst=id=>!!DB.d.circleApps.find(x=>x.circleId===S.circleId&&x.appId===id&&x.installed);
-    const featured=avail.find(a=>a.status==="live"&&!isInst(a.id))||avail.find(a=>a.status==="live");
+    const featured=avail.find(a=>a.status==="live"&&!this.isInst(a.id))||avail.find(a=>a.status==="live");
     const rows=avail.length?avail.map(a=>{
-      const inst=isInst(a.id),soon=a.status==="soon";
-      return `<div class="strow"><span class="ic" style="background:linear-gradient(135deg,${a.gradient[0]},${a.gradient[1]})">${a.glyph}</span>
-      <div style="min-width:0"><b>${esc(a.name)}</b><p>${esc(a.tagline)}</p>${inst&&!soon?`<button class="rm" onclick="storeRm('${a.id}')">Remove from circle</button>`:""}</div>
-      <button class="getbtn ${soon?"soon":""}" onclick="${inst?`storeOpen('${a.id}')`:`storeGet('${a.id}')`}">${soon?"SOON":inst?"OPEN":"GET"}</button></div>`;
+      const inst=this.isInst(a.id),soon=a.status==="soon";
+      return `<div class="strow" style="cursor:pointer" onclick="Store.detail('${a.id}')"><span class="ic" style="background:linear-gradient(135deg,${a.gradient[0]},${a.gradient[1]})">${a.glyph}</span>
+      <div style="min-width:0"><b>${esc(a.name)}</b><p>${esc(a.tagline)}</p>${inst&&!soon?`<button class="rm" onclick="event.stopPropagation();storeRm('${a.id}')">Remove from circle</button>`:`<p style="font-size:10.5px;color:var(--faint);font-weight:700">${esc(a.category||"App")}</p>`}</div>
+      ${this.getBtn(a)}</div>`;
     }).join(""):`<p style="padding:12px 0;color:var(--dim);font-size:13.5px">No apps are available for this circle type yet.</p>`;
     B.innerHTML=`
-    ${featured?`<div class="feat" style="background:linear-gradient(135deg,${featured.gradient[0]},${featured.gradient[1]})">
+    ${featured?`<div class="feat" style="background:linear-gradient(135deg,${featured.gradient[0]},${featured.gradient[1]});cursor:pointer" onclick="Store.detail('${featured.id}')">
       <span class="k">FEATURED</span><h3>${esc(featured.name)}</h3><p>${esc(featured.tagline)}</p>
-      <div class="fr"><span class="ic">${featured.glyph}</span>
-      <button class="getbtn" style="background:rgba(255,255,255,.94);color:#0d1426" onclick="${isInst(featured.id)?`storeOpen('${featured.id}')`:`storeGet('${featured.id}')`}">${isInst(featured.id)?"OPEN":"GET"}</button></div></div>`:""}
+      <div class="fr"><span class="ic">${featured.glyph}</span>${this.getBtn(featured,true)}</div></div>`:""}
+    <div class="lbl" style="margin:4px 2px 9px">All apps</div>
     <div class="me-sec glass" style="padding:4px 16px">${rows}</div>
     <p style="font-size:11.5px;color:var(--faint);margin-top:12px;text-align:center">Apps install per circle · removing keeps your data</p>`;
     Motion.stagger("#storeInner .feat, #storeInner .strow");
+  },
+  detail(id){this.view="detail";this.detailId=id;this.renderDetail();
+    $("#storeBody").scrollTop=0;},
+  renderDetail(){
+    const a=DataAPI.get("appCatalog",this.detailId);if(!a)return this.back();
+    const B=$("#storeInner"),soon=a.status==="soon";
+    $("#storeSub").textContent=esc(a.name);
+    B.innerHTML=`
+    <div class="sdhead">
+      <span class="ic" style="background:linear-gradient(135deg,${a.gradient[0]},${a.gradient[1]})">${a.glyph}</span>
+      <div style="min-width:0"><h2>${esc(a.name)}</h2><p>${esc(a.tagline)}</p>${this.getBtn(a)}</div>
+    </div>
+    <div class="sdinfo glass">
+      <div><div class="k">Rating</div><div class="v">${esc(a.rating||"—")}<small> ★</small></div></div>
+      <div><div class="k">Category</div><div class="v" style="font-size:12px">${esc(a.category||"App")}</div></div>
+      <div><div class="k">Made for</div><div class="v" style="font-size:12px">Circles</div></div>
+      <div><div class="k">Version</div><div class="v">${esc(a.version||"1.0")}</div></div>
+    </div>
+    <div class="shots">
+      <div class="shot" style="background:linear-gradient(160deg,${a.gradient[0]},${a.gradient[1]})">${a.glyph}</div>
+      <div class="shot" style="background:linear-gradient(20deg,${a.gradient[1]},${a.gradient[0]})">${a.glyph}</div>
+    </div>
+    <div class="sdsec">About</div>
+    <p class="sdp">${esc(a.desc||a.tagline)}</p>
+    <div class="sdsec">Privacy</div>
+    <p class="sdp">All data stays inside <b>${esc(circle().name)}</b>. Members of other circles never see it.</p>
+    ${this.isInst(a.id)&&!soon?`<button class="rm" style="font-size:12.5px" onclick="storeRm('${a.id}')">Remove from circle</button>`:""}`;
+    Motion.reveal("#storeInner");
   }
 };
-$("#storeBack").onclick=()=>Store.close();
+$("#storeBack").onclick=()=>Store.back();
 window.storeGet=appId=>{
   let ca=DB.d.circleApps.find(a=>a.circleId===S.circleId&&a.appId===appId);
   if(ca){ca.installed=true;DB.save();SyncEngine.queue("circleApps","update",ca);}
@@ -1118,6 +1268,7 @@ window.storeRm=appId=>{
   if(ca){ca.installed=false;DB.save();SyncEngine.queue("circleApps","update",ca);}
   Toast.show("Removed — app data kept");EventBus.emit("app:uninstalled");Store.render();
 };
+window.Store=Store;
 
 /* ---------------- App Host + Bridge ---------------- */
 const AppHost={cur:null,
@@ -1164,45 +1315,44 @@ function renderMe(){
   const ppl=circlePeople();
   const st=DB.d.settings;
   const myRole=Perm.role(S.userId,S.circleId);
-  const canManage=Perm.canManageMembers(S.userId,S.circleId);
+  const circleCard=c=>{
+    const canMng=Perm.canManageMembers(S.userId,c.id);
+    const mems=DB.d.circleMembers.filter(x=>x.circleId===c.id&&(x.active===undefined||x.active===""||x.active===true||String(x.active).toLowerCase()==="true"));
+    const MAX=canMng?6:7;
+    const tiles=mems.slice(0,MAX).map(mem=>{
+      const p=DataAPI.get("people",mem.personId);if(!p)return "";
+      const lead=mem.role==="owner";
+      const first=esc(String(p.displayName).split(" ")[0]);
+      const tap=canMng&&!lead?`onclick="manageMember('${mem.id}')"`:`onclick="Toast.show('${first} · ${ROLE_LABEL[mem.role]||"Member"}')"`;
+      return `<button class="memtile ${lead?"lead":""}" ${tap}>
+        <span class="sq" style="background:${p.color}">${esc(p.displayName[0])}<span class="st" style="background:${lead?"#f43f5e":"var(--ok)"}"></span></span>
+        <small>${first}</small></button>`;
+    }).join("");
+    const more=mems.length>MAX?`<button class="memtile" onclick="setCircle('${c.id}')"><span class="sq more">+${mems.length-MAX}</span><small>more</small></button>`:"";
+    const inv=canMng?`<button class="memtile" onclick="inviteTo('${c.id}')"><span class="sq add">+</span><small>Invite</small></button>`:"";
+    const act=c.id===S.circleId;
+    return `<div class="circard glass">
+      <div class="chd"><div><h3>${esc(c.name)}</h3><div class="csub">${c.type==="family"?"home team":"friends circle"} · ${mems.length} member${mems.length!==1?"s":""}</div></div>
+      <button class="opnbtn ${act?"act":""}" onclick="setCircle('${c.id}')">${act?"Active":"Open"}</button></div>
+      <div class="memgrid">${tiles}${more}${inv}</div></div>`;
+  };
   B.innerHTML=`
   <div class="me-prof glass"><span class="av" style="background:${m.color};width:54px;height:54px;font-size:19px">${esc(m.displayName[0])}</span>
     <div><b>${esc(m.displayName)}</b><span>${esc(ROLE_LABEL[myRole]||"Member")} · ${esc(circle().name)}</span></div></div>
 
-  <div class="lbl" style="margin:4px 0 9px">My Circles</div>
-  <div class="me-sec glass">${myCircles.map(c=>`
-    <button class="me-row" onclick="setCircle('${c.id}')"><span class="dot" style="width:9px;height:9px;border-radius:50%;background:${c.accent[0]}"></span>
-    ${esc(c.name)} <span class="end">${c.type}${c.id===S.circleId?" · active":""} ›</span></button>`).join("")}
-    <button class="me-row" id="newCircle" style="color:var(--acc);font-weight:600">+ Create Friends Circle</button></div>
-
-  <div class="lbl" style="margin:4px 0 9px">People · ${esc(circle().name)}</div>
-  <div class="me-sec glass">${ppl.map(p=>{
-    const mem=DB.d.circleMembers.find(x=>x.circleId===S.circleId&&x.personId===p.id);
-    const role=mem?mem.role:"member",tag=ROLE_LABEL[role]||"Member";
-    return canManage&&mem&&role!=="owner"
-      ?`<button class="me-row" onclick="manageMember('${mem.id}')">${avHtml(p.id)} ${esc(p.displayName)}<span class="end"><span class="rolechip">${tag}</span> ›</span></button>`
-      :`<div class="me-row">${avHtml(p.id)} ${esc(p.displayName)}<span class="end"><span class="rolechip ${role==="owner"?"lead":""}">${tag}</span></span></div>`;}).join("")}
-    <button class="me-row" id="invBtn" style="color:var(--acc);font-weight:600">+ Invite member (existing account)</button></div>
-  <p style="font-size:11.5px;color:var(--faint);margin:-5px 2px 13px;line-height:1.5">Everyone has a personal account. Each circle has <b>one Leader</b>; the Leader can appoint Co-leaders to help manage people and plans.</p>
+  <div class="spread" style="margin:10px 2px 11px"><span class="lbl">Circles</span>
+    <button id="newCircle" style="color:var(--acc);font-weight:700;font-size:13px">+ Circle</button></div>
+  ${myCircles.map(circleCard).join("")}
+  <p style="font-size:11.5px;color:var(--faint);margin:-2px 2px 16px;line-height:1.5">Everyone has a personal account. Each circle has <b>one Leader</b> <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#f43f5e;vertical-align:0"></span>; the Leader can appoint Co-leaders to help manage people and plans.</p>
 
   <div class="lbl" style="margin:4px 0 9px">Settings</div>
   <div class="me-sec glass">
     <div class="me-row">Theme<span class="end"><select id="setTheme"><option value="auto"${st.theme==="auto"?" selected":""}>Auto</option><option value="dark"${st.theme==="dark"?" selected":""}>Dark</option><option value="light"${st.theme==="light"?" selected":""}>Light</option></select></span></div>
     <div class="me-row">Weekend<span class="end"><select id="setWknd"><option value="fri-sat"${st.weekendDays==="fri-sat"?" selected":""}>Fri – Sat (Middle East)</option><option value="sat-sun"${st.weekendDays==="sat-sun"?" selected":""}>Sat – Sun</option></select></span></div>
   </div>
-
-  <div class="lbl" style="margin:4px 0 9px">Advanced</div>
-  <div class="me-sec glass">
-    <div class="me-row">Backend<span class="end">Google Sheets</span></div>
-    <div class="me-row">Endpoint<span class="end">Apps Script live</span></div>
-    <button class="me-row" id="expBtn">Export cached snapshot (JSON)<span class="end">↓</span></button>
-    <button class="me-row" id="refBtn">Refresh from Sheets<span class="end">↻</span></button>
-  </div>
-  <button id="logoutBtn">Log out</button>`;
+  <button id="logoutBtn"><svg viewBox="0 0 24 24"><path d="M9 21H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3M16 17l5-5-5-5M21 12H9"/></svg>Log out</button>`;
   $("#setTheme").onchange=e=>{st.theme=e.target.value;DB.save();Theme.apply();};
   $("#setWknd").onchange=e=>{st.weekendDays=e.target.value;DB.save();Toast.show("Weekend updated");renderAll();};
-  $("#expBtn").onclick=()=>{const a=document.createElement("a");a.href="data:application/json,"+encodeURIComponent(JSON.stringify(DB.d,null,2));a.download="kinetik_export.json";a.click();};
-  $("#refBtn").onclick=async()=>{await DB.refresh();Toast.show("Sheets refreshed");renderAll();};
   $("#newCircle").onclick=()=>{
     const w=document.createElement("div");
     w.innerHTML=`<input class="fld" id="ncN" placeholder="Circle name (e.g. Weekend Crew)"><button class="btn" id="ncGo">Create</button>`;
@@ -1214,7 +1364,10 @@ function renderMe(){
       Sheet.close();setCircle(c.id);Toast.show("Circle created ✓");
     };
   };
-  $("#invBtn").onclick=()=>{
+  $("#logoutBtn").onclick=logoutFlow;
+}
+window.inviteTo=cid=>{
+    if(cid&&cid!==S.circleId)setCircle(cid);
     const w=document.createElement("div");
     const others=DB.d.users.filter(u2=>u2.id!==S.userId&&!DB.d.circleMembers.find(mm=>mm.circleId===S.circleId&&mm.userId===u2.id));
     let selU=null,selRole="member";
@@ -1249,14 +1402,13 @@ function renderMe(){
       Sheet.close();Toast.show(selU.displayName+" added as "+ROLE_LABEL[selRole]+" ✓");renderMe();
     };
   };
-  $("#logoutBtn").onclick=()=>{
-    const w=document.createElement("div");
-    w.innerHTML=`<p style="font-size:14px;color:var(--dim)">Log out of Kinetik? Your circle data stays on this device.</p>
-    <div class="row" style="gap:9px"><button class="btn danger" id="loYes">Log out</button><button class="btn ghost" id="loNo">Cancel</button></div>`;
-    Sheet.open("Log out",w);
-    w.querySelector("#loYes").onclick=()=>{Session.clear();EventBus.emit("auth:logout");location.reload();};
-    w.querySelector("#loNo").onclick=()=>Sheet.close();
-  };
+function logoutFlow(){
+  const w=document.createElement("div");
+  w.innerHTML=`<p style="font-size:14px;color:var(--dim)">Log out of Kinetik? Your circle data stays on this device.</p>
+  <div class="row" style="gap:9px"><button class="btn danger" id="loYes">Log out</button><button class="btn ghost" id="loNo">Cancel</button></div>`;
+  Sheet.open("Log out",w);
+  w.querySelector("#loYes").onclick=()=>{Session.clear();EventBus.emit("auth:logout");location.reload();};
+  w.querySelector("#loNo").onclick=()=>Sheet.close();
 }
 window.manageMember=memId=>{
   const mem=DataAPI.get("circleMembers",memId);if(!mem||mem.role==="owner")return;
@@ -1439,8 +1591,10 @@ async function boot(){
   }
   setTimeout(()=>{
     const sp=$("#splash");
-    const done=()=>{sp.style.display="none";has?enterShell():showLogin();};
-    if(Motion.ok())gsap.to(sp,{opacity:0,duration:.45,ease:"power2.in",onComplete:done});else done();
+    const done=()=>{if(sp.style.display==="none")return;sp.style.display="none";has?enterShell():showLogin();};
+    if(Motion.ok())gsap.to(sp,{opacity:0,duration:.45,ease:"power2.in",onComplete:done});
+    /* rAF (and GSAP) throttles in background tabs — never let the splash hang */
+    setTimeout(done,600);
   },has?1300:1500);
   /* refresh listeners */
   ["calendar:eventCreated","calendar:routineCreated","circle:changed","app:installed"].forEach(e=>EventBus.on(e,()=>{if(S.tab==="today")renderToday();}));
