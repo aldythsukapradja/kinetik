@@ -70,12 +70,12 @@ html[data-theme="light"]{
 /* per-circle accent set by JS */
 html{--acc:#22d3ee;--acc2:#818cf8;}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html,body{height:var(--app-height);overscroll-behavior:none}
+html,body{height:100%;overscroll-behavior:none}
 body{font-family:var(--font);color:var(--text);background:
   radial-gradient(120% 90% at 80% -10%,color-mix(in srgb,var(--acc) 16%,transparent),transparent 55%),
   radial-gradient(120% 100% at 0% 100%,color-mix(in srgb,var(--acc2) 13%,transparent),transparent 55%),
   linear-gradient(170deg,var(--bg1),var(--bg0) 55%,var(--bg2));
-  position:fixed;top:0;left:0;right:0;height:var(--app-height);overflow:hidden;transition:background .6s;
+  position:fixed;inset:0;overflow:hidden;transition:background .6s;
   font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
 #bg3d{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.85}
 button{font-family:var(--font);color:inherit;background:none;border:none;cursor:pointer;font-size:inherit}
@@ -135,21 +135,21 @@ input.fld:focus,select.fld:focus{border-color:var(--acc)}
 .persona b{font-size:15px}.persona span:not(.av){display:block;font-size:12px;color:var(--dim)}
 #login .priv{font-size:12px;color:var(--faint);text-align:center;line-height:1.5}
 /* ============ SHELL ============ */
-#shell{position:fixed;top:0;left:0;right:0;height:var(--app-height);z-index:10;display:flex;flex-direction:column;padding-top:var(--sat)}
+#shell{position:fixed;inset:0;z-index:10;display:flex;flex-direction:column;padding-top:var(--sat)}
 #topbar{display:flex;align-items:center;justify-content:space-between;padding:12px 18px 10px;gap:10px}
 #topbar .brand{font-weight:800;font-size:19px;letter-spacing:-.02em}
 #topbar .brand i{font-style:normal;background:linear-gradient(120deg,var(--acc),var(--acc2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 #circlePill{display:flex;align-items:center;gap:8px;border-radius:999px;padding:7px 13px 7px 9px;font-size:13px;font-weight:600;max-width:52vw}
 #circlePill .dot{width:9px;height:9px;border-radius:50%;background:var(--acc);box-shadow:0 0 10px var(--acc)}
 #circlePill em{font-style:normal;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-#views{flex:1;position:relative;overflow:hidden}
-.view{position:absolute;inset:0;overflow-y:auto;padding:4px 18px calc(var(--navh) + 20px);display:none;-webkit-overflow-scrolling:touch}
+#views{flex:1;min-height:0;position:relative;overflow:hidden}
+.view{position:absolute;inset:0;overflow-y:auto;padding:4px 18px 34px;display:none;-webkit-overflow-scrolling:touch}
 .view.on{display:block}
 .view-inner{max-width:560px;margin:0 auto}
 #view-calendar .view-inner{max-width:980px}
 /* bottom nav — WhatsApp-style: hugs the screen bottom, bg bleeds into the
    home-bar zone (env safe-area), glass + cradle notch + sliding pill */
-#nav{position:fixed;left:0;right:0;bottom:0;z-index:40;height:var(--navh);
+#nav{position:relative;z-index:40;flex:0 0 auto;height:var(--navh);
   display:flex;align-items:stretch;justify-content:center;gap:2px;
   padding:7px 12px var(--safeb);border-radius:26px 26px 0 0;
   background:var(--glass2);backdrop-filter:blur(28px) saturate(1.5);-webkit-backdrop-filter:blur(28px) saturate(1.5);
@@ -183,7 +183,7 @@ input.fld:focus,select.fld:focus{border-color:var(--acc)}
 /* ============ TODAY (non-scroll) ============ */
 #view-today{overflow:hidden!important;display:none}
 #view-today.on{display:flex;flex-direction:column}
-#view-today .view-inner{display:flex;flex-direction:column;gap:12px;height:100%;width:100%;max-width:560px;padding-bottom:calc(var(--navh) + 12px)}
+#view-today .view-inner{display:flex;flex-direction:column;gap:12px;height:100%;width:100%;max-width:560px;padding-bottom:18px}
 .greet h2{font-size:clamp(21px,5.5vw,27px);letter-spacing:-.02em}
 .greet p{color:var(--dim);font-size:13px}
 .hero{border-radius:var(--radius-md);padding:17px;position:relative;overflow:hidden;border:1px solid color-mix(in srgb,var(--acc) 35%,var(--brd))}
@@ -241,7 +241,7 @@ input.fld:focus,select.fld:focus{border-color:var(--acc)}
 .dayblock h4 .wkb{font-size:9.5px;font-weight:800;color:var(--warn);border:1px solid color-mix(in srgb,var(--warn) 45%,transparent);border-radius:99px;padding:1px 7px}
 .empty-day{font-size:12.5px;color:var(--faint);padding:3px 0}
 /* ============ ASK (full-screen overlay, WhatsApp pattern) ============ */
-#askScreen{position:fixed;top:0;left:0;right:0;height:var(--app-height);z-index:60;display:none;flex-direction:column;
+#askScreen{position:fixed;inset:0;z-index:60;display:none;flex-direction:column;
   background:radial-gradient(120% 80% at 80% -10%,color-mix(in srgb,var(--acc) 13%,transparent),transparent 55%),
   radial-gradient(110% 90% at 0% 100%,color-mix(in srgb,var(--acc2) 10%,transparent),transparent 55%),var(--bg0)}
 #askScreen.on{display:flex}
@@ -309,7 +309,7 @@ input.fld:focus,select.fld:focus{border-color:var(--acc)}
 .getbtn:active{transform:scale(.94)}
 .getbtn.soon{opacity:.45;pointer-events:none}
 /* store — full-screen app (back button, nav hidden) */
-#storeScreen{position:fixed;top:0;left:0;right:0;height:var(--app-height);z-index:60;display:none;flex-direction:column;
+#storeScreen{position:fixed;inset:0;z-index:60;display:none;flex-direction:column;
   background:radial-gradient(120% 80% at 80% -10%,color-mix(in srgb,var(--acc) 10%,transparent),transparent 55%),var(--bg0)}
 #storeScreen.on{display:flex}
 #storeBody{flex:1;overflow-y:auto;padding:16px 18px calc(28px + var(--sab));-webkit-overflow-scrolling:touch}
@@ -333,7 +333,7 @@ input.fld:focus,select.fld:focus{border-color:var(--acc)}
 /* board inline add */
 .dayadd{width:19px;height:19px;border-radius:50%;background:color-mix(in srgb,var(--acc) 13%,transparent);color:var(--acc);font-size:13px;font-weight:800;line-height:1;display:flex;align-items:center;justify-content:center;margin-top:3px}
 /* ============ MONTH (full-screen, HowAbout-style) ============ */
-#monthScreen{position:fixed;top:0;left:0;right:0;height:var(--app-height);z-index:60;display:none;flex-direction:column;
+#monthScreen{position:fixed;inset:0;z-index:60;display:none;flex-direction:column;
   background:radial-gradient(120% 80% at 80% -10%,color-mix(in srgb,var(--acc) 11%,transparent),transparent 55%),var(--bg0)}
 #monthScreen.on{display:flex}
 #monthBody{flex:1;overflow-y:auto;padding:14px 14px calc(26px + var(--sab));-webkit-overflow-scrolling:touch}
@@ -353,10 +353,11 @@ input.fld:focus,select.fld:focus{border-color:var(--acc)}
 .mcell .md.today{background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;font-weight:800;
   border:2px solid rgba(255,255,255,.7);transform:translateY(-2px);
   box-shadow:0 5px 16px color-mix(in srgb,var(--acc) 55%,transparent),inset 0 1px 0 rgba(255,255,255,.4)}
-.mcell .marks{display:flex;gap:2.5px;align-items:center;flex-wrap:wrap;justify-content:center;padding:0 3px}
+.mcell .marks{display:flex;gap:0;align-items:center;justify-content:center;padding:0 3px}
 .mcell .marks i{width:5.5px;height:5.5px;border-radius:50%}
-.mcell .marks .mi{font-size:10px;font-weight:800;letter-spacing:.04em;line-height:1.1}
-.mcell .marks em{font-style:normal;font-size:8.5px;font-weight:800;color:var(--dim)}
+.mcell .marks .ma{width:15px;height:15px;border-radius:50%;color:#fff;font-size:8px;font-weight:800;display:flex;align-items:center;justify-content:center;border:1.5px solid var(--bg0);margin-left:-4px;flex:0 0 auto;background-size:cover;background-position:center}
+.mcell .marks .ma:first-child{margin-left:0}
+.mcell .marks em{font-style:normal;font-size:8.5px;font-weight:800;color:var(--dim);margin-left:3px}
 .mleg{display:flex;gap:13px;flex-wrap:wrap;justify-content:center;margin-top:14px;font-size:11px;color:var(--dim);font-weight:600}
 .mleg i{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:5px}
 /* ============ MOMENTS (real media — §72.18) ============ */
@@ -412,7 +413,7 @@ input.fld:focus,select.fld:focus{border-color:var(--acc)}
 .iconbtn:active{transform:scale(.88)}
 .iconbtn svg{width:20px;height:20px;stroke:var(--text);fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
 /* ============ CREATE MOMENT (full-screen) ============ */
-#createScreen{position:fixed;top:0;left:0;right:0;height:var(--app-height);z-index:62;display:none;flex-direction:column;
+#createScreen{position:fixed;inset:0;z-index:62;display:none;flex-direction:column;
   background:radial-gradient(120% 80% at 80% -10%,color-mix(in srgb,var(--acc) 11%,transparent),transparent 55%),var(--bg0)}
 #createScreen.on{display:flex}
 #createScreen .prog{height:3px;background:transparent;flex:0 0 auto}
@@ -439,7 +440,7 @@ input.fld:focus,select.fld:focus{border-color:var(--acc)}
 .crad .dot{width:9px;height:9px;border-radius:50%;background:var(--acc);margin-left:auto;opacity:0}
 .crad.on .dot{opacity:1}
 /* ============ STORY VIEWER ============ */
-#storyView{position:fixed;top:0;left:0;right:0;height:var(--app-height);z-index:72;display:none;flex-direction:column;background:#06080f}
+#storyView{position:fixed;inset:0;z-index:72;display:none;flex-direction:column;background:#06080f}
 #storyView.on{display:flex}
 #storyView .bars{display:flex;gap:4px;padding:calc(10px + var(--sat)) 12px 8px;flex:0 0 auto}
 #storyView .bars i{flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,.28);overflow:hidden}
@@ -456,7 +457,7 @@ input.fld:focus,select.fld:focus{border-color:var(--acc)}
 #storyView .nav span{flex:1}
 .confetti{position:fixed;width:9px;height:9px;z-index:73;pointer-events:none;border-radius:2px}
 /* app host */
-#appHost{position:fixed;top:0;left:0;right:0;height:var(--app-height);z-index:70;display:none;flex-direction:column;background:var(--bg0)}
+#appHost{position:fixed;inset:0;z-index:70;display:none;flex-direction:column;background:var(--bg0)}
 #appHost.on{display:flex}
 #appHostBar{display:flex;align-items:center;justify-content:space-between;padding:calc(10px + var(--sat)) 16px 10px;background:var(--glass2);backdrop-filter:blur(20px);border-bottom:1px solid var(--brd2)}
 #appHostBar b{font-size:15px}
@@ -499,7 +500,7 @@ input.fld:focus,select.fld:focus{border-color:var(--acc)}
 #logoutBtn:active{transform:scale(.97)}
 #logoutBtn svg{width:18px;height:18px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 /* ============ SHEETS & TOAST ============ */
-#sheetLayer{position:fixed;top:0;left:0;right:0;height:var(--app-height);z-index:80;display:none}
+#sheetLayer{position:fixed;inset:0;z-index:80;display:none}
 #sheetLayer.on{display:block}
 #scrim{position:absolute;inset:0;background:rgba(4,7,16,.45);backdrop-filter:blur(3px)}
 #sheet{position:absolute;left:0;right:0;bottom:0;max-height:84%;border-radius:var(--radius-lg) var(--radius-lg) 0 0;padding:10px 20px calc(22px + var(--sab));display:flex;flex-direction:column}
@@ -633,7 +634,8 @@ input.fld:focus,select.fld:focus{border-color:var(--acc)}
   <div class="bars" id="storyBars"></div>
   <div class="shead"><span class="av" id="storyAv" style="width:32px;height:32px;font-size:12px"></span>
     <div><b id="storyWho">—</b><small id="storyWhen"></small></div>
-    <button class="sclose" id="storyClose" aria-label="Close">✕</button></div>
+    <button class="sclose" id="storyMenu" aria-label="Moment options" style="margin-left:auto;display:none">⋯</button>
+    <button class="sclose" id="storyClose" aria-label="Close" style="margin-left:8px">✕</button></div>
   <div class="sbody" id="storyBody">
     <div class="nav"><span id="storyPrev"></span><span id="storyNext"></span></div>
   </div>
@@ -819,6 +821,10 @@ const MomentsService={
   listMemoryLines(circleId,limit,cursor){return this.call("listMemoryLines",{circleId,limit:limit||20,cursor:cursor||""});},
   createMomentStory(p){return this.call("createMomentStory",p);},
   listMomentStories(circleId){return this.call("listMomentStories",{circleId});},
+  editMemoryLine(postId,caption){return this.call("editMemoryLine",{postId,caption});},
+  deleteMemoryLine(postId){return this.call("deleteMemoryLine",{postId});},
+  editMomentStory(p){return this.call("editMomentStory",p);},
+  deleteMomentStory(storyId){return this.call("deleteMomentStory",{storyId});},
   healthCheck(){return this.call("healthCheck",{});},
   /* per-circle feed cache for instant paint before the network returns */
   readCache(circleId){try{return (JSON.parse(localStorage.getItem(this.CACHE))||{})[circleId]||null;}catch(e){return null;}},
@@ -1216,7 +1222,7 @@ const MonthScreen={off:0,
         const who=[...new Set(items.map(it=>it.participants[0]))];
         cells+=`<button class="mcell ${inM?"":"out"} ${wk?"wkndc":""}" onclick="MonthScreen.day('${dIso}')">
           <span class="md ${dIso===todayIso?"today":""}">${d.getDate()}</span>
-          <span class="marks">${who.slice(0,4).map(pid=>`<b class="mi" style="color:${personColor(pid)}">${esc(String(personName(pid)||"?")[0])}</b>`).join("")}${who.length>4?`<em>+${who.length-4}</em>`:""}</span></button>`;
+          <span class="marks">${who.slice(0,3).map(pid=>`<span class="ma" style="background:${personColor(pid)}">${esc(String(personName(pid)||"?")[0])}</span>`).join("")}${who.length>3?`<em>+${who.length-3}</em>`:""}</span></button>`;
         d=addDays(d,1);
       }
     }
@@ -1250,6 +1256,8 @@ function authorOf(userId){
   const p=u&&DataAPI.get("people",u.personId||u.defaultPersonId);
   return {name:(p&&p.displayName)||(u&&u.displayName)||"Member",color:(p&&p.color)||"#64748b"};
 }
+/* author can always edit/delete own; Leader & Co-leaders can moderate any */
+const canEditMoment=authorUserId=>authorUserId===S.userId||Perm.canManageMembers(S.userId,S.circleId);
 const relTime=iso=>{
   const t=new Date(iso).getTime();if(isNaN(t))return"";
   const s=(Date.now()-t)/1000;
@@ -1361,7 +1369,8 @@ function postCard(p){
     :`<img loading="lazy" src="${mediaSrc(m)}" data-fid="${m.driveFileId}" alt="" onload="this.dataset.ok=1">`);
   return `<article class="post glass" data-id="${p.postId}">
     <div class="ph"><span class="av" style="background:${a.color};width:32px;height:32px;font-size:12px">${esc(a.name[0])}</span>
-      <div><b>${esc(a.name)}</b><small>${esc(circle().name)} · ${esc(relTime(p.createdAt))}</small></div></div>
+      <div><b>${esc(a.name)}</b><small>${esc(circle().name)} · ${esc(relTime(p.createdAt))}</small></div>
+      ${canEditMoment(p.authorUserId)?`<button class="mmenu" onclick="momentMenu('${p.postId}')" aria-label="Post options">⋯</button>`:""}</div>
     <div class="pmedia">${media}</div>
     <div class="pacts">
       <button onclick="Toast.show('Reactions arrive in the next build')"><svg viewBox="0 0 24 24"><path d="M12 20s-7-4.6-9.2-8.8C1.2 8 3 4.5 6.6 4.5c2 0 3.6 1.1 4.4 2.6.8-1.5 2.4-2.6 4.4-2.6 3.6 0 5.4 3.5 3.8 6.7C19 15.4 12 20 12 20z"/></svg></button>
@@ -1525,6 +1534,7 @@ const StoryView={items:[],i:0,timer:null,
     if(idx<0)idx=0;if(idx>=this.items.length)return this.close();
     this.i=idx;const s=this.items[idx];
     markStorySeen(s.storyId);
+    $("#storyMenu").style.display=canEditMoment(s.authorUserId)?"flex":"none";
     $("#storyWhen").textContent=relTime(s.createdAt);
     const m=s.media;
     const slot=$("#storyBody");
@@ -1546,8 +1556,105 @@ const StoryView={items:[],i:0,timer:null,
   close(){clearTimeout(this.timer);$("#storyView").classList.remove("on");if(S.tab==="moments")paintMoments();}
 };
 $("#storyClose").onclick=()=>StoryView.close();
+$("#storyMenu").onclick=()=>storyMenu();
 $("#storyNext").onclick=()=>StoryView.show(StoryView.i+1);
 $("#storyPrev").onclick=()=>StoryView.show(StoryView.i-1);
+
+/* ---------------- MOMENTS edit / delete (author or Leader/Co-leader) ---------------- */
+window.momentMenu=postId=>{
+  const p=MomentsState.memoryLines.find(x=>x.postId===postId);if(!p)return;
+  const w=document.createElement("div");
+  w.innerHTML=`<button class="me-row" id="pmEdit">✏️&nbsp; Edit caption<span class="end">›</span></button>
+  <button class="me-row" id="pmDel" style="color:var(--bad);font-weight:700">🗑&nbsp; Delete post<span class="end" style="color:var(--bad)">›</span></button>`;
+  Sheet.open("Post options",w);
+  w.querySelector("#pmEdit").onclick=()=>{Sheet.close();setTimeout(()=>editPost(postId),160);};
+  w.querySelector("#pmDel").onclick=()=>{Sheet.close();setTimeout(()=>deletePost(postId),160);};
+};
+function editPost(postId){
+  const p=MomentsState.memoryLines.find(x=>x.postId===postId);if(!p)return;
+  const w=document.createElement("div");
+  w.innerHTML=`<div class="cfield"><div class="lbl">Caption</div>
+    <textarea class="fld" id="epCap" rows="3">${esc(p.caption||"")}</textarea>
+    <div class="cc" id="epCC"></div></div><button class="btn" id="epGo">Save</button>`;
+  Sheet.open("Edit post",w);
+  const t=w.querySelector("#epCap"),cc=w.querySelector("#epCC"),go=w.querySelector("#epGo");
+  const upd=()=>{const n=t.value.trim().length;cc.textContent=n+" / min 10";cc.classList.toggle("bad",n<10);go.disabled=n<10;};
+  t.oninput=upd;upd();
+  go.onclick=async()=>{
+    const cap=t.value.trim();if(cap.length<10)return;
+    go.disabled=true;go.textContent="Saving…";
+    try{
+      await MomentsService.editMemoryLine(postId,cap);
+      p.caption=cap;MomentsService.writeCache(S.circleId,{stories:MomentsState.stories,posts:MomentsState.memoryLines});
+      Sheet.close();Toast.show("Caption updated ✓");paintMoments();
+    }catch(e){go.disabled=false;go.textContent="Save";Toast.show("Couldn't save: "+String(e.message||e).slice(0,60));}
+  };
+}
+function deletePost(postId){
+  const p=MomentsState.memoryLines.find(x=>x.postId===postId);if(!p)return;
+  const w=document.createElement("div");
+  w.innerHTML=`<p style="font-size:13.5px;color:var(--dim)">Delete this memory permanently? The photo is removed from Drive too.</p>
+  <div class="row" style="gap:9px"><button class="btn danger" id="dpYes">Delete</button><button class="btn ghost" id="dpNo">Cancel</button></div>`;
+  Sheet.open("Delete post",w);
+  w.querySelector("#dpNo").onclick=()=>Sheet.close();
+  w.querySelector("#dpYes").onclick=async()=>{
+    Sheet.close();
+    MomentsState.memoryLines=MomentsState.memoryLines.filter(x=>x.postId!==postId);
+    MomentsService.writeCache(S.circleId,{stories:MomentsState.stories,posts:MomentsState.memoryLines});
+    paintMoments();Toast.show("Deleting…");
+    try{await MomentsService.deleteMemoryLine(postId);Toast.show("Post deleted");}
+    catch(e){Toast.show("Delete failed — restoring");loadMoments(true);}
+  };
+}
+window.storyMenu=()=>{
+  const s=StoryView.items[StoryView.i];if(!s)return;
+  clearTimeout(StoryView.timer);
+  const w=document.createElement("div");
+  w.innerHTML=`<button class="me-row" id="smEdit">✏️&nbsp; Edit title &amp; caption<span class="end">›</span></button>
+  <button class="me-row" id="smDel" style="color:var(--bad);font-weight:700">🗑&nbsp; Delete moment<span class="end" style="color:var(--bad)">›</span></button>`;
+  Sheet.open("Moment options",w);
+  w.querySelector("#smEdit").onclick=()=>{Sheet.close();setTimeout(()=>editStory(s.storyId),160);};
+  w.querySelector("#smDel").onclick=()=>{Sheet.close();setTimeout(()=>deleteStory(s.storyId),160);};
+};
+function editStory(storyId){
+  const s=StoryView.items.find(x=>x.storyId===storyId)||MomentsState.stories.find(x=>x.storyId===storyId);if(!s)return;
+  const w=document.createElement("div");
+  w.innerHTML=`<div class="cfield"><div class="lbl">Title</div><input class="fld" id="esT" maxlength="40" value="${esc(s.title||"")}"><div class="cc" id="esTC"></div></div>
+  <div class="cfield"><div class="lbl">Caption</div><textarea class="fld" id="esC" rows="2">${esc(s.caption||"")}</textarea></div>
+  <button class="btn" id="esGo">Save</button>`;
+  Sheet.open("Edit moment",w);
+  const tt=w.querySelector("#esT"),tc=w.querySelector("#esTC"),go=w.querySelector("#esGo");
+  const upd=()=>{const n=tt.value.trim().length;tc.textContent=n+" / 40 · min 3";tc.classList.toggle("bad",n<3);go.disabled=n<3;};
+  tt.oninput=upd;upd();
+  go.onclick=async()=>{
+    const title=tt.value.trim(),caption=w.querySelector("#esC").value.trim();
+    if(title.length<3)return;
+    go.disabled=true;go.textContent="Saving…";
+    try{
+      await MomentsService.editMomentStory({storyId,title,caption});
+      [s,...MomentsState.stories.filter(x=>x.storyId===storyId)].forEach(o=>{o.title=title;o.caption=caption;});
+      MomentsService.writeCache(S.circleId,{stories:MomentsState.stories,posts:MomentsState.memoryLines});
+      Sheet.close();Toast.show("Moment updated ✓");StoryView.close();
+    }catch(e){go.disabled=false;go.textContent="Save";Toast.show("Couldn't save: "+String(e.message||e).slice(0,60));}
+  };
+}
+function deleteStory(storyId){
+  const w=document.createElement("div");
+  w.innerHTML=`<p style="font-size:13.5px;color:var(--dim)">Delete this moment permanently? The photo is removed from Drive too.</p>
+  <div class="row" style="gap:9px"><button class="btn danger" id="dsYes">Delete</button><button class="btn ghost" id="dsNo">Cancel</button></div>`;
+  Sheet.open("Delete moment",w);
+  w.querySelector("#dsNo").onclick=()=>Sheet.close();
+  w.querySelector("#dsYes").onclick=async()=>{
+    Sheet.close();
+    MomentsState.stories=MomentsState.stories.filter(x=>x.storyId!==storyId);
+    StoryView.items=StoryView.items.filter(x=>x.storyId!==storyId);
+    MomentsService.writeCache(S.circleId,{stories:MomentsState.stories,posts:MomentsState.memoryLines});
+    Toast.show("Deleting…");
+    if(StoryView.items.length)StoryView.show(Math.min(StoryView.i,StoryView.items.length-1));else StoryView.close();
+    try{await MomentsService.deleteMomentStory(storyId);Toast.show("Moment deleted");}
+    catch(e){Toast.show("Delete failed — restoring");loadMoments(true);}
+  };
+}
 
 /* ---------------- ASK ---------------- */
 const Ask={
