@@ -1,676 +1,650 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#f7fbff" />
-  <title>Kinetik — Code Clash</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#ff6fae">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Code Clash">
+  <title>Code Clash - Kinetik</title>
   <script type="application/kinetik-app+json">
-  {"appId":"code-clash","name":"Code Clash","shortName":"CodeClash","icon":"⚡","gradient":["#7dd3fc","#a78bfa"],"category":"games","tagline":"Race to crack the code.","about":"A fast head-to-head puzzle game for the circle — race to crack each round's code, climb the leaderboard, and settle who's the sharpest. Quick rounds, pass-and-play.","audience":"all","circleTypes":["family","friends"],"worksWith":["standalone"],"status":"live","minMembers":2}
+  {
+    "appId": "game-code-clash",
+    "name": "Code Clash",
+    "shortName": "CodeClash",
+    "icon": "⚡",
+    "gradient": ["#ff6fae", "#6f8cff"],
+    "category": "games",
+    "tagline": "Crack the color code.",
+    "about": "A fast logic duel for family and friends. Guess the hidden color code with unlimited attempts, tactile marbles, hints, and a circle-ready leaderboard.",
+    "audience": "all",
+    "circleTypes": ["family", "friends"],
+    "worksWith": ["offline", "standalone"],
+    "status": "live",
+    "minMembers": 1
+  }
   </script>
   <style>
     :root{
       color-scheme:light;
-      --bg:#f6f9ff;
-      --bg2:#ffffff;
-      --card:rgba(255,255,255,.78);
-      --card2:rgba(255,255,255,.96);
-      --stroke:rgba(15,35,60,.12);
-      --text:#081524;
-      --muted:rgba(8,21,36,.56);
-      --soft:rgba(15,35,60,.07);
-      --accent:#7dd3fc;
-      --accent2:#a78bfa;
-      --good:#18a96d;
-      --warn:#f2a900;
-      --danger:#ef476f;
-      --shadow:0 18px 48px rgba(34,64,101,.14);
-      --safeTop:env(safe-area-inset-top,0px);
-      --safeBottom:env(safe-area-inset-bottom,0px);
-      --font:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text",Inter,Segoe UI,Roboto,Arial,sans-serif;
+      --bg:#fff3f8;
+      --ink:#261827;
+      --muted:rgba(38,24,39,.62);
+      --panel:rgba(255,255,255,.78);
+      --soft:rgba(255,255,255,.58);
+      --line:rgba(56,32,61,.13);
+      --accent:#ff6fae;
+      --accent2:#6f8cff;
+      --mint:#48d6b5;
+      --danger:#df4e6f;
+      --shadow:0 22px 60px rgba(188,65,124,.17);
+      font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
     }
     [data-theme="dark"]{
       color-scheme:dark;
-      --bg:#07111f;
-      --bg2:#0b1a31;
-      --card:rgba(255,255,255,.08);
-      --card2:rgba(12,24,42,.96);
-      --stroke:rgba(255,255,255,.14);
-      --text:#f7fbff;
-      --muted:rgba(247,251,255,.62);
-      --soft:rgba(247,251,255,.10);
-      --accent:#67e8f9;
-      --accent2:#a78bfa;
-      --good:#6df2b0;
-      --warn:#ffd166;
-      --danger:#ff6b8a;
-      --shadow:0 20px 60px rgba(0,0,0,.28);
+      --bg:#130c18;
+      --ink:#fff7fb;
+      --muted:rgba(255,247,251,.66);
+      --panel:rgba(31,20,39,.78);
+      --soft:rgba(255,255,255,.08);
+      --line:rgba(255,255,255,.13);
+      --shadow:0 24px 70px rgba(0,0,0,.38);
     }
-    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-    html,body{width:100%;height:100%;margin:0;font-family:var(--font);background:var(--bg);color:var(--text);overflow:hidden;overscroll-behavior:none}
-    body:before{content:"";position:fixed;inset:-28%;z-index:-2;pointer-events:none;background:radial-gradient(circle at 20% 0%,rgba(125,211,252,.38),transparent 28%),radial-gradient(circle at 86% 8%,rgba(167,139,250,.24),transparent 30%),radial-gradient(circle at 50% 110%,rgba(24,169,109,.12),transparent 30%),linear-gradient(145deg,var(--bg),var(--bg2));filter:saturate(1.08)}
-    body:after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(rgba(255,255,255,.24) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.18) 1px,transparent 1px);background-size:44px 44px;mask-image:radial-gradient(circle at 50% 40%,black,transparent 78%)}
-    body[data-theme="dark"]:after{background:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);background-size:44px 44px}
-    button,input,select{font:inherit;color:inherit}
-    button{border:none;cursor:pointer}
-
-    .app{height:100dvh;width:100%;max-width:560px;margin:0 auto;padding:calc(8px + var(--safeTop)) 10px calc(10px + var(--safeBottom));display:grid;grid-template-rows:auto minmax(0,1fr);gap:8px;overflow:hidden;justify-items:center}
-    .topbar{width:100%;height:46px;display:flex;align-items:center;justify-content:space-between;gap:8px;flex:0 0 auto}
-    .brand{min-width:0;display:flex;align-items:center;gap:8px}
-    .orb{width:36px;height:36px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#06101d;font-weight:1000;box-shadow:0 12px 30px rgba(110,170,255,.22)}
-    .brand h1{margin:0;font-size:19px;line-height:1;letter-spacing:-.06em;white-space:nowrap}
-    .brand p{display:none}
-    .top-actions{display:flex;align-items:center;justify-content:flex-end;gap:6px;min-width:0}
-    .btn{min-height:36px;padding:0 13px;border-radius:999px;background:linear-gradient(180deg,rgba(255,255,255,.96),rgba(255,255,255,.74));border:1px solid var(--stroke);box-shadow:0 10px 28px rgba(27,50,84,.10),inset 0 1px 0 rgba(255,255,255,.92);backdrop-filter:blur(18px);font-weight:950;font-size:12.5px;letter-spacing:-.012em;transition:transform .14s ease,background .14s ease,border-color .14s ease,box-shadow .14s ease;white-space:nowrap}
-    [data-theme="dark"] .btn{background:linear-gradient(180deg,rgba(255,255,255,.12),rgba(255,255,255,.065));box-shadow:0 11px 28px rgba(0,0,0,.20),inset 0 1px 0 rgba(255,255,255,.11)}
-    .btn:hover{box-shadow:0 14px 34px rgba(27,50,84,.13),inset 0 1px 0 rgba(255,255,255,.96)}
-    .btn:active{transform:scale(.98)}
-    .btn.primary{background:linear-gradient(135deg,#b9e8ff 0%,#b8b2ff 100%);color:#04111f;border-color:rgba(255,255,255,.62);box-shadow:0 16px 38px rgba(111,154,255,.26),inset 0 1px 0 rgba(255,255,255,.68)}
-    .btn.danger{background:linear-gradient(180deg,rgba(239,71,111,.14),rgba(239,71,111,.08));border-color:rgba(239,71,111,.22);color:var(--danger)}
-    .btn.good{background:linear-gradient(180deg,rgba(24,169,109,.16),rgba(24,169,109,.09));border-color:rgba(24,169,109,.25);color:var(--good)}
-    .btn:disabled{opacity:.48;cursor:not-allowed;transform:none;filter:saturate(.8)}
-
-    .screen{width:100%;height:100%;min-height:0;display:grid;grid-template-rows:auto auto minmax(0,1fr) auto;gap:8px;align-items:center;justify-items:center;overflow:hidden}
-    .mini-row{width:min(100%,520px);min-height:44px;display:flex;align-items:center;justify-content:space-between;gap:8px;border:1px solid var(--stroke);background:var(--card);border-radius:18px;padding:7px 8px;box-shadow:0 10px 28px rgba(0,0,0,.07);backdrop-filter:blur(18px)}
-    .player-main{display:flex;align-items:center;gap:8px;min-width:0}
-    .avatar{width:30px;height:30px;border-radius:11px;display:grid;place-items:center;background:linear-gradient(135deg,#ffffff,#dbeeff);color:#07111f;font-weight:1000;box-shadow:inset 0 1px 0 rgba(255,255,255,.8),0 8px 18px rgba(0,0,0,.10);flex:0 0 auto;font-size:13px}
-    [data-theme="dark"] .avatar{background:linear-gradient(135deg,#17243a,#31415f);color:#fff}
-    .ptext{min-width:0}.pname{font-weight:950;letter-spacing:-.035em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:58vw;font-size:14px}.psub{display:none;color:var(--muted);font-size:11px;font-weight:800;margin-top:1px}
-    .pill{border:1px solid var(--stroke);background:rgba(255,255,255,.42);border-radius:999px;padding:6px 9px;font-size:11px;font-weight:950;color:var(--muted);white-space:nowrap}
-    [data-theme="dark"] .pill{background:rgba(255,255,255,.08)}
-    .pill.active{background:rgba(24,169,109,.14);border-color:rgba(24,169,109,.30);color:var(--good)}
-
-    .secret-strip{width:min(100%,520px);display:flex;align-items:center;justify-content:center;gap:9px;padding:8px 8px;border-radius:22px;background:var(--card);border:1px solid var(--stroke);box-shadow:0 10px 28px rgba(0,0,0,.06);backdrop-filter:blur(18px)}
-    .secret-label{font-size:11px;font-weight:950;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-right:2px;white-space:nowrap}
-    .code-slot,.guess-slot{width:38px;height:38px;border-radius:15px;background:rgba(15,35,60,.08);border:1px solid var(--stroke);box-shadow:inset 0 1px 0 rgba(255,255,255,.45);display:grid;place-items:center;position:relative;flex:0 0 auto}
-    [data-theme="dark"] .code-slot,[data-theme="dark"] .guess-slot{background:rgba(255,255,255,.08)}
-    .code-slot.hidden:before{content:"?";font-weight:1000;color:var(--muted);font-size:18px}
-    .dot{width:24px;height:24px;border-radius:999px;border:2px solid rgba(255,255,255,.75);box-shadow:0 8px 18px rgba(0,0,0,.18),inset 0 1px 1px rgba(255,255,255,.38)}
-    .dot.empty{display:none}
-
-    .board-zone{width:min(100%,520px);height:100%;min-height:0;overflow:hidden;border-radius:24px;background:var(--card);border:1px solid var(--stroke);box-shadow:var(--shadow);backdrop-filter:blur(18px);padding:9px;display:flex;flex-direction:column;gap:7px}
-    .attempts{height:100%;min-height:0;overflow:auto;display:flex;flex-direction:column;gap:8px;padding:1px 1px 3px;scrollbar-width:none}.attempts::-webkit-scrollbar{display:none}
-    .guess-row{min-height:50px;display:flex;align-items:center;justify-content:flex-start;gap:10px;border-radius:18px;padding:7px 8px;background:rgba(255,255,255,.72);border:1px solid rgba(15,35,60,.09);box-shadow:inset 0 1px 0 rgba(255,255,255,.72)}
-    [data-theme="dark"] .guess-row{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.09);box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
-    .guess-row.current{background:linear-gradient(135deg,rgba(125,211,252,.24),rgba(167,139,250,.18));border-color:rgba(125,211,252,.34);box-shadow:0 10px 28px rgba(118,174,255,.14),inset 0 1px 0 rgba(255,255,255,.58)}
-    .guess-left{display:flex;align-items:center;gap:8px;min-width:0;flex:0 0 auto}.row-no{width:19px;text-align:center;font-size:12px;font-weight:1000;color:var(--muted);flex:0 0 auto}.guess-pegs{display:flex;gap:6px;min-width:0;flex:0 0 auto}.guess-slot{width:34px;height:34px;border-radius:14px}.guess-slot.active{outline:3px solid rgba(125,211,252,.48);outline-offset:2px;background:rgba(125,211,252,.12)}
-    .feedback{height:34px;border-radius:999px;background:rgba(15,35,60,.045);border:1px solid var(--stroke);display:grid;grid-template-columns:repeat(var(--pins,4),12px);gap:6px;padding:7px 8px;align-items:center;justify-content:center;flex:0 0 auto;box-shadow:inset 0 1px 0 rgba(255,255,255,.66)}
-    [data-theme="dark"] .feedback{background:rgba(255,255,255,.08);box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
-    .fb-track{display:flex;flex-direction:row;gap:5px;align-items:center;justify-content:center}
-    .fb{width:12px;height:12px;border-radius:999px;background:rgba(15,35,60,.075);border:1px solid rgba(15,35,60,.07);box-shadow:inset 0 1px 0 rgba(255,255,255,.50);flex:0 0 auto}
-    [data-theme="dark"] .fb{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.08)}
-    .fb.exact{background:radial-gradient(circle at 34% 28%,#465267 0,#101827 42%,#030712 100%);border:1px solid rgba(0,0,0,.34);box-shadow:0 2px 6px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.22)}
-    .fb.color{background:radial-gradient(circle at 34% 28%,#ffffff 0,#ffffff 45%,#d8e0ea 100%);border:1px solid rgba(15,35,60,.24);box-shadow:0 2px 6px rgba(0,0,0,.10),inset 0 1px 0 rgba(255,255,255,.95)}
-    [data-theme="dark"] .fb.exact{background:radial-gradient(circle at 34% 28%,#4b5563 0,#0b1020 44%,#020617 100%);border-color:rgba(255,255,255,.24)}
-    [data-theme="dark"] .fb.color{background:radial-gradient(circle at 34% 28%,#fff 0,#f8fafc 48%,#cbd5e1 100%);border-color:rgba(255,255,255,.65)}
-    .fb.off{opacity:.72}
-    .legend{width:min(100%,520px);display:flex;align-items:center;justify-content:flex-end;gap:10px;padding:0 4px;margin:-2px 0 -2px;color:var(--muted);font-size:10px;font-weight:950;text-transform:uppercase;letter-spacing:.055em}
-    .legend span{display:inline-flex;align-items:center;gap:4px;white-space:nowrap}.legend i{width:7px;height:7px;border-radius:50%;display:inline-block}.legend .black{background:#101827;border:1px solid rgba(255,255,255,.35)}.legend .white{background:#fff;border:1px solid rgba(15,35,60,.34)}
-
-    .composer{width:min(100%,520px);display:grid;grid-template-rows:auto auto;gap:10px;border-radius:24px;background:var(--card);border:1px solid var(--stroke);box-shadow:0 16px 42px rgba(27,50,84,.12);backdrop-filter:blur(18px);padding:10px}
-    .palette{display:flex;align-items:center;justify-content:center;gap:9px;flex-wrap:nowrap}
-    .color-btn{width:44px;height:44px;border-radius:18px;border:2px solid rgba(255,255,255,.84);box-shadow:0 12px 24px rgba(30,47,70,.18),inset 0 1px 1px rgba(255,255,255,.54);transition:transform .13s ease,box-shadow .13s ease,outline .13s ease;flex:0 0 auto;position:relative}
-    .color-btn:after{content:"";position:absolute;inset:7px;border-radius:12px;background:radial-gradient(circle at 32% 22%,rgba(255,255,255,.74),transparent 38%);pointer-events:none}
-    .color-btn:active{transform:scale(.96)}
-    .color-btn.selected{outline:5px solid rgba(8,21,36,.12);outline-offset:4px;transform:translateY(-3px);box-shadow:0 16px 32px rgba(30,47,70,.24),inset 0 1px 1px rgba(255,255,255,.58)}
-    [data-theme="dark"] .color-btn.selected{outline-color:rgba(255,255,255,.24)}
-    .action-row{display:grid;grid-template-columns:1fr 1fr 1.3fr;gap:8px}.action-row .btn{height:42px}
-
-    .modal-backdrop{position:fixed;inset:0;z-index:50;display:none;place-items:center;background:rgba(7,16,31,.30);backdrop-filter:blur(18px);padding:calc(12px + var(--safeTop)) 10px calc(12px + var(--safeBottom))}
-    [data-theme="dark"] .modal-backdrop{background:rgba(1,6,15,.62)}
-    .modal-backdrop.show{display:grid}.modal{width:min(100%,500px);border:1px solid var(--stroke);border-radius:28px;background:var(--card2);box-shadow:0 24px 80px rgba(0,0,0,.20);padding:18px;max-height:90dvh;overflow:auto}.modal h2{font-size:28px;letter-spacing:-.07em;margin:0 0 6px}.modal p{color:var(--muted);margin:0 0 16px;font-weight:700;line-height:1.42}.form-grid{display:grid;grid-template-columns:1fr;gap:10px}.field{display:flex;flex-direction:column;gap:6px}.field.hide{display:none}label{font-size:12px;font-weight:950;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}input,select{width:100%;border:1px solid var(--stroke);background:rgba(14,32,55,.05);border-radius:16px;padding:13px 13px;outline:none;font-weight:850}[data-theme="dark"] input,[data-theme="dark"] select{background:rgba(255,255,255,.08)}input:focus,select:focus{border-color:rgba(125,211,252,.8);box-shadow:0 0 0 4px rgba(125,211,252,.14)}.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.seg button{height:44px;border-radius:16px;background:rgba(14,32,55,.05);border:1px solid var(--stroke);font-weight:950;color:var(--muted)}[data-theme="dark"] .seg button{background:rgba(255,255,255,.08)}.seg button.on{background:linear-gradient(135deg,rgba(125,211,252,.28),rgba(167,139,250,.22));border-color:rgba(125,211,252,.38);color:var(--text)}.modal-actions{display:flex;justify-content:flex-end;gap:9px;margin-top:16px;flex-wrap:wrap}.modal-actions .btn{flex:1;min-width:130px;height:42px}
-
-    .maker-code{display:flex;justify-content:center;gap:8px;margin:12px 0}.maker-code .code-slot{width:44px;height:44px}.maker-note{font-size:12px!important;margin-top:2px!important;text-align:center}.result-card{text-align:center}.result-code{display:flex;justify-content:center;gap:8px;margin:12px 0}.result-card h2{font-size:31px;letter-spacing:-.07em;margin:0 0 6px}.result-card p{margin:0 0 10px}.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}.stat{border:1px solid var(--stroke);background:rgba(14,32,55,.05);border-radius:16px;padding:10px 6px}[data-theme="dark"] .stat{background:rgba(255,255,255,.08)}.stat b{display:block;font-size:18px;letter-spacing:-.04em}.stat span{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:950}
-    .toast{position:fixed;left:50%;bottom:calc(16px + var(--safeBottom));transform:translate(-50%,16px);z-index:80;opacity:0;pointer-events:none;background:rgba(3,10,20,.88);color:#fff;border:1px solid rgba(255,255,255,.12);border-radius:999px;padding:10px 14px;font-weight:850;box-shadow:0 18px 60px rgba(0,0,0,.30);backdrop-filter:blur(18px);transition:opacity .18s ease,transform .18s ease;max-width:92vw;text-align:center}.toast.show{opacity:1;transform:translate(-50%,0)}
-    .spark{position:fixed;width:9px;height:9px;border-radius:999px;z-index:70;pointer-events:none;animation:spark .85s ease-out forwards;transform:translate(var(--x),var(--y)) scale(.2)}@keyframes spark{0%{transform:translate(0,0) scale(.7);opacity:1}100%{transform:translate(var(--x),var(--y)) scale(.9);opacity:0}}
-
-    @media (max-width:380px){.app{padding-left:7px;padding-right:7px;gap:6px}.topbar{height:42px}.orb{width:32px;height:32px;border-radius:12px}.brand h1{font-size:17px}.btn{min-height:33px;padding:0 10px;font-size:12px}.mini-row{min-height:40px;border-radius:16px;padding:6px 7px}.avatar{width:28px;height:28px;border-radius:10px}.pname{font-size:13px}.secret-strip{gap:6px;padding:7px}.secret-label{display:none}.code-slot{width:35px;height:35px;border-radius:14px}.dot{width:22px;height:22px}.board-zone{border-radius:21px;padding:7px;gap:6px}.guess-row{min-height:39px;border-radius:15px;gap:5px;padding:4px 5px}.guess-slot{width:29px;height:29px;border-radius:11px}.row-no{width:15px;font-size:10px}.feedback{width:58px;height:33px;border-radius:13px;padding:5px 6px}.fb{width:5px;height:5px}.fb-track{gap:2px}.legend{font-size:9px;gap:8px}.composer{border-radius:21px;padding:8px;gap:7px}.palette{gap:6px}.color-btn{width:37px;height:37px;border-radius:15px}.action-row{gap:6px}.action-row .btn{height:38px}}
-    @media (min-width:640px){.app{padding-left:14px;padding-right:14px;gap:10px}.topbar{height:54px}.orb{width:40px;height:40px;border-radius:15px}.brand h1{font-size:23px}.brand p{display:block;margin:2px 0 0;color:var(--muted);font-size:11px;font-weight:850;letter-spacing:.05em;text-transform:uppercase}.btn{min-height:39px;padding:0 15px;font-size:13px}.mini-row{min-height:52px;border-radius:20px;padding:8px 10px}.avatar{width:36px;height:36px;border-radius:13px}.pname{font-size:16px;max-width:360px}.psub{display:block}.pill{font-size:12px;padding:7px 10px}.secret-strip{padding:10px;gap:10px}.code-slot{width:44px;height:44px}.dot{width:28px;height:28px}.board-zone{padding:10px;gap:8px}.guess-row{min-height:49px;border-radius:18px;padding:6px 8px}.guess-slot{width:38px;height:38px;border-radius:15px}.feedback{width:70px;height:40px}.fb{width:7px;height:7px}.legend{font-size:10.5px}.composer{padding:11px;gap:10px}.color-btn{width:48px;height:48px}.action-row .btn{height:46px}.modal{padding:24px}.form-grid{grid-template-columns:1fr 1fr}.field.full{grid-column:1/-1}.modal-actions .btn{flex:0 0 auto}}
-
-    /* Final mobile polish overrides */
-    @media (max-width:380px){
-      .guess-row{min-height:44px;border-radius:15px;gap:7px;padding:5px 6px}
-      .guess-left{gap:6px}.guess-pegs{gap:5px}.guess-slot{width:30px;height:30px;border-radius:12px}.row-no{width:16px;font-size:10px}
-      .feedback{width:auto;height:30px;border-radius:999px;grid-template-columns:repeat(var(--pins,4),11px);padding:6px 8px;gap:5px}
-      .fb{width:11px;height:11px}
-      .color-btn{width:38px;height:38px;border-radius:15px}
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0}
+    body{
+      min-height:100dvh;
+      color:var(--ink);
+      background:
+        radial-gradient(circle at 15% 8%,rgba(255,111,174,.24),transparent 34%),
+        radial-gradient(circle at 88% 10%,rgba(111,140,255,.18),transparent 31%),
+        linear-gradient(180deg,rgba(255,255,255,.25),transparent 48%),
+        var(--bg);
+      overflow:hidden;
     }
-    @media (min-width:640px){
-      .guess-row{min-height:52px;border-radius:18px;padding:7px 9px}
-      .guess-slot{width:40px;height:40px;border-radius:15px}
-      .feedback{width:auto;height:36px;grid-template-columns:repeat(var(--pins,4),15px);gap:8px;padding:7px 11px}
-      .fb{width:15px;height:15px}
+    button,input,select{font:inherit}
+    button{cursor:pointer}
+    .app{
+      width:min(100%,680px);
+      height:100dvh;
+      margin:0 auto;
+      padding:calc(12px + env(safe-area-inset-top)) 12px calc(12px + env(safe-area-inset-bottom));
+      display:grid;
+      grid-template-rows:auto minmax(0,1fr);
+      gap:10px;
+      overflow:hidden;
+    }
+    .top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+    .brand{display:flex;align-items:center;gap:9px;min-width:0}
+    .mark{width:38px;height:38px;border-radius:15px;background:linear-gradient(135deg,var(--accent),var(--accent2));box-shadow:0 12px 30px rgba(255,111,174,.24);display:grid;place-items:center;color:white;font-size:22px;font-weight:950}
+    h1,h2,h3,p{margin:0}
+    h1{font-size:21px;line-height:1;font-weight:950;letter-spacing:0}
+    h2{font-size:18px;line-height:1.1}
+    h3{font-size:14px;line-height:1.1}
+    .small{font-size:12px;color:var(--muted);line-height:1.25}
+    .screen{display:none;min-height:0;overflow:hidden}
+    .screen.active{display:grid}
+    .setup{align-content:center;gap:12px}
+    .game{grid-template-rows:auto auto minmax(0,1fr) auto;gap:10px}
+    .panel{
+      border:1px solid var(--line);
+      background:var(--panel);
+      backdrop-filter:blur(24px) saturate(1.16);
+      box-shadow:var(--shadow);
+      border-radius:24px;
+      padding:14px;
+      overflow:hidden;
+    }
+    .grid{display:grid;gap:9px}
+    .two{grid-template-columns:1fr 1fr}
+    .row{display:flex;align-items:center;gap:8px}
+    .between{display:flex;align-items:center;justify-content:space-between;gap:10px}
+    label{display:grid;gap:6px;font-size:12px;font-weight:850;color:var(--muted)}
+    input,select{
+      width:100%;
+      min-height:44px;
+      border:1px solid var(--line);
+      background:var(--soft);
+      color:var(--ink);
+      border-radius:15px;
+      padding:11px 12px;
+      outline:none;
+    }
+    input:focus,select:focus{border-color:rgba(255,111,174,.5);box-shadow:0 0 0 4px rgba(255,111,174,.13)}
+    .btn{
+      min-height:44px;
+      border:0;
+      border-radius:15px;
+      padding:10px 13px;
+      color:white;
+      background:linear-gradient(135deg,var(--accent),#d955ff);
+      box-shadow:0 12px 28px rgba(255,111,174,.22);
+      font-weight:900;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:7px;
+      touch-action:manipulation;
+    }
+    .btn.secondary{background:var(--soft);border:1px solid var(--line);color:var(--ink);box-shadow:none}
+    .btn.danger{background:rgba(223,78,111,.12);border:1px solid rgba(223,78,111,.28);color:var(--danger);box-shadow:none}
+    .icon-btn{width:44px;height:44px;border-radius:15px;padding:0;flex:0 0 auto}
+    .secret-row,.guess-slots,.picker{display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap}
+    .secret-card{display:grid;gap:10px;text-align:center}
+    .slot,.hidden-slot{
+      width:44px;
+      height:44px;
+      border-radius:16px;
+      border:1px solid var(--line);
+      background:var(--soft);
+      display:grid;
+      place-items:center;
+      color:var(--muted);
+      font-weight:950;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.45);
+    }
+    .slot{cursor:pointer}
+    .hidden-slot.hint{color:white;background:linear-gradient(135deg,var(--accent),var(--accent2))}
+    .marble{
+      width:34px;
+      height:34px;
+      border-radius:50%;
+      border:3px solid rgba(255,255,255,.72);
+      box-shadow:0 9px 20px rgba(41,28,52,.18), inset 0 6px 10px rgba(255,255,255,.35);
+      display:inline-block;
+    }
+    .picker .marble-btn{
+      width:46px;
+      height:46px;
+      border:1px solid var(--line);
+      background:var(--panel);
+      border-radius:17px;
+      display:grid;
+      place-items:center;
+      padding:0;
+      box-shadow:0 10px 24px rgba(0,0,0,.06);
+    }
+    .guess-board{
+      min-height:0;
+      overflow:auto;
+      display:flex;
+      flex-direction:column-reverse;
+      gap:8px;
+      padding:2px;
+      overscroll-behavior:contain;
+    }
+    .guess-row{
+      display:grid;
+      grid-template-columns:auto auto;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      border:1px solid var(--line);
+      background:var(--soft);
+      border-radius:18px;
+      padding:9px;
+    }
+    .guess-marbles,.feedback{display:flex;align-items:center;gap:6px}
+    .feedback{min-width:90px;justify-content:center}
+    .pin{
+      width:16px;
+      height:16px;
+      border-radius:50%;
+      border:1px solid var(--line);
+      background:transparent;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.25);
+    }
+    .pin.black{background:#151923;border-color:#151923}
+    .pin.white{background:#fff;border-color:rgba(26,31,43,.25)}
+    [data-theme="dark"] .pin.white{background:#f7fbff}
+    .actions{display:grid;grid-template-columns:1fr 1fr 1.2fr;gap:8px}
+    .score-strip{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:0 2px}
+    .chip{border:1px solid var(--line);background:var(--soft);border-radius:999px;padding:7px 10px;color:var(--muted);font-size:12px;font-weight:800}
+    .drawer{
+      position:fixed;
+      inset:auto 10px calc(10px + env(safe-area-inset-bottom)) 10px;
+      max-width:660px;
+      margin:0 auto;
+      transform:translateY(120%);
+      transition:transform .22s ease;
+      z-index:10;
+    }
+    .drawer.open{transform:translateY(0)}
+    .drawer-list{max-height:48dvh;overflow:auto;display:grid;gap:7px;margin-top:10px}
+    .leader{display:grid;grid-template-columns:auto 1fr auto;gap:9px;align-items:center;border:1px solid var(--line);background:var(--soft);border-radius:15px;padding:9px}
+    .rank{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,var(--accent),var(--accent2));color:white;font-weight:950;font-size:12px}
+    .modal{
+      position:fixed;
+      inset:0;
+      display:none;
+      place-items:center;
+      background:rgba(8,12,20,.32);
+      backdrop-filter:blur(12px);
+      z-index:15;
+      padding:18px;
+    }
+    .modal.show{display:grid}
+    .modal-card{width:min(100%,360px);display:grid;gap:12px;text-align:center}
+    .toast{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom));transform:translate(-50%,120px);background:#24172a;color:white;border-radius:999px;padding:10px 14px;box-shadow:0 12px 34px rgba(0,0,0,.24);font-size:13px;font-weight:850;transition:transform .22s ease;z-index:20}
+    .toast.show{transform:translate(-50%,0)}
+    @media(max-width:390px){
+      .slot,.hidden-slot{width:39px;height:39px;border-radius:14px}
+      .picker .marble-btn{width:42px;height:42px}
+      .marble{width:30px;height:30px}
+      .guess-row{gap:7px}
+      .feedback{min-width:76px}
     }
   </style>
 </head>
-<body data-theme="light">
-  <main class="app" id="app">
-    <header class="topbar">
-      <div class="brand"><div class="orb">K</div><div><h1>Code Clash</h1><p>Kinetik Games</p></div></div>
-      <div class="top-actions">
-        <button class="btn" id="themeBtn" type="button">Dark</button>
-        <button class="btn primary" id="newBtn" type="button">New</button>
+<body>
+  <main class="app">
+    <header class="top">
+      <div class="brand">
+        <div class="mark">⚡</div>
+        <div>
+          <h1>Code Clash</h1>
+          <p class="small" id="circleLabel">Standalone circle</p>
+        </div>
+      </div>
+      <div class="row">
+        <button class="btn secondary icon-btn" id="leaderBtn" aria-label="Open leaderboard">🏆</button>
+        <button class="btn secondary icon-btn" id="themeBtn" aria-label="Toggle theme">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v2.2M12 18.8V21M4.4 4.4 6 6M18 18l1.6 1.6M3 12h2.2M18.8 12H21M4.4 19.6 6 18M18 6l1.6-1.6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="12" r="4.2" stroke="currentColor" stroke-width="2"/></svg>
+        </button>
       </div>
     </header>
 
-    <section class="screen" aria-label="Code Clash game">
-      <div class="mini-row">
-        <div class="player-main"><div class="avatar" id="makerAvatar">A</div><div class="ptext"><div class="pname" id="makerName">Kinetik AI</div><div class="psub">Code maker</div></div></div>
-        <div class="pill" id="makerPill">Hidden code</div>
+    <section class="screen setup active" id="setupScreen">
+      <div class="panel grid">
+        <div>
+          <h2>Start clash</h2>
+          <p class="small">Guess the hidden code. Attempts are unlimited.</p>
+        </div>
+        <label>Player
+          <input id="playerName" maxlength="18" value="Player 1" autocomplete="off">
+        </label>
+        <div class="grid two">
+          <label>Code maker
+            <select id="makerType">
+              <option value="ai">Kinetik AI</option>
+              <option value="human">Human</option>
+            </select>
+          </label>
+          <label>Mode
+            <select id="modeSelect">
+              <option value="classic">Classic</option>
+              <option value="easy">Easy</option>
+              <option value="hard">Hard</option>
+            </select>
+          </label>
+        </div>
+        <button class="btn" id="startBtn">Start</button>
       </div>
+    </section>
 
-      <div class="secret-strip" id="secretStrip">
-        <div class="secret-label">Secret</div>
+    <section class="screen setup" id="makerScreen">
+      <div class="panel grid">
+        <div>
+          <h2>Set secret code</h2>
+          <p class="small">Pass the phone to the code maker. The code hides when play starts.</p>
+        </div>
+        <div class="guess-slots" id="makerSlots"></div>
+        <div class="picker" id="makerPicker"></div>
+        <button class="btn" id="hideCodeBtn">Hide Code & Play</button>
       </div>
+    </section>
 
-      <div class="board-zone">
-        <div class="legend" aria-label="Feedback legend"><span><i class="black"></i> exact slot</span><span><i class="white"></i> color only</span></div>
-        <div class="attempts" id="attempts"></div>
+    <section class="screen game" id="gameScreen">
+      <div class="panel secret-card">
+        <div class="between">
+          <span class="chip" id="makerLabel">Kinetik AI</span>
+          <span class="chip" id="modeLabel">Classic</span>
+        </div>
+        <div class="secret-row" id="secretRow"></div>
       </div>
-
-      <div class="composer">
-        <div class="palette" id="palette"></div>
-        <div class="action-row">
-          <button class="btn" id="clearBtn" type="button">Clear</button>
-          <button class="btn" id="hintBtn" type="button">Hint</button>
-          <button class="btn primary" id="submitBtn" type="button">Submit</button>
+      <div class="score-strip">
+        <span class="chip" id="guessCount">0 guesses</span>
+        <span class="chip" id="streakText">Streak 0</span>
+      </div>
+      <div class="guess-board" id="guessBoard"></div>
+      <div class="panel grid">
+        <div class="guess-slots" id="currentSlots"></div>
+        <div class="picker" id="colorPicker"></div>
+        <div class="actions">
+          <button class="btn secondary" id="clearBtn">Clear</button>
+          <button class="btn secondary" id="hintBtn">Hint</button>
+          <button class="btn" id="submitBtn">Submit</button>
         </div>
       </div>
     </section>
   </main>
 
-  <div class="modal-backdrop show" id="setupModal" role="dialog" aria-modal="true" aria-labelledby="setupTitle">
-    <div class="modal">
-      <h2 id="setupTitle">Start Code Clash</h2>
-      <p>Simple secret-code duel. Unlimited guesses, clean positional feedback, and a score based on how fast you crack it.</p>
-      <div class="form-grid">
-        <div class="field">
-          <label for="p1Name">Player #1</label>
-          <input id="p1Name" value="Aldyth" maxlength="18" autocomplete="off" />
-        </div>
-        <div class="field">
-          <label for="p2Type">Player #2</label>
-          <select id="p2Type">
-            <option value="ai" selected>Kinetik AI</option>
-            <option value="human">Another player</option>
-          </select>
-        </div>
-        <div class="field full hide" id="p2NameField">
-          <label for="p2Name">Player #2 name</label>
-          <input id="p2Name" value="Baginda" maxlength="18" autocomplete="off" />
-        </div>
-        <div class="field full">
-          <label>Mode</label>
-          <div class="seg" id="modeSeg">
-            <button type="button" data-mode="easy" class="on">Easy</button>
-            <button type="button" data-mode="classic">Classic</button>
-            <button type="button" data-mode="hard">Hard</button>
-          </div>
-        </div>
+  <aside class="drawer panel" id="drawer">
+    <div class="between">
+      <div>
+        <h2>Leaderboard</h2>
+        <p class="small">Best local Code Clash runs.</p>
       </div>
-      <div class="modal-actions">
-        <button class="btn" id="continueBtn" type="button">Continue saved</button>
-        <button class="btn primary" id="startBtn" type="button">Start match</button>
+      <button class="btn secondary icon-btn" id="closeDrawer" aria-label="Close">×</button>
+    </div>
+    <div class="drawer-list" id="leaderList"></div>
+  </aside>
+
+  <div class="modal" id="resultModal">
+    <div class="panel modal-card">
+      <div>
+        <h2 id="resultTitle">Code cracked</h2>
+        <p class="small" id="resultText">Sharp work.</p>
       </div>
+      <div class="secret-row" id="resultCode"></div>
+      <button class="btn" id="againBtn">Play Again</button>
+      <button class="btn secondary" id="setupBtn">Setup</button>
     </div>
   </div>
 
-  <div class="modal-backdrop" id="makerModal" role="dialog" aria-modal="true">
-    <div class="modal">
-      <h2>Make the code</h2>
-      <p id="makerPrompt">Player #2 picks the secret code. Then pass the phone back.</p>
-      <div class="maker-code" id="makerCode"></div>
-      <div class="palette" id="makerPalette"></div>
-      <p class="maker-note">The code will be hidden after you tap Confirm.</p>
-      <div class="modal-actions">
-        <button class="btn" id="makerClearBtn" type="button">Clear</button>
-        <button class="btn primary" id="makerConfirmBtn" type="button">Confirm code</button>
-      </div>
-    </div>
-  </div>
+  <div class="toast" id="toast">Saved</div>
 
-  <div class="modal-backdrop" id="resultModal" role="dialog" aria-modal="true">
-    <div class="modal result-card">
-      <h2 id="resultTitle">Solved</h2>
-      <p id="resultText">Great logic.</p>
-      <div class="result-code" id="resultCode"></div>
-      <div class="stat-row">
-        <div class="stat"><b id="statAttempts">0</b><span>Attempts</span></div>
-        <div class="stat"><b id="statExact">4</b><span>Exact</span></div>
-        <div class="stat"><b id="statScore">0</b><span>Score</span></div>
-      </div>
-      <div class="modal-actions">
-        <button class="btn" id="closeResultBtn" type="button">View board</button>
-        <button class="btn primary" id="rematchBtn" type="button">Rematch</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="toast" id="toast"></div>
-
-<script>
-(() => {
-  'use strict';
-
-  const COLORS = [
-    {id:'red', name:'Red', hex:'#ef4444'},
-    {id:'yellow', name:'Yellow', hex:'#f5c542'},
-    {id:'green', name:'Green', hex:'#22c55e'},
-    {id:'blue', name:'Blue', hex:'#3b82f6'},
-    {id:'purple', name:'Purple', hex:'#a855f7'},
-    {id:'pink', name:'Pink', hex:'#ec4899'},
-    {id:'orange', name:'Orange', hex:'#fb923c'},
-  ];
-  const MODES = {
-    easy:{name:'Easy', codeLength:4, colorCount:6, maxAttempts:null, allowDuplicates:false},
-    classic:{name:'Classic', codeLength:4, colorCount:6, maxAttempts:null, allowDuplicates:true},
-    hard:{name:'Hard', codeLength:5, colorCount:7, maxAttempts:null, allowDuplicates:true}
-  };
-  const LS_KEY = 'kinetik_code_clash_v2';
-
-  const $ = (id) => document.getElementById(id);
-  const els = {
-    body: document.body,
-    app: $('app'),
-    themeBtn: $('themeBtn'), newBtn: $('newBtn'),
-    setupModal: $('setupModal'), p1Name: $('p1Name'), p2Type: $('p2Type'), p2Name: $('p2Name'), p2NameField: $('p2NameField'), modeSeg: $('modeSeg'), startBtn: $('startBtn'), continueBtn: $('continueBtn'),
-    makerModal: $('makerModal'), makerPrompt: $('makerPrompt'), makerCode: $('makerCode'), makerPalette: $('makerPalette'), makerClearBtn: $('makerClearBtn'), makerConfirmBtn: $('makerConfirmBtn'),
-    makerAvatar: $('makerAvatar'), makerName: $('makerName'), makerPill: $('makerPill'), secretStrip: $('secretStrip'), attempts: $('attempts'), palette: $('palette'), clearBtn: $('clearBtn'), hintBtn: $('hintBtn'), submitBtn: $('submitBtn'),
-    resultModal: $('resultModal'), resultTitle: $('resultTitle'), resultText: $('resultText'), resultCode: $('resultCode'), statAttempts: $('statAttempts'), statExact: $('statExact'), statScore: $('statScore'), closeResultBtn: $('closeResultBtn'), rematchBtn: $('rematchBtn'), toast: $('toast')
-  };
-
-  const qs = new URLSearchParams(location.search);
-  const bridge = {
-    circleId: qs.get('circleId') || 'demo-circle',
-    embedded: qs.get('embedded') === '1' || window !== window.parent,
-    post(type, payload={}){
-      try{ window.parent?.postMessage({source:'kinetik', app:'code_clash', type, payload}, '*'); }catch(e){}
-    }
-  };
-
-  let state = null;
-  let selectedColor = COLORS[0].id;
-  let selectedSlot = 0;
-  let makerDraft = [];
-  let currentMode = 'easy';
-  let toastTimer = null;
-
-  function uid(){ return 'cc_' + Math.random().toString(36).slice(2,10) + Date.now().toString(36).slice(-4); }
-  function initials(name){ return (name||'?').trim().slice(0,1).toUpperCase(); }
-  function colorById(id){ return COLORS.find(c => c.id === id) || COLORS[0]; }
-  function clampText(v, fallback){ return (v || '').trim().slice(0,18) || fallback; }
-  function showToast(msg){ clearTimeout(toastTimer); els.toast.textContent = msg; els.toast.classList.add('show'); toastTimer = setTimeout(() => els.toast.classList.remove('show'), 1500); }
-  function save(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(state)); }catch(e){} bridge.post('state:saved', {gameId:state?.id, status:state?.status}); }
-  function load(){ try{ const v = localStorage.getItem(LS_KEY); return v ? JSON.parse(v) : null; }catch(e){ return null; } }
-  function setTheme(theme){ document.body.dataset.theme = theme; document.documentElement.dataset.theme = theme; els.themeBtn.textContent = theme === 'dark' ? 'Light' : 'Dark'; try{ localStorage.setItem('kinetik_theme_codeclash', theme); }catch(e){} }
-  function savedTheme(){ try{ return localStorage.getItem('kinetik_theme_codeclash') || 'light'; }catch(e){ return 'light'; } }
-
-  function getConfig(){ return MODES[currentMode] || MODES.easy; }
-  function getPool(config = getConfig()){ return COLORS.slice(0, config.colorCount); }
-  function makeSecret(config = getConfig()){
-    const pool = getPool(config).map(c => c.id);
-    const code = [];
-    while(code.length < config.codeLength){
-      const pick = pool[Math.floor(Math.random() * pool.length)];
-      if(!config.allowDuplicates && code.includes(pick)) continue;
-      code.push(pick);
-    }
-    return code;
-  }
-  function makeEmptyGuess(length){ return Array.from({length}, () => null); }
-
-  function feedback(secret, guess){
-    // Positional feedback for the right-side pill:
-    // black = this exact slot is correct; white = this guessed color exists elsewhere.
-    // Duplicates are handled by counting exact matches first, then consuming remaining colors.
-    const slots = Array(secret.length).fill('off');
-    const remaining = {};
-    let exact = 0, colorOnly = 0;
-    for(let i=0;i<secret.length;i++){
-      if(secret[i] === guess[i]){ slots[i] = 'exact'; exact++; }
-      else remaining[secret[i]] = (remaining[secret[i]] || 0) + 1;
-    }
-    for(let i=0;i<guess.length;i++){
-      if(slots[i] === 'exact') continue;
-      const g = guess[i];
-      if(remaining[g] > 0){ slots[i] = 'color'; remaining[g]--; colorOnly++; }
-    }
-    return {exact, colorOnly, slots};
-  }
-
-  function newState({player1, player2Type, player2, mode}){
-    const config = MODES[mode] || MODES.easy;
-    return {
-      id: uid(),
-      circleId: bridge.circleId,
-      gameType:'code_clash',
-      status:'setup',
-      mode,
-      config,
-      createdAt:new Date().toISOString(),
-      updatedAt:new Date().toISOString(),
-      player1:{id:'p1', name:player1},
-      player2:{id: player2Type === 'ai' ? 'ai' : 'p2', name: player2Type === 'ai' ? 'Kinetik AI' : player2, type: player2Type},
-      codeMakerId: player2Type === 'ai' ? 'ai' : 'p2',
-      guesserId:'p1',
-      secretCode: player2Type === 'ai' ? makeSecret(config) : [],
-      guesses:[],
-      currentGuess:makeEmptyGuess(config.codeLength),
-      selectedSlot:0,
-      selectedColor: getPool(config)[0].id,
-      attemptsUsed:0,
-      winnerId:null,
-      resultReason:null,
-      solved:false,
-      hintUsed:false
+  <script>
+    const AppConfig = {
+      appId: "game-code-clash",
+      storagePrefix: "kinetik_game_code_clash",
+      leaderboardCollection: "leaderboard",
+      sessionCollection: "game_sessions"
     };
-  }
+    const $ = (id) => document.getElementById(id);
+    const colors = [
+      {id:"rose", name:"Rose", hex:"#ff4f8b"},
+      {id:"sun", name:"Sun", hex:"#ffc847"},
+      {id:"mint", name:"Mint", hex:"#38d6a8"},
+      {id:"sky", name:"Sky", hex:"#43b8ff"},
+      {id:"violet", name:"Violet", hex:"#8b6cff"},
+      {id:"coral", name:"Coral", hex:"#ff7a59"},
+      {id:"lime", name:"Lime", hex:"#a8df4e"},
+      {id:"navy", name:"Navy", hex:"#32415f"}
+    ];
+    const modes = {
+      easy: {label:"Easy", slots:3, colors:5},
+      classic: {label:"Classic", slots:4, colors:6},
+      hard: {label:"Hard", slots:5, colors:8}
+    };
+    const state = {
+      circleId:"standalone_demo",
+      circleType:"friends",
+      playerId:"local_player",
+      theme:localStorage.getItem(AppConfig.storagePrefix + "_theme") || "light",
+      playerName:"Player 1",
+      makerType:"ai",
+      mode:"classic",
+      secret:[],
+      makerDraft:[],
+      current:[],
+      guesses:[],
+      hints:[],
+      streak:Number(localStorage.getItem(AppConfig.storagePrefix + "_streak") || 0),
+      startedAt:0
+    };
+    if (window.self !== window.top) document.body.classList.add("embedded");
+    document.documentElement.dataset.theme = state.theme;
 
-  function startMatch(){
-    const p1 = clampText(els.p1Name.value, 'Player 1');
-    const type = els.p2Type.value;
-    const p2 = clampText(els.p2Name.value, 'Player 2');
-    state = newState({player1:p1, player2Type:type, player2:p2, mode:currentMode});
-    selectedColor = state.selectedColor;
-    selectedSlot = 0;
-    els.setupModal.classList.remove('show');
-    if(type === 'human'){
-      makerDraft = makeEmptyGuess(state.config.codeLength);
-      renderMakerModal();
-      els.makerModal.classList.add('show');
-    }else{
-      state.status = 'active';
-      save();
-      render();
-      showToast('AI made the code');
-    }
-  }
-
-  function render(){
-    if(!state) return;
-    state.updatedAt = new Date().toISOString();
-    els.makerName.textContent = state.player2.name;
-    els.makerAvatar.textContent = initials(state.player2.name);
-    els.makerPill.textContent = state.status === 'completed' ? (state.solved ? 'Code cracked' : 'Code survived') : 'Hidden code';
-    els.makerPill.classList.toggle('active', state.status === 'active');
-    renderSecret();
-    renderAttempts();
-    renderPalette();
-    const complete = state.currentGuess.every(Boolean);
-    els.submitBtn.disabled = state.status !== 'active' || !complete;
-    els.clearBtn.disabled = state.status !== 'active';
-    els.hintBtn.disabled = state.status !== 'active' || state.hintUsed;
-  }
-
-  function renderSecret(){
-    els.secretStrip.innerHTML = '<div class="secret-label">Secret</div>';
-    const reveal = state.status === 'completed';
-    for(let i=0;i<state.config.codeLength;i++){
-      const slot = document.createElement('div');
-      slot.className = 'code-slot' + (reveal ? '' : ' hidden');
-      if(reveal){ slot.appendChild(dot(state.secretCode[i])); }
-      els.secretStrip.appendChild(slot);
-    }
-  }
-
-  function dot(colorId){
-    const d = document.createElement('span');
-    const c = colorById(colorId);
-    d.className = colorId ? 'dot' : 'dot empty';
-    if(colorId) d.style.background = `radial-gradient(circle at 32% 26%, rgba(255,255,255,.88), rgba(255,255,255,.18) 18%, ${c.hex} 42%, ${shade(c.hex,-22)} 100%)`;
-    d.title = c.name;
-    return d;
-  }
-  function shade(hex, percent){
-    const n = parseInt(hex.replace('#',''),16), amt = Math.round(2.55*percent);
-    const R = Math.max(0, Math.min(255, (n>>16)+amt));
-    const G = Math.max(0, Math.min(255, ((n>>8)&255)+amt));
-    const B = Math.max(0, Math.min(255, (n&255)+amt));
-    return '#' + (0x1000000 + R*0x10000 + G*0x100 + B).toString(16).slice(1);
-  }
-
-  function renderAttempts(){
-    els.attempts.innerHTML = '';
-    const rows = [];
-    for(let i=0;i<state.guesses.length;i++) rows.push({type:'done', index:i, data:state.guesses[i]});
-    if(state.status === 'active') rows.push({type:'current', index:state.guesses.length});
-    if(!rows.length) rows.push({type:'current', index:0});
-    rows.forEach((row) => els.attempts.appendChild(renderRow(row)));
-    requestAnimationFrame(() => { els.attempts.scrollTop = els.attempts.scrollHeight; });
-  }
-
-  function renderRow(row){
-    const div = document.createElement('div');
-    div.className = 'guess-row' + (row.type === 'current' ? ' current' : '');
-    const left = document.createElement('div'); left.className = 'guess-left';
-    const no = document.createElement('div'); no.className = 'row-no'; no.textContent = row.index + 1; left.appendChild(no);
-    const pegs = document.createElement('div'); pegs.className = 'guess-pegs';
-    const code = row.type === 'done' ? row.data.guess : (row.type === 'current' ? state.currentGuess : makeEmptyGuess(state.config.codeLength));
-    for(let i=0;i<state.config.codeLength;i++){
-      const s = document.createElement('button');
-      s.className = 'guess-slot' + (row.type === 'current' && selectedSlot === i ? ' active' : '');
-      s.type = 'button';
-      if(code[i]) s.appendChild(dot(code[i]));
-      if(row.type === 'current'){
-        s.addEventListener('click', () => { selectedSlot = i; state.selectedSlot = i; render(); });
+    const Bridge = {
+      send(type, payload){
+        if (window.parent && window.parent !== window) window.parent.postMessage({type, appId:AppConfig.appId, payload}, "*");
       }
-      pegs.appendChild(s);
-    }
-    left.appendChild(pegs);
-    div.appendChild(left);
-    div.appendChild(renderFeedback(row.type === 'done' ? row.data.feedback : null));
-    return div;
-  }
+    };
 
-  function renderFeedback(fb){
-    const box = document.createElement('div');
-    box.className = 'feedback';
-    const total = state?.config?.codeLength || 4;
-    const slots = fb?.slots || Array(total).fill('off');
-    box.style.setProperty('--pins', total);
-    box.title = 'Feedback follows your guess order: black = exact slot, white = color exists elsewhere.';
-    for(let i=0;i<total;i++){
-      const p = document.createElement('span');
-      p.className = 'fb ' + (slots[i] === 'exact' ? 'exact' : slots[i] === 'color' ? 'color' : 'off');
-      box.appendChild(p);
-    }
-    return box;
-  }
-
-  function renderPalette(){
-    els.palette.innerHTML = '';
-    getPool(state.config).forEach(c => {
-      const b = document.createElement('button');
-      b.type = 'button';
-      b.className = 'color-btn' + (selectedColor === c.id ? ' selected' : '');
-      b.title = c.name;
-      b.style.background = `radial-gradient(circle at 32% 26%, rgba(255,255,255,.88), rgba(255,255,255,.18) 18%, ${c.hex} 42%, ${shade(c.hex,-22)} 100%)`;
-      b.addEventListener('click', () => chooseColor(c.id));
-      els.palette.appendChild(b);
-    });
-  }
-
-  function chooseColor(colorId){
-    if(!state || state.status !== 'active') return;
-    selectedColor = colorId;
-    state.selectedColor = colorId;
-    state.currentGuess[selectedSlot] = colorId;
-    const nextEmpty = state.currentGuess.findIndex(v => !v);
-    if(nextEmpty >= 0) selectedSlot = nextEmpty;
-    else selectedSlot = Math.min(selectedSlot + 1, state.config.codeLength - 1);
-    state.selectedSlot = selectedSlot;
-    save(); render();
-  }
-
-  function clearGuess(){
-    if(!state || state.status !== 'active') return;
-    state.currentGuess = makeEmptyGuess(state.config.codeLength);
-    selectedSlot = 0; state.selectedSlot = 0;
-    save(); render();
-  }
-
-  function submitGuess(){
-    if(!state || state.status !== 'active') return;
-    if(!state.currentGuess.every(Boolean)){ showToast('Complete the row first'); return; }
-    const fb = feedback(state.secretCode, state.currentGuess);
-    state.guesses.push({guess:[...state.currentGuess], feedback:fb, createdAt:new Date().toISOString()});
-    state.attemptsUsed = state.guesses.length;
-    state.currentGuess = makeEmptyGuess(state.config.codeLength);
-    selectedSlot = 0; state.selectedSlot = 0;
-    if(fb.exact === state.config.codeLength){
-      state.status = 'completed'; state.solved = true; state.winnerId = state.guesserId; state.resultReason = 'solved';
-      save(); render(); celebrate(); showResult(); return;
-    }
-    save(); render();
-    if(fb.exact === 0 && fb.colorOnly === 0) showToast('No colors match');
-    else showToast(`${fb.exact} exact • ${fb.colorOnly} color`);
-  }
-
-  function hint(){
-    if(!state || state.status !== 'active' || state.hintUsed) return;
-    // Give one safe hint: reveal one color exists, not its position.
-    const color = colorById(state.secretCode[Math.floor(Math.random() * state.secretCode.length)]).name;
-    state.hintUsed = true;
-    save(); render(); showToast(`Hint: ${color} is in the code`);
-  }
-
-  function renderMakerModal(){
-    els.makerPrompt.textContent = `${state.player2.name} picks the secret code. Then pass the phone back to ${state.player1.name}.`;
-    els.makerCode.innerHTML = '';
-    for(let i=0;i<state.config.codeLength;i++){
-      const s = document.createElement('button'); s.className = 'code-slot'; s.type='button';
-      if(makerDraft[i]) s.appendChild(dot(makerDraft[i]));
-      s.addEventListener('click', () => { selectedSlot = i; renderMakerModal(); });
-      els.makerCode.appendChild(s);
-    }
-    els.makerPalette.innerHTML = '';
-    getPool(state.config).forEach(c => {
-      const b = document.createElement('button'); b.className='color-btn'; b.type='button'; b.title=c.name;
-      b.style.background = `radial-gradient(circle at 32% 26%, rgba(255,255,255,.88), rgba(255,255,255,.18) 18%, ${c.hex} 42%, ${shade(c.hex,-22)} 100%)`;
-      b.addEventListener('click', () => {
-        if(!state.config.allowDuplicates && makerDraft.includes(c.id)){
-          showToast('Easy mode has no duplicates'); return;
-        }
-        const empty = makerDraft.findIndex(v=>!v);
-        const idx = empty >= 0 ? empty : Math.min(selectedSlot, state.config.codeLength - 1);
-        makerDraft[idx] = c.id; selectedSlot = Math.min(idx+1, state.config.codeLength-1); renderMakerModal();
-      });
-      els.makerPalette.appendChild(b);
-    });
-    els.makerConfirmBtn.disabled = !makerDraft.every(Boolean);
-  }
-
-  function confirmMakerCode(){
-    if(!makerDraft.every(Boolean)){ showToast('Complete the secret code'); return; }
-    state.secretCode = [...makerDraft];
-    state.status = 'active';
-    els.makerModal.classList.remove('show');
-    selectedSlot = 0;
-    save(); render(); showToast('Secret code is hidden');
-  }
-
-  function showResult(){
-    const last = state.guesses[state.guesses.length-1];
-    const score = calculateScore();
-    els.resultTitle.textContent = state.solved ? 'Code cracked' : 'Code survived';
-    els.resultText.textContent = state.solved ? `${state.player1.name} solved it in ${state.attemptsUsed} attempt${state.attemptsUsed === 1 ? '' : 's'}.` : `${state.player2.name} wins. The code was not cracked.`;
-    els.resultCode.innerHTML = '';
-    state.secretCode.forEach(id => { const s = document.createElement('div'); s.className='code-slot'; s.appendChild(dot(id)); els.resultCode.appendChild(s); });
-    els.statAttempts.textContent = state.attemptsUsed;
-    els.statExact.textContent = last ? last.feedback.exact : 0;
-    els.statScore.textContent = score;
-    els.resultModal.classList.add('show');
-    bridge.post('game:completed', {gameId:state.id, solved:state.solved, attempts:state.attemptsUsed, score});
-  }
-  function calculateScore(){
-    if(!state.solved) return 0;
-    const base = 1000;
-    const penalty = (state.attemptsUsed - 1) * 85;
-    const hint = state.hintUsed ? 120 : 0;
-    const hardBonus = state.mode === 'hard' ? 200 : state.mode === 'classic' ? 100 : 0;
-    return Math.max(100, base - penalty - hint + hardBonus);
-  }
-
-  function celebrate(){
-    const palette = getPool(state.config).map(c=>c.hex);
-    for(let i=0;i<44;i++){
-      const s = document.createElement('i'); s.className='spark';
-      s.style.background = palette[i % palette.length];
-      s.style.left = (50 + (Math.random()-.5)*18) + 'vw';
-      s.style.top = (48 + (Math.random()-.5)*10) + 'vh';
-      s.style.setProperty('--x', ((Math.random()-.5)*260) + 'px');
-      s.style.setProperty('--y', ((Math.random()-.5)*260) + 'px');
-      document.body.appendChild(s); setTimeout(()=>s.remove(), 900);
-    }
-  }
-
-  function rematch(){
-    const old = state;
-    state = newState({player1:old.player1.name, player2Type:old.player2.type, player2:old.player2.name, mode:old.mode});
-    els.resultModal.classList.remove('show');
-    selectedColor = state.selectedColor;
-    selectedSlot = 0;
-    if(state.player2.type === 'human'){
-      makerDraft = makeEmptyGuess(state.config.codeLength); renderMakerModal(); els.makerModal.classList.add('show');
-    }else{
-      state.status = 'active'; save(); render(); showToast('New AI code ready');
-    }
-  }
-
-  function continueSaved(){
-    const saved = load();
-    if(!saved){ showToast('No saved match'); return; }
-    state = saved;
-    selectedColor = state.selectedColor || getPool(state.config)[0].id;
-    selectedSlot = state.selectedSlot || 0;
-    currentMode = state.mode || 'easy';
-    els.setupModal.classList.remove('show');
-    render();
-    if(state.status === 'completed') showResult();
-    else showToast('Saved match loaded');
-  }
-
-  function openNew(){ els.setupModal.classList.add('show'); }
-
-  function bind(){
-    els.themeBtn.addEventListener('click', () => setTheme((document.body.dataset.theme || 'light') === 'dark' ? 'light' : 'dark'));
-    els.newBtn.addEventListener('click', openNew);
-    els.p2Type.addEventListener('change', () => els.p2NameField.classList.toggle('hide', els.p2Type.value !== 'human'));
-    els.modeSeg.addEventListener('click', (e) => {
-      const b = e.target.closest('button[data-mode]'); if(!b) return;
-      currentMode = b.dataset.mode;
-      els.modeSeg.querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b));
-    });
-    els.startBtn.addEventListener('click', startMatch);
-    els.continueBtn.addEventListener('click', continueSaved);
-    els.clearBtn.addEventListener('click', clearGuess);
-    els.hintBtn.addEventListener('click', hint);
-    els.submitBtn.addEventListener('click', submitGuess);
-    els.makerClearBtn.addEventListener('click', () => { makerDraft = makeEmptyGuess(state.config.codeLength); selectedSlot = 0; renderMakerModal(); });
-    els.makerConfirmBtn.addEventListener('click', confirmMakerCode);
-    els.closeResultBtn.addEventListener('click', () => els.resultModal.classList.remove('show'));
-    els.rematchBtn.addEventListener('click', rematch);
-    window.addEventListener('message', (event) => {
+    addEventListener("message", (event) => {
       const msg = event.data || {};
-      if(msg.type === 'kinetik:setTheme') setTheme(msg.theme === 'dark' ? 'dark' : 'light');
-      if(msg.type === 'kinetik:newGame') openNew();
+      if (msg.type !== "INIT_APP") return;
+      const ctx = msg.payload || {};
+      state.circleId = ctx.circleId || state.circleId;
+      state.circleType = ctx.circleType || state.circleType;
+      state.playerId = ctx.personId || state.playerId;
+      if (ctx.theme) setTheme(ctx.theme);
+      $("circleLabel").textContent = state.circleType + " circle";
     });
-  }
 
-  function boot(){
-    setTheme('light');
-    bind();
-    const saved = load();
-    els.continueBtn.style.display = saved ? '' : 'none';
-    // Create a quiet preview game behind the setup modal so the screen is not empty.
-    state = newState({player1:'Aldyth', player2Type:'ai', player2:'Kinetik AI', mode:'easy'});
-    state.status = 'active';
-    render();
-    bridge.post('ready', {circleId: bridge.circleId, app:'code_clash'});
-  }
+    function setTheme(theme){
+      state.theme = theme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = state.theme;
+      localStorage.setItem(AppConfig.storagePrefix + "_theme", state.theme);
+    }
 
-  boot();
-})();
-</script>
+    function toast(message){
+      $("toast").textContent = message;
+      $("toast").classList.add("show");
+      Bridge.send("SHOW_TOAST", {message});
+      clearTimeout(toast.timer);
+      toast.timer = setTimeout(() => $("toast").classList.remove("show"), 1700);
+    }
+
+    function cfg(){ return modes[state.mode]; }
+    function palette(){ return colors.slice(0, cfg().colors); }
+    function marble(id, size = ""){
+      const color = colors.find((item) => item.id === id);
+      const hex = color ? color.hex : "transparent";
+      return `<span class="marble ${size}" title="${color ? color.name : ""}" style="background:${hex}"></span>`;
+    }
+
+    function showScreen(id){
+      ["setupScreen","makerScreen","gameScreen"].forEach((screen) => $(screen).classList.toggle("active", screen === id));
+    }
+
+    function start(){
+      state.playerName = $("playerName").value.trim() || "Player 1";
+      state.makerType = $("makerType").value;
+      state.mode = $("modeSelect").value;
+      state.secret = [];
+      state.current = Array(cfg().slots).fill(null);
+      state.guesses = [];
+      state.hints = [];
+      if (state.makerType === "human"){
+        state.makerDraft = Array(cfg().slots).fill(null);
+        renderMaker();
+        showScreen("makerScreen");
+      } else {
+        state.secret = randomCode();
+        beginPlay();
+      }
+    }
+
+    function randomCode(){
+      const ids = palette().map((c) => c.id);
+      return Array.from({length:cfg().slots}, () => ids[Math.floor(Math.random() * ids.length)]);
+    }
+
+    function beginPlay(){
+      state.current = Array(cfg().slots).fill(null);
+      state.guesses = [];
+      state.hints = [];
+      state.startedAt = Date.now();
+      $("makerLabel").textContent = state.makerType === "human" ? "Human maker" : "Kinetik AI";
+      $("modeLabel").textContent = cfg().label;
+      showScreen("gameScreen");
+      render();
+    }
+
+    function renderMaker(){
+      $("makerSlots").innerHTML = state.makerDraft.map((id,index) => `<button class="slot" data-maker-slot="${index}">${id ? marble(id) : "?"}</button>`).join("");
+      $("makerPicker").innerHTML = palette().map((color) => `<button class="marble-btn" data-maker-color="${color.id}" aria-label="${color.name}">${marble(color.id)}</button>`).join("");
+      document.querySelectorAll("[data-maker-slot]").forEach((button) => button.onclick = () => {
+        state.makerDraft[Number(button.dataset.makerSlot)] = null;
+        renderMaker();
+      });
+      document.querySelectorAll("[data-maker-color]").forEach((button) => button.onclick = () => {
+        const empty = state.makerDraft.findIndex((value) => !value);
+        state.makerDraft[empty === -1 ? state.makerDraft.length - 1 : empty] = button.dataset.makerColor;
+        renderMaker();
+      });
+    }
+
+    function render(){
+      renderSecret();
+      renderCurrent();
+      renderPicker();
+      renderGuesses();
+      $("guessCount").textContent = state.guesses.length + (state.guesses.length === 1 ? " guess" : " guesses");
+      $("streakText").textContent = "Streak " + state.streak;
+    }
+
+    function renderSecret(){
+      $("secretRow").innerHTML = state.secret.map((id,index) => {
+        const hinted = state.hints.includes(index);
+        return `<span class="hidden-slot ${hinted ? "hint" : ""}">${hinted ? marble(id) : "?"}</span>`;
+      }).join("");
+    }
+
+    function renderCurrent(){
+      $("currentSlots").innerHTML = state.current.map((id,index) => `<button class="slot" data-slot="${index}" aria-label="Guess slot ${index + 1}">${id ? marble(id) : "?"}</button>`).join("");
+      document.querySelectorAll("[data-slot]").forEach((button) => button.onclick = () => {
+        state.current[Number(button.dataset.slot)] = null;
+        renderCurrent();
+      });
+    }
+
+    function renderPicker(){
+      $("colorPicker").innerHTML = palette().map((color) => `<button class="marble-btn" data-color="${color.id}" aria-label="${color.name}">${marble(color.id)}</button>`).join("");
+      document.querySelectorAll("[data-color]").forEach((button) => button.onclick = () => addColor(button.dataset.color));
+    }
+
+    function renderGuesses(){
+      $("guessBoard").innerHTML = state.guesses.map((guess,index) => `
+        <div class="guess-row">
+          <div class="guess-marbles">${guess.code.map((id) => marble(id)).join("")}</div>
+          <div class="feedback" aria-label="Feedback for guess ${index + 1}">${guess.feedback.map((pin) => `<span class="pin ${pin}"></span>`).join("")}</div>
+        </div>
+      `).join("");
+    }
+
+    function addColor(id){
+      const empty = state.current.findIndex((value) => !value);
+      state.current[empty === -1 ? state.current.length - 1 : empty] = id;
+      renderCurrent();
+    }
+
+    function feedback(guess, secret){
+      const result = Array(guess.length).fill("");
+      const secretCounts = {};
+      guess.forEach((id,index) => {
+        if (id === secret[index]) result[index] = "black";
+        else secretCounts[secret[index]] = (secretCounts[secret[index]] || 0) + 1;
+      });
+      guess.forEach((id,index) => {
+        if (result[index]) return;
+        if (secretCounts[id] > 0){
+          result[index] = "white";
+          secretCounts[id]--;
+        }
+      });
+      return result;
+    }
+
+    function submit(){
+      if (state.current.some((value) => !value)){
+        toast("Fill every slot first.");
+        return;
+      }
+      const pins = feedback(state.current, state.secret);
+      state.guesses.push({code:state.current.slice(), feedback:pins});
+      const solved = pins.every((pin) => pin === "black");
+      state.current = Array(cfg().slots).fill(null);
+      render();
+      if (solved) finish();
+    }
+
+    function finish(){
+      const seconds = Math.max(1, Math.round((Date.now() - state.startedAt) / 1000));
+      state.streak++;
+      localStorage.setItem(AppConfig.storagePrefix + "_streak", String(state.streak));
+      const attempts = state.guesses.length;
+      saveLeader({playerName:state.playerName, mode:state.mode, attempts, seconds, streak:state.streak});
+      $("resultTitle").textContent = "Code cracked";
+      $("resultText").textContent = `${state.playerName} solved ${cfg().label} in ${attempts} ${attempts === 1 ? "guess" : "guesses"} and ${seconds}s.`;
+      $("resultCode").innerHTML = state.secret.map((id) => `<span class="hidden-slot hint">${marble(id)}</span>`).join("");
+      $("resultModal").classList.add("show");
+      Bridge.send("DATA_CREATE", {
+        collection: AppConfig.sessionCollection,
+        payload: {circleId:state.circleId, appId:AppConfig.appId, playerName:state.playerName, mode:state.mode, attempts, seconds, createdAt:new Date().toISOString()}
+      });
+    }
+
+    function saveLeader(run){
+      const leaders = readLeaders();
+      const key = run.playerName + "_" + run.mode;
+      const prev = leaders[key];
+      if (!prev || run.attempts < prev.attempts || (run.attempts === prev.attempts && run.seconds < prev.seconds)){
+        leaders[key] = {...run, updatedAt:new Date().toISOString()};
+        localStorage.setItem(AppConfig.storagePrefix + "_leaders", JSON.stringify(leaders));
+      }
+    }
+
+    function readLeaders(){
+      try { return JSON.parse(localStorage.getItem(AppConfig.storagePrefix + "_leaders") || "{}"); }
+      catch { return {}; }
+    }
+
+    function renderLeaders(){
+      const leaders = Object.values(readLeaders()).sort((a,b) => a.attempts - b.attempts || a.seconds - b.seconds || b.streak - a.streak);
+      $("leaderList").innerHTML = leaders.length ? leaders.map((leader,index) => `
+        <div class="leader">
+          <span class="rank">${index + 1}</span>
+          <div><b>${escapeHtml(leader.playerName)}</b><div class="small">${modes[leader.mode].label} · ${leader.seconds}s · streak ${leader.streak}</div></div>
+          <b>${leader.attempts}</b>
+        </div>
+      `).join("") : `<p class="small">No solved codes yet. Crack one to start the board.</p>`;
+    }
+
+    function hint(){
+      const hidden = state.secret.map((_,i) => i).filter((i) => !state.hints.includes(i));
+      if (!hidden.length){
+        toast("All hints revealed.");
+        return;
+      }
+      state.hints.push(hidden[Math.floor(Math.random() * hidden.length)]);
+      renderSecret();
+    }
+
+    function resetCurrent(){
+      state.current = Array(cfg().slots).fill(null);
+      renderCurrent();
+    }
+
+    function playAgain(){
+      $("resultModal").classList.remove("show");
+      if (state.makerType === "ai") state.secret = randomCode();
+      else state.secret = state.makerDraft.slice();
+      beginPlay();
+    }
+
+    function setup(){
+      $("resultModal").classList.remove("show");
+      showScreen("setupScreen");
+    }
+
+    function openLeaders(){
+      renderLeaders();
+      $("drawer").classList.add("open");
+    }
+
+    function escapeHtml(text){ return String(text).replace(/[&<>"']/g, (m) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+
+    $("themeBtn").onclick = () => setTheme(state.theme === "dark" ? "light" : "dark");
+    $("leaderBtn").onclick = openLeaders;
+    $("closeDrawer").onclick = () => $("drawer").classList.remove("open");
+    $("startBtn").onclick = start;
+    $("hideCodeBtn").onclick = () => {
+      if (state.makerDraft.some((value) => !value)){
+        toast("Complete the secret code.");
+        return;
+      }
+      state.secret = state.makerDraft.slice();
+      beginPlay();
+    };
+    $("clearBtn").onclick = resetCurrent;
+    $("hintBtn").onclick = hint;
+    $("submitBtn").onclick = submit;
+    $("againBtn").onclick = playAgain;
+    $("setupBtn").onclick = setup;
+    renderLeaders();
+  </script>
 </body>
 </html>
