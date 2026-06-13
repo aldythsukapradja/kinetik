@@ -742,33 +742,122 @@ body.dark #screen-board .stickyFooter{
 }
 
 .bottomNav{
-  gap:9px!important;
+  position:relative!important;
+  left:auto!important;
+  right:auto!important;
+  bottom:auto!important;
+  height:var(--nav)!important;
+  flex:0 0 var(--nav)!important;
+  display:grid!important;
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  align-items:center!important;
+  gap:4px!important;
   padding:8px 12px calc(8px + env(safe-area-inset-bottom))!important;
+  background:rgba(248,251,255,.88)!important;
+  border-top:1px solid rgba(217,230,255,.82)!important;
+  box-shadow:0 -14px 34px rgba(35,82,160,.10)!important;
+  backdrop-filter:blur(26px)!important;
+}
+
+body.dark .bottomNav{
+  background:rgba(9,17,31,.9)!important;
+  border-color:rgba(38,56,82,.82)!important;
+  box-shadow:0 -14px 34px rgba(0,0,0,.28)!important;
 }
 
 .tab{
-  border-radius:999px!important;
-  min-height:52px!important;
-  transition:background .16s, color .16s, box-shadow .16s, transform .16s;
+  min-width:0!important;
+  min-height:58px!important;
+  border:0!important;
+  border-radius:18px!important;
+  background:transparent!important;
+  color:var(--mut)!important;
+  box-shadow:none!important;
+  display:grid!important;
+  grid-template-rows:34px 14px!important;
+  place-items:center!important;
+  gap:3px!important;
+  padding:4px 2px!important;
+  font-size:10.5px!important;
+  font-weight:950!important;
+  letter-spacing:0!important;
+  transition:background .16s, color .16s, transform .16s;
 }
 
 .tab:active{
-  transform:scale(.98);
-}
-
-.tab.active{
-  background:linear-gradient(135deg,var(--p),var(--p2))!important;
-  box-shadow:0 12px 28px rgba(47,107,255,.24)!important;
+  transform:scale(.97);
 }
 
 .tab:not(.active){
-  background:rgba(255,255,255,.46)!important;
-  border:1px solid rgba(217,230,255,.78)!important;
+  background:transparent!important;
+  border:0!important;
 }
 
 body.dark .tab:not(.active){
-  background:rgba(17,27,44,.58)!important;
-  border-color:rgba(38,56,82,.78)!important;
+  background:transparent!important;
+  border:0!important;
+}
+
+.tab .tabIcon{
+  width:34px;
+  height:34px;
+  border-radius:15px;
+  display:grid;
+  place-items:center;
+  color:var(--mut);
+  transition:background .16s, color .16s, box-shadow .16s, transform .16s;
+}
+
+.tab .icon{
+  width:21px!important;
+  height:21px!important;
+  stroke-width:2.35!important;
+}
+
+.tab span:last-child{
+  max-width:100%;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  line-height:1;
+}
+
+.tab.active{
+  background:rgba(47,107,255,.08)!important;
+  color:var(--p)!important;
+  box-shadow:none!important;
+}
+
+body.dark .tab.active{
+  background:rgba(84,199,236,.10)!important;
+  color:#74dcff!important;
+}
+
+.tab.active .tabIcon{
+  color:white;
+  background:linear-gradient(135deg,var(--p),var(--p2));
+  box-shadow:0 10px 22px rgba(47,107,255,.25);
+}
+
+.tab.active span:last-child{
+  color:var(--p)!important;
+}
+
+body.dark .tab.active span:last-child{
+  color:#74dcff!important;
+}
+
+.photoChoiceGrid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin:4px 0 10px;
+}
+
+@media(max-width:380px){
+  .photoChoiceGrid{
+    grid-template-columns:1fr;
+  }
 }
 
 #matchesCanvas{
@@ -809,7 +898,7 @@ body.dark .tab:not(.active){
     </div>
     <div class="players playersScroll" id="playersList"></div>
   </div>
-</section><section class="screen" id="screen-matches"><div class="headline"><h1>Matches</h1><p id="matchHint">Generate matches from the Players screen.</p></div><div class="matchToolbar"><button class="capsuleBtn primary" id="exportMatchesBtn" type="button">Export matches image</button><button class="capsuleBtn" id="jumpBoardBtn" type="button">View leaderboard</button></div><div id="batchesList"></div><div id="bottomAction"></div></section><section class="screen" id="screen-board"><div class="headline"><h1>Leaderboard</h1><p>Crown the winner and generate a premium result image.</p></div><div class="stickyFooter"><button class="btn primary full" id="shareBtn" type="button">Create clean card</button><button class="btn darkblue full" id="photoResultBtn" type="button">Create photo story</button><button class="hidden" id="resetBtnBoard" type="button">Reset event</button></div><div id="boardTable"></div></section></section><nav class="bottomNav"><button class="tab active" data-screen="home" type="button"><span class="tabIcon" data-icon="home"></span><span>Setup</span></button><button class="tab" data-screen="players" type="button"><span class="tabIcon" data-icon="users"></span><span>Players</span></button><button class="tab" data-screen="matches" type="button"><span class="tabIcon" data-icon="court"></span><span>Matches</span></button><button class="tab" data-screen="board" type="button"><span class="tabIcon" data-icon="trophy"></span><span>Board</span></button></nav><div class="sheetBackdrop" id="moreSheet"><div class="sheet"><div class="grab"></div><div class="title"><div><h2>More options</h2><p>Advanced controls stay here so setup stays clean.</p></div><button class="btn small soft" id="closeMoreBtn" type="button">Close</button></div><div class="field"><label for="venue">Venue</label><input id="venue" placeholder="Padel club or location" autocomplete="off" maxlength="70"></div>
+</section><section class="screen" id="screen-matches"><div class="headline"><h1>Matches</h1><p id="matchHint">Generate matches from the Players screen.</p></div><div class="matchToolbar"><button class="capsuleBtn primary" id="exportMatchesBtn" type="button">Export matches image</button><button class="capsuleBtn" id="jumpBoardBtn" type="button">View leaderboard</button></div><div id="batchesList"></div><div id="bottomAction"></div></section><section class="screen" id="screen-board"><div class="headline"><h1>Leaderboard</h1><p>Crown the winner and generate a premium result image.</p></div><div class="stickyFooter"><button class="btn primary full" id="shareBtn" type="button">Results card</button><button class="btn darkblue full" id="photoResultBtn" type="button">Group photo</button><button class="hidden" id="resetBtnBoard" type="button">Reset event</button></div><div id="boardTable"></div></section></section><nav class="bottomNav"><button class="tab active" data-screen="home" type="button"><span class="tabIcon" data-icon="home"></span><span>Setup</span></button><button class="tab" data-screen="players" type="button"><span class="tabIcon" data-icon="users"></span><span>Players</span></button><button class="tab" data-screen="matches" type="button"><span class="tabIcon" data-icon="court"></span><span>Matches</span></button><button class="tab" data-screen="board" type="button"><span class="tabIcon" data-icon="trophy"></span><span>Board</span></button></nav><div class="sheetBackdrop" id="moreSheet"><div class="sheet"><div class="grab"></div><div class="title"><div><h2>More options</h2><p>Advanced controls stay here so setup stays clean.</p></div><button class="btn small soft" id="closeMoreBtn" type="button">Close</button></div><div class="field"><label for="venue">Venue</label><input id="venue" placeholder="Padel club or location" autocomplete="off" maxlength="70"></div>
 <div class="field"><label>Booking duration</label><div class="choiceGrid" id="durationSeg"><button class="choiceBtn active" data-duration="60" type="button">60 min</button><button class="choiceBtn" data-duration="90" type="button">90 min</button><button class="choiceBtn" data-duration="120" type="button">120 min</button><button class="choiceBtn" data-duration="custom" type="button">Custom</button></div></div>
 <div class="field hidden" id="customDurationBox"><label for="customDuration">Custom duration</label><input id="customDuration" type="number" min="30" max="240" inputmode="numeric" placeholder="90"></div>
 <div class="field"><label>Match pace</label><div class="choiceGrid" id="paceSeg"><button class="choiceBtn" data-pace="relaxed" type="button">Relaxed</button><button class="choiceBtn active" data-pace="normal" type="button">Normal</button><button class="choiceBtn" data-pace="fast" type="button">Fast</button></div></div>
@@ -818,8 +907,8 @@ body.dark .tab:not(.active){
 <div class="field"><label>Generate more</label><div class="choiceGrid two" id="moreCycleSeg"><button class="choiceBtn active" data-more-cycle="fair" type="button">One fair cycle</button><button class="choiceBtn" data-more-cycle="duration" type="button">Same duration block</button></div></div>
 <div class="field"><label>Mexicano first round</label><div class="choiceGrid two" id="mexicanoFirstSeg"><button class="choiceBtn active" data-mexicano-first="roster" type="button">Roster order</button><button class="choiceBtn" data-mexicano-first="shuffle" type="button">Shuffle</button></div></div>
 <div class="optionDivider"></div>
-<div class="moreList"><button class="moreItem" id="resetFromMoreBtn" type="button"><div><b>Reset event</b><span>Clear players, matches, and scores</span></div><span id="trashIcon"></span></button></div><button class="btn primary full" id="saveMoreBtn" type="button" style="margin-top:12px">Save options</button></div></div><div class="sheetBackdrop" id="courtsSheet"><div class="sheet"><div class="grab"></div><div class="courtPicker"><div class="courtPickerHead"><h2>Select courts</h2><p style="margin:7px 0 0;color:var(--mut);font-size:13px;font-weight:800">Choose exact court numbers, for example Court 2 and Court 7.</p></div><div class="courtGrid" id="courtGrid"></div><div class="courtSummary" id="courtSelectedSummary"></div></div><div class="stack courtSheetActions"><button class="btn primary full" id="saveCourtsBtn" type="button">Save selected courts</button><button class="btn soft full" id="closeCourtsBtn" type="button">Close</button></div></div></div><div class="sheetBackdrop" id="customPointsSheet"><div class="sheet"><div class="grab"></div><div class="title"><div><h2>Custom points</h2><p>Set the agreed match total.</p></div><button class="btn small soft" id="closeCustomBtn" type="button">Close</button></div><div class="field"><label for="customPoints">Match points</label><input id="customPoints" type="number" min="4" max="80" inputmode="numeric" placeholder="24"></div><button class="btn primary full" id="saveCustomBtn" type="button">Use custom points</button></div></div><div class="sheetBackdrop" id="bulkSheet"><div class="sheet"><div class="grab"></div><div class="title"><div><h2>Bulk import</h2><p>Kinetik detects comma, line break, or space automatically.</p></div><button class="btn small soft" id="closeBulkBtn" type="button">Close</button></div><textarea id="bulkNames" placeholder="Aldyth, Keyla, Baginda, Kinara"></textarea><div class="importMeta" id="importMeta">Paste names to preview.</div><div class="previewList" id="previewList"></div><button class="btn primary full" id="importBulkBtn" type="button" style="margin-top:10px">Import players</button></div></div><div class="sheetBackdrop" id="shareSheet"><div class="sheet"><div class="grab"></div><div class="title"><div><h2>Result image</h2><p>Download or share a blue premium result card.</p></div><button class="btn small soft" id="closeShareBtn" type="button">Close</button></div><div class="resultPreview"><canvas id="resultCanvas" width="1080" height="1350"></canvas></div><div class="stack"><button class="btn primary full" id="downloadImageBtn" type="button">Download image</button><button class="btn full" id="nativeShareBtn" type="button">Share image</button><button class="btn soft full" id="copyTextBtn" type="button">Copy text fallback</button></div></div></div>
-<div class="sheetBackdrop" id="photoSheet"><div class="sheet"><div class="grab"></div><div class="title"><div><h2>Photo result</h2><p>Take or choose a photo, then overlay the top 3 with W-L-T, diff, and points.</p></div><button class="btn small soft" id="closePhotoBtn" type="button">Close</button></div><input id="photoFile" class="hidden" type="file" accept="image/*" capture="environment"><button class="btn primary full" id="choosePhotoBtn" type="button">Take or choose photo</button><div class="resultPreview"><canvas id="photoCanvas" width="1080" height="1350"></canvas></div><div class="stack"><button class="btn primary full" id="downloadPhotoBtn" type="button">Download photo result</button><button class="btn full" id="sharePhotoBtn" type="button">Share photo result</button></div></div></div>
+<div class="moreList"><button class="moreItem" id="resetFromMoreBtn" type="button"><div><b>Reset event</b><span>Clear players, matches, and scores</span></div><span id="trashIcon"></span></button></div><button class="btn primary full" id="saveMoreBtn" type="button" style="margin-top:12px">Save options</button></div></div><div class="sheetBackdrop" id="courtsSheet"><div class="sheet"><div class="grab"></div><div class="courtPicker"><div class="courtPickerHead"><h2>Select courts</h2><p style="margin:7px 0 0;color:var(--mut);font-size:13px;font-weight:800">Choose exact court numbers, for example Court 2 and Court 7.</p></div><div class="courtGrid" id="courtGrid"></div><div class="courtSummary" id="courtSelectedSummary"></div></div><div class="stack courtSheetActions"><button class="btn primary full" id="saveCourtsBtn" type="button">Save selected courts</button><button class="btn soft full" id="closeCourtsBtn" type="button">Close</button></div></div></div><div class="sheetBackdrop" id="customPointsSheet"><div class="sheet"><div class="grab"></div><div class="title"><div><h2>Custom points</h2><p>Set the agreed match total.</p></div><button class="btn small soft" id="closeCustomBtn" type="button">Close</button></div><div class="field"><label for="customPoints">Match points</label><input id="customPoints" type="number" min="4" max="80" inputmode="numeric" placeholder="24"></div><button class="btn primary full" id="saveCustomBtn" type="button">Use custom points</button></div></div><div class="sheetBackdrop" id="bulkSheet"><div class="sheet"><div class="grab"></div><div class="title"><div><h2>Add Multiplayers</h2><p>Kinetik detects comma, line break, or space automatically.</p></div><button class="btn small soft" id="closeBulkBtn" type="button">Close</button></div><textarea id="bulkNames" placeholder="Aldyth, Keyla, Baginda, Kinara"></textarea><div class="importMeta" id="importMeta">Paste names to preview.</div><div class="previewList" id="previewList"></div><button class="btn primary full" id="importBulkBtn" type="button" style="margin-top:10px">Import players</button></div></div><div class="sheetBackdrop" id="shareSheet"><div class="sheet"><div class="grab"></div><div class="title"><div><h2>Result image</h2><p>Download or share a blue premium result card.</p></div><button class="btn small soft" id="closeShareBtn" type="button">Close</button></div><div class="resultPreview"><canvas id="resultCanvas" width="1080" height="1350"></canvas></div><div class="stack"><button class="btn primary full" id="downloadImageBtn" type="button">Download image</button><button class="btn full" id="nativeShareBtn" type="button">Share image</button><button class="btn soft full" id="copyTextBtn" type="button">Copy text fallback</button></div></div></div>
+<div class="sheetBackdrop" id="photoSheet"><div class="sheet"><div class="grab"></div><div class="title"><div><h2>Group photo</h2><p>Choose from the camera roll or take a new photo, then overlay the top 3.</p></div><button class="btn small soft" id="closePhotoBtn" type="button">Close</button></div><input id="photoFile" class="hidden" type="file" accept="image/*"><input id="photoCameraFile" class="hidden" type="file" accept="image/*" capture="environment"><div class="photoChoiceGrid"><button class="btn primary full" id="choosePhotoBtn" type="button">Choose from library</button><button class="btn soft full" id="takePhotoBtn" type="button">Take photo</button></div><div class="resultPreview"><canvas id="photoCanvas" width="1080" height="1350"></canvas></div><div class="stack"><button class="btn primary full" id="sharePhotoBtn" type="button">Save or share image</button><button class="btn full" id="downloadPhotoBtn" type="button">Download file</button></div></div></div>
 <div class="sheetBackdrop" id="matchesSheet"><div class="sheet"><div class="grab"></div><div class="title"><div><h2>Matches image</h2><p>Export the match list as a polished story card.</p></div><button class="btn small soft" id="closeMatchesBtn" type="button">Close</button></div><div class="resultPreview"><canvas id="matchesCanvas" width="1080" height="1350"></canvas></div><div class="stack"><button class="btn primary full" id="downloadMatchesBtn" type="button">Download matches image</button><button class="btn full" id="shareMatchesBtn" type="button">Share matches image</button></div></div></div>
 <div class="toast" id="toast"></div></main><script>
 if(window.self!==window.top)document.body.classList.add('embedded');
@@ -827,7 +916,7 @@ const ICONS={spark:'<svg class="icon" viewBox="0 0 24 24"><path d="M13 2 4 14h7l
 const STORAGE='kinetik_padel_mobile_v10_4_scroll_fixed';const blank=()=>({eventName:'',venue:'',courtsAvailable:9,selectedCourts:[1],points:21,customMode:false,format:'americano',duration:90,customDuration:90,pace:'normal',americanoMode:'duration',moreCycle:'fair',mexicanoFirst:'roster',shuffleFirstMexicano:false,players:[],batches:[],expanded:{},openMatchId:null,screen:'home',dark:false,updatedAt:Date.now()});let state=load();
 const $=id=>document.getElementById(id),clamp=(v,min,max,f)=>{const n=parseInt(v,10);return Number.isNaN(n)?f:Math.max(min,Math.min(max,n))},uid=(p='id')=>p+'_'+Math.random().toString(36).slice(2,8)+Date.now().toString(36).slice(-4),safe=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
 function load(){try{const raw=localStorage.getItem(STORAGE),x=raw?{...blank(),...JSON.parse(raw)}:blank();if(!x.selectedCourts?.length)x.selectedCourts=[1];if(!x.courtsAvailable)x.courtsAvailable=Math.max(9,...x.selectedCourts);return x}catch(e){return blank()}}function save(){state.updatedAt=Date.now();localStorage.setItem(STORAGE,JSON.stringify(state))}function toast(msg){const el=$('toast');el.textContent=msg;el.classList.add('show');clearTimeout(window.tTimer);window.tTimer=setTimeout(()=>el.classList.remove('show'),2100)}const byId=id=>state.players.find(p=>p.id===id),playerName=id=>byId(id)?.name||'Unknown',teamName=ids=>ids.map(playerName).join(' / '),sortedCourts=()=>[...new Set(state.selectedCourts)].sort((a,b)=>a-b),gcd=(a,b)=>b?gcd(b,a%b):a;
-function icons(){const set=(id,v)=>{const e=$(id);if(e)e.innerHTML=v};set('appOrb',ICONS.spark);set('themeBtn',state.dark?ICONS.sun:ICONS.moon);set('moreBtn',ICONS.more);set('chevronIcon',ICONS.chevron);set('chevronIcon2',ICONS.chevron);set('trashIcon',ICONS.trash);const am=document.querySelector('[data-format="americano"]'),mx=document.querySelector('[data-format="mexicano"]');if(am)am.innerHTML=ICONS.rotate+'<span>Americano</span>';if(mx)mx.innerHTML=ICONS.bolt+'<span>Mexicano</span>';set('addPlayerBtn',ICONS.plus);set('bulkBtn',ICONS.bulk+'<span>Bulk import</span>');document.querySelectorAll('.tabIcon').forEach(el=>el.innerHTML=ICONS[el.dataset.icon]||'')}
+function icons(){const set=(id,v)=>{const e=$(id);if(e)e.innerHTML=v};set('appOrb',ICONS.spark);set('themeBtn',state.dark?ICONS.sun:ICONS.moon);set('moreBtn',ICONS.more);set('chevronIcon',ICONS.chevron);set('chevronIcon2',ICONS.chevron);set('trashIcon',ICONS.trash);const am=document.querySelector('[data-format="americano"]'),mx=document.querySelector('[data-format="mexicano"]');if(am)am.innerHTML=ICONS.rotate+'<span>Americano</span>';if(mx)mx.innerHTML=ICONS.bolt+'<span>Mexicano</span>';set('addPlayerBtn',ICONS.plus);set('bulkBtn',ICONS.bulk+'<span>Add Multiplayers</span>');document.querySelectorAll('.tabIcon').forEach(el=>el.innerHTML=ICONS[el.dataset.icon]||'')}
 function readSetup(){state.eventName=$('eventName').value.trim();if($('venue'))state.venue=$('venue').value.trim();if($('customDuration'))state.customDuration=clamp($('customDuration').value,30,240,state.customDuration||90);if(state.duration==='custom')state.duration=state.customDuration;save()}function setScreen(s){state.screen=s;save();render()}function setFormat(f){readSetup();state.format=f;state.batches=[];state.expanded={};save();render();toast(f==='mexicano'?'Mexicano selected':'Americano selected')}function setPoints(v){readSetup();if(v==='custom'){$('customPoints').value=state.customMode?state.points:'';$('customPointsSheet').classList.add('show');return}state.points=parseInt(v,10);state.customMode=false;state.batches.forEach(b=>b.matches.forEach(m=>{m.scoreA=null;m.scoreB=null}));save();render();toast('Point target updated')}function saveCustom(){state.points=clamp($('customPoints').value,4,80,state.points||21);state.customMode=true;state.batches.forEach(b=>b.matches.forEach(m=>{m.scoreA=null;m.scoreB=null}));save();$('customPointsSheet').classList.remove('show');render();toast('Custom point target saved')}
 function addPlayer(name){const clean=String(name||'').trim();if(!clean){toast('Add a name first');return false}if(state.players.some(p=>p.name.toLowerCase()===clean.toLowerCase())){toast('Player already added');return false}state.players.push({id:uid('p'),name:clean});state.batches=[];state.expanded={};save();render();return true}function removePlayer(id){const p=byId(id);state.players=state.players.filter(x=>x.id!==id);state.batches=[];state.expanded={};save();render();toast(p?`${p.name} removed`:'Player removed')}
 function completion(){const matches=state.batches.flatMap(b=>b.matches),scored=matches.filter(m=>Number.isFinite(m.scoreA)&&Number.isFinite(m.scoreB)).length;return{matches,total:matches.length,scored,pct:matches.length?Math.round(scored/matches.length*100):0}}function fairBlock(n){if(n<4)return 0;if(n===4)return 3;return n/gcd(n,4)}function fairBatchMatches(n){return fairBlock(n)}function officialAmericanoMatches(n){if(n<4)return 0;const pairs=n*(n-1)/2;let m=Math.ceil(pairs/2);while((4*m)%n!==0)m++;return m}function matchMinutes(){if(state.points>=30)return{fast:14,normal:18,relaxed:22}[state.pace]||18;return{fast:10,normal:12,relaxed:15}[state.pace]||12}function durationMinutes(){return state.duration==='custom'?clamp(state.customDuration,30,240,90):clamp(state.duration,30,240,90)}function durationMatches(n){const block=fairBlock(n);if(!block)return 0;const courts=Math.max(1,Math.min(sortedCourts().length,Math.floor(n/4)));const slots=Math.max(1,Math.floor(durationMinutes()/matchMinutes()));const capacity=slots*courts;let m=Math.floor(capacity/block)*block;if(m<block)m=block;return m}function recommendedInitialMatches(n){if(state.americanoMode==='official')return officialAmericanoMatches(n);return durationMatches(n)}function batchInfo(){if(state.format!=='americano')return 'Mexicano generates one ranking round at a time.';const n=state.players.length;if(n<4)return 'Add at least 4 players.';const m=recommendedInitialMatches(n),plays=4*m/n,mode=state.americanoMode==='official'?'Official cycle':'90-minute recommendation';return `${mode}: ${m} matches. Each player plays ${plays} matches. ${state.americanoMode==='duration'?'Duration: '+durationMinutes()+' min · '+state.pace+' pace.':'Partner rotation first.'}`}
@@ -849,9 +938,9 @@ ctx.fillStyle='#5ee7ff';ctx.font=`900 28px ${f}`;ctx.fillText('TOP 3',92,panelY+
 ranks.slice(0,3).forEach((p,i)=>{const y=panelY+125+i*92;ctx.fillStyle=i===0?'rgba(94,231,255,.94)':'rgba(255,255,255,.12)';roundRect(ctx,86,y-48,900,70,22);ctx.fill();ctx.fillStyle=i===0?'#07111f':'#fff';ctx.font=`900 30px ${f}`;ctx.fillText(`${i+1}.`,116,y-4);ctx.font=`900 34px ${f}`;ctx.fillText(p.name.length>16?p.name.slice(0,15)+'…':p.name,170,y-4);ctx.font=`800 25px ${f}`;ctx.textAlign='right';ctx.fillText(`${p.wins}-${p.losses}-${p.draws}`,735,y-4);ctx.fillText(`${p.diff>=0?'+':''}${p.diff}`,850,y-4);ctx.font=`900 33px ${f}`;ctx.fillText(String(p.points),965,y-4);ctx.textAlign='left'});
 ctx.fillStyle='rgba(255,255,255,.74)';ctx.font=`700 22px ${f}`;ctx.fillText('Generated by Kinetik',60,1288);return canvas}
 function openPhoto(){$('photoSheet').classList.add('show');setTimeout(photoResult,60)}
-function loadPhoto(e){const file=e.target.files&&e.target.files[0];if(!file)return;const img=new Image();img.onload=()=>{photoImg=img;photoResult();toast('Photo loaded')};img.src=URL.createObjectURL(file)}
-function downloadPhoto(){if(!photoImg){toast('Take or choose a photo first');return}const a=document.createElement('a');a.download='kinetik-padel-photo-result.png';a.href=photoResult().toDataURL('image/png');document.body.appendChild(a);a.click();a.remove()}
-async function sharePhoto(){if(!photoImg){toast('Take or choose a photo first');return}photoResult().toBlob(async blob=>{if(!blob){toast('Image not ready');return}const file=new File([blob],'kinetik-padel-photo-result.png',{type:'image/png'});if(navigator.canShare&&navigator.canShare({files:[file]})){try{await navigator.share({files:[file],title:'Kinetik Padel Photo Result',text:shareText()})}catch(e){}}else{downloadPhoto();toast('Photo result downloaded')}},'image/png')}
+function loadPhoto(e){const file=e.target.files&&e.target.files[0];if(!file)return;const img=new Image(),url=URL.createObjectURL(file);img.onload=()=>{photoImg=img;URL.revokeObjectURL(url);photoResult();toast('Photo loaded')};img.src=url;e.target.value=''}
+function downloadPhoto(){if(!photoImg){toast('Choose or take a photo first');return}const a=document.createElement('a');a.download='kinetik-padel-photo-result.png';a.href=photoResult().toDataURL('image/png');document.body.appendChild(a);a.click();a.remove();toast('Downloaded to files')}
+async function sharePhoto(){if(!photoImg){toast('Choose or take a photo first');return}photoResult().toBlob(async blob=>{if(!blob){toast('Image not ready');return}const file=new File([blob],'kinetik-padel-photo-result.png',{type:'image/png'});if(navigator.canShare&&navigator.canShare({files:[file]})){try{await navigator.share({files:[file],title:'Kinetik Padel Group Photo',text:shareText()});toast('Use Save Image from the share sheet')}catch(e){}}else{downloadPhoto()}},'image/png')}
 function openShare(){$('shareSheet').classList.add('show');setTimeout(resultImage,60)}function downloadImage(){const a=document.createElement('a');a.download='kinetik-padel-result.png';a.href=resultImage().toDataURL('image/png');document.body.appendChild(a);a.click();a.remove()}async function shareImage(){resultImage().toBlob(async blob=>{if(!blob){toast('Image not ready');return}const file=new File([blob],'kinetik-padel-result.png',{type:'image/png'});if(navigator.canShare&&navigator.canShare({files:[file]})){try{await navigator.share({files:[file],title:'Kinetik Padel Result',text:shareText()})}catch(e){}}else{downloadImage();toast('Image downloaded')}},'image/png')}
 
 function paceLabel(){return (state.pace||'normal').charAt(0).toUpperCase()+(state.pace||'normal').slice(1)}
@@ -889,6 +978,6 @@ document.querySelectorAll('#paceSeg button').forEach(b=>b.addEventListener('clic
 document.querySelectorAll('#americanoModeSeg button').forEach(b=>b.addEventListener('click',()=>{state.americanoMode=b.dataset.americanoMode;state.batches=[];state.expanded={};save();render()}));
 document.querySelectorAll('#moreCycleSeg button').forEach(b=>b.addEventListener('click',()=>{state.moreCycle=b.dataset.moreCycle;save();render()}));
 document.querySelectorAll('#mexicanoFirstSeg button').forEach(b=>b.addEventListener('click',()=>{state.mexicanoFirst=b.dataset.mexicanoFirst;state.batches=[];state.expanded={};save();render()}));
-$('courtsBtn').addEventListener('click',()=>$('courtsSheet').classList.add('show'));$('closeCourtsBtn').addEventListener('click',()=>$('courtsSheet').classList.remove('show'));$('saveCourtsBtn').addEventListener('click',()=>{$('courtsSheet').classList.remove('show');render();toast('Courts saved')});$('courtsSheet').addEventListener('click',e=>{if(e.target.id==='courtsSheet')$('courtsSheet').classList.remove('show')});$('closeCustomBtn').addEventListener('click',()=>$('customPointsSheet').classList.remove('show'));$('saveCustomBtn').addEventListener('click',saveCustom);$('customPointsSheet').addEventListener('click',e=>{if(e.target.id==='customPointsSheet')$('customPointsSheet').classList.remove('show')});$('addPlayerBtn').addEventListener('click',()=>{if(addPlayer($('playerName').value)){$('playerName').value='';$('playerName').focus()}});$('playerName').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();$('addPlayerBtn').click()}});$('bulkBtn').addEventListener('click',()=>{$('bulkSheet').classList.add('show');importPreview()});$('closeBulkBtn').addEventListener('click',()=>$('bulkSheet').classList.remove('show'));$('bulkSheet').addEventListener('click',e=>{if(e.target.id==='bulkSheet')$('bulkSheet').classList.remove('show')});$('bulkNames').addEventListener('input',importPreview);$('importBulkBtn').addEventListener('click',()=>{const d=detectNames($('bulkNames').value);let added=0;d.names.forEach(n=>{if(addPlayer(n))added++});$('bulkNames').value='';$('bulkSheet').classList.remove('show');toast(`${added} player${added===1?'':'s'} imported`)});$('generateBtn').addEventListener('click',generateInitial);$('resetBtn').addEventListener('click',reset);$('resetBtnBoard').addEventListener('click',reset);$('shareBtn').addEventListener('click',openShare);$('photoResultBtn').addEventListener('click',openPhoto);$('closePhotoBtn').addEventListener('click',()=>$('photoSheet').classList.remove('show'));$('choosePhotoBtn').addEventListener('click',()=>$('photoFile').click());$('photoFile').addEventListener('change',loadPhoto);$('downloadPhotoBtn').addEventListener('click',downloadPhoto);$('sharePhotoBtn').addEventListener('click',sharePhoto);$('photoSheet').addEventListener('click',e=>{if(e.target.id==='photoSheet')$('photoSheet').classList.remove('show')});$('closeShareBtn').addEventListener('click',()=>$('shareSheet').classList.remove('show'));$('shareSheet').addEventListener('click',e=>{if(e.target.id==='shareSheet')$('shareSheet').classList.remove('show')});$('downloadImageBtn').addEventListener('click',downloadImage);$('nativeShareBtn').addEventListener('click',shareImage);$('copyTextBtn').addEventListener('click',()=>copy(shareText()))}
+$('courtsBtn').addEventListener('click',()=>$('courtsSheet').classList.add('show'));$('closeCourtsBtn').addEventListener('click',()=>$('courtsSheet').classList.remove('show'));$('saveCourtsBtn').addEventListener('click',()=>{$('courtsSheet').classList.remove('show');render();toast('Courts saved')});$('courtsSheet').addEventListener('click',e=>{if(e.target.id==='courtsSheet')$('courtsSheet').classList.remove('show')});$('closeCustomBtn').addEventListener('click',()=>$('customPointsSheet').classList.remove('show'));$('saveCustomBtn').addEventListener('click',saveCustom);$('customPointsSheet').addEventListener('click',e=>{if(e.target.id==='customPointsSheet')$('customPointsSheet').classList.remove('show')});$('addPlayerBtn').addEventListener('click',()=>{if(addPlayer($('playerName').value)){$('playerName').value='';$('playerName').focus()}});$('playerName').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();$('addPlayerBtn').click()}});$('bulkBtn').addEventListener('click',()=>{$('bulkSheet').classList.add('show');importPreview()});$('closeBulkBtn').addEventListener('click',()=>$('bulkSheet').classList.remove('show'));$('bulkSheet').addEventListener('click',e=>{if(e.target.id==='bulkSheet')$('bulkSheet').classList.remove('show')});$('bulkNames').addEventListener('input',importPreview);$('importBulkBtn').addEventListener('click',()=>{const d=detectNames($('bulkNames').value);let added=0;d.names.forEach(n=>{if(addPlayer(n))added++});$('bulkNames').value='';$('bulkSheet').classList.remove('show');toast(`${added} player${added===1?'':'s'} imported`)});$('generateBtn').addEventListener('click',generateInitial);$('resetBtn').addEventListener('click',reset);$('resetBtnBoard').addEventListener('click',reset);$('shareBtn').addEventListener('click',openShare);$('photoResultBtn').addEventListener('click',openPhoto);$('closePhotoBtn').addEventListener('click',()=>$('photoSheet').classList.remove('show'));$('choosePhotoBtn').addEventListener('click',()=>$('photoFile').click());$('takePhotoBtn').addEventListener('click',()=>$('photoCameraFile').click());$('photoFile').addEventListener('change',loadPhoto);$('photoCameraFile').addEventListener('change',loadPhoto);$('sharePhotoBtn').addEventListener('click',sharePhoto);$('downloadPhotoBtn').addEventListener('click',downloadPhoto);$('photoSheet').addEventListener('click',e=>{if(e.target.id==='photoSheet')$('photoSheet').classList.remove('show')});$('closeShareBtn').addEventListener('click',()=>$('shareSheet').classList.remove('show'));$('shareSheet').addEventListener('click',e=>{if(e.target.id==='shareSheet')$('shareSheet').classList.remove('show')});$('downloadImageBtn').addEventListener('click',downloadImage);$('nativeShareBtn').addEventListener('click',shareImage);$('copyTextBtn').addEventListener('click',()=>copy(shareText()))}
 window.removePlayer=removePlayer;window.saveScore=saveScore;window.clearScore=clearScore;window.autoScore=autoScore;window.toggleCourt=toggleCourt;window.addCourtNumber=addCourtNumber;window.toggleBatch=toggleBatch;window.toggleMatch=toggleMatch;window.generateMexicanoNext=generateMexicanoNext;window.generateMoreAmericano=generateMoreAmericano;window.openPhoto=openPhoto;window.setScreen=setScreen;hook();$('exportMatchesBtn').addEventListener('click',openMatchesExport);$('jumpBoardBtn').addEventListener('click',()=>setScreen('board'));$('closeMatchesBtn').addEventListener('click',()=>$('matchesSheet').classList.remove('show'));$('matchesSheet').addEventListener('click',e=>{if(e.target.id==='matchesSheet')$('matchesSheet').classList.remove('show')});$('downloadMatchesBtn').addEventListener('click',downloadMatchesImage);$('shareMatchesBtn').addEventListener('click',shareMatchesImage);render();
 </script></body></html>
