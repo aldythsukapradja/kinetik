@@ -679,6 +679,482 @@ body.dark .matchCompact.locked{
   background:linear-gradient(135deg,rgba(157,176,204,.08),rgba(17,27,44,.7));
 }
 
+.liveMatch{
+  padding:10px 12px 12px!important;
+  background:linear-gradient(135deg,rgba(47,107,255,.05),rgba(84,199,236,.05)),var(--card);
+}
+
+.liveMatch .matchTop{
+  margin-bottom:9px!important;
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) auto!important;
+  align-items:center!important;
+  gap:8px!important;
+}
+
+.matchHeaderActions{
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+
+.miniPill{
+  min-height:32px;
+  border-radius:999px;
+  padding:0 11px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:5px;
+  border:1px solid var(--line);
+  background:var(--soft);
+  color:var(--txt);
+  font-size:11.5px;
+  font-weight:1000;
+  box-shadow:none;
+}
+
+.miniPill.primary{
+  color:#fff;
+  border-color:transparent;
+  background:linear-gradient(135deg,var(--p),var(--p2));
+  box-shadow:0 8px 18px rgba(47,107,255,.18);
+}
+
+.scoreRows{
+  display:grid;
+  gap:7px;
+}
+
+.scoreTeamRow{
+  display:grid;
+  grid-template-columns:23px minmax(0,1fr) 58px;
+  align-items:center;
+  gap:8px;
+  min-height:45px;
+  padding:6px 7px;
+  border:1px solid var(--line);
+  border-radius:18px;
+  background:var(--card2);
+}
+
+.teamLetter{
+  width:23px;
+  height:23px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:rgba(47,107,255,.12);
+  color:var(--p);
+  font-size:11px;
+  font-weight:1000;
+}
+
+.playerChips{
+  min-width:0;
+  display:flex;
+  align-items:center;
+  gap:5px;
+  flex-wrap:wrap;
+}
+
+.playerChip{
+  max-width:112px;
+  min-height:28px;
+  border-radius:999px;
+  padding:5px 9px;
+  display:inline-flex;
+  align-items:center;
+  border:1px solid rgba(217,230,255,.92);
+  background:rgba(255,255,255,.82);
+  color:var(--txt);
+  font-size:12px;
+  font-weight:950;
+  line-height:1;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+body.dark .playerChip{
+  background:rgba(17,27,44,.86);
+  border-color:rgba(38,56,82,.9);
+}
+
+.inlineScore{
+  width:58px!important;
+  min-height:36px!important;
+  padding:4px 6px!important;
+  border-radius:14px!important;
+  text-align:center!important;
+  font-size:20px!important;
+  font-weight:1000!important;
+  letter-spacing:-.04em!important;
+}
+
+.matchCompact{
+  width:calc(100% - 20px)!important;
+  min-height:46px!important;
+  margin:8px 10px!important;
+  border:1px solid var(--line)!important;
+  border-radius:999px!important;
+  background:rgba(255,255,255,.78)!important;
+  padding:6px 7px!important;
+  display:grid!important;
+  grid-template-columns:auto minmax(0,1fr) auto!important;
+  gap:7px!important;
+  align-items:center!important;
+  text-align:left!important;
+  box-shadow:0 7px 18px rgba(35,82,160,.07)!important;
+}
+
+body.dark .matchCompact{
+  background:rgba(17,27,44,.82)!important;
+}
+
+.compactMeta,.compactTeams{
+  min-width:0;
+  display:flex;
+  align-items:center;
+  gap:4px;
+}
+
+.compactTeams{
+  overflow:hidden;
+  flex-wrap:nowrap;
+}
+
+.compactMatch,.compactCourt,.compactAction,.compactScore{
+  min-height:28px;
+  border-radius:999px;
+  padding:6px 8px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  white-space:nowrap;
+  font-size:11px;
+  font-weight:1000;
+  line-height:1;
+}
+
+.compactMatch{
+  color:#fff;
+  background:linear-gradient(135deg,var(--p),var(--p2));
+}
+
+.compactCourt,.compactAction{
+  color:var(--mut);
+  background:var(--soft);
+}
+
+.compactAction{
+  color:var(--p);
+}
+
+.compactScore{
+  min-width:48px;
+  color:#07111f;
+  background:rgba(94,231,255,.9);
+}
+
+.playerChip.mini{
+  max-width:66px;
+  min-height:28px;
+  padding:6px 8px;
+  font-size:11px;
+  flex:0 1 auto;
+}
+
+.matchCompact.locked .compactScore{
+  color:var(--mut);
+  background:var(--soft);
+}
+
+@media(max-width:390px){
+  .playerChip{max-width:88px}
+  .playerChip.mini{max-width:52px}
+  .compactCourt{display:none}
+  .miniPill{padding:0 9px}
+}
+
+/* v10.8 premium match rails */
+#batchesList{
+  display:grid;
+  gap:14px;
+}
+
+.batch{
+  border-radius:30px!important;
+  border:1px solid rgba(217,230,255,.88)!important;
+  background:linear-gradient(180deg,rgba(255,255,255,.94),rgba(246,250,255,.88))!important;
+  box-shadow:0 18px 46px rgba(35,82,160,.12)!important;
+  overflow:hidden!important;
+}
+
+body.dark .batch{
+  background:linear-gradient(180deg,rgba(17,27,44,.96),rgba(11,20,35,.9))!important;
+  border-color:rgba(38,56,82,.9)!important;
+}
+
+.batchHead{
+  padding:18px 20px 16px!important;
+  border-bottom:1px solid rgba(217,230,255,.78)!important;
+  background:radial-gradient(circle at 12% 0%,rgba(47,107,255,.12),transparent 34%),linear-gradient(90deg,rgba(47,107,255,.05),transparent),transparent!important;
+}
+
+.batchHead b{
+  font-size:20px!important;
+  letter-spacing:-.055em!important;
+}
+
+.batchHead span{
+  margin-top:6px!important;
+  font-size:13px!important;
+  font-weight:850!important;
+}
+
+.matchSection{
+  padding:12px 12px 0;
+}
+
+.matchSection:last-child{
+  padding-bottom:12px;
+}
+
+.matchSectionLabel{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin:0 4px 8px;
+  color:var(--mut);
+  font-size:10px;
+  font-weight:1000;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
+
+.matchSectionLabel:before{
+  content:"";
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:linear-gradient(135deg,var(--p),var(--p2));
+  box-shadow:0 0 0 4px rgba(47,107,255,.10);
+}
+
+.liveMatch{
+  margin:0 0 10px!important;
+  padding:12px!important;
+  border:1px solid rgba(198,216,255,.9)!important;
+  border-radius:24px!important;
+  background:linear-gradient(180deg,rgba(255,255,255,.92),rgba(237,245,255,.82))!important;
+  box-shadow:0 12px 28px rgba(35,82,160,.10)!important;
+}
+
+body.dark .liveMatch{
+  background:linear-gradient(180deg,rgba(17,27,44,.96),rgba(21,35,58,.86))!important;
+}
+
+.liveMatch .matchTop{
+  grid-template-columns:minmax(0,1fr) auto!important;
+  margin-bottom:10px!important;
+}
+
+.liveMeta{
+  min-width:0;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.courtBadge,.matchNoBadge{
+  min-height:32px;
+  border-radius:999px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  white-space:nowrap;
+  font-size:12px;
+  font-weight:1000;
+  line-height:1;
+}
+
+.courtBadge{
+  padding:0 12px;
+  color:#fff;
+  background:linear-gradient(135deg,var(--p),var(--p2));
+  box-shadow:0 10px 22px rgba(47,107,255,.22);
+}
+
+.matchNoBadge{
+  padding:0 10px;
+  color:var(--mut);
+  background:var(--soft);
+}
+
+.matchHeaderActions{
+  display:flex;
+  gap:6px;
+}
+
+.miniPill{
+  min-height:32px!important;
+  padding:0 11px!important;
+  border-radius:999px!important;
+  font-size:11px!important;
+}
+
+.teamRail{
+  display:grid;
+  grid-template-columns:28px minmax(0,1fr) 18px minmax(0,1fr) 58px;
+  gap:8px;
+  align-items:center;
+  min-height:45px;
+  padding:6px 7px;
+  border-radius:18px;
+  background:rgba(255,255,255,.72);
+  border:1px solid rgba(217,230,255,.86);
+}
+
+.scoreRows{
+  gap:7px!important;
+}
+
+body.dark .teamRail{
+  background:rgba(9,17,31,.42);
+  border-color:rgba(38,56,82,.86);
+}
+
+.railSide{
+  width:28px;
+  height:28px;
+  border-radius:11px;
+  display:grid;
+  place-items:center;
+  color:var(--p);
+  background:rgba(47,107,255,.11);
+  font-size:12px;
+  font-weight:1000;
+}
+
+.railName{
+  min-width:0;
+  display:block;
+  color:var(--txt);
+  font-size:13px;
+  font-weight:950;
+  letter-spacing:-.025em;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.railPlus,.railVs{
+  display:grid;
+  place-items:center;
+  color:var(--mut);
+  font-size:11px;
+  font-weight:1000;
+  line-height:1;
+}
+
+.railVs{
+  color:var(--p);
+  letter-spacing:.04em;
+}
+
+.inlineScore{
+  width:58px!important;
+  min-height:36px!important;
+  border-radius:14px!important;
+  background:rgba(255,255,255,.92)!important;
+  border-color:rgba(198,216,255,.95)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.7)!important;
+  font-size:19px!important;
+}
+
+body.dark .inlineScore{
+  background:rgba(17,27,44,.95)!important;
+}
+
+.matchCompact{
+  width:100%!important;
+  min-height:44px!important;
+  margin:7px 0!important;
+  border-radius:18px!important;
+  padding:6px 7px!important;
+  grid-template-columns:34px 54px minmax(0,1fr) 14px minmax(0,1fr) 42px minmax(0,1fr) 14px minmax(0,1fr) 42px!important;
+  gap:5px!important;
+  background:rgba(255,255,255,.76)!important;
+  border:1px solid rgba(217,230,255,.82)!important;
+  box-shadow:0 8px 22px rgba(35,82,160,.07)!important;
+}
+
+body.dark .matchCompact{
+  background:rgba(17,27,44,.76)!important;
+}
+
+.compactMatch,.compactCourt,.compactAction,.railScore{
+  min-height:30px;
+  border-radius:999px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  white-space:nowrap;
+  font-size:11px;
+  font-weight:1000;
+  line-height:1;
+}
+
+.compactMatch{
+  padding:0 8px;
+  color:#fff;
+  background:linear-gradient(135deg,var(--p),var(--p2));
+}
+
+.compactCourt{
+  padding:0 8px;
+  color:var(--mut);
+  background:var(--soft);
+}
+
+.railScore{
+  color:#07111f;
+  background:linear-gradient(135deg,#b9e9ff,#65d8f4);
+}
+
+.matchCompact.locked .railScore{
+  color:var(--p);
+  background:rgba(47,107,255,.10);
+}
+
+.compactAction{
+  color:var(--p);
+  background:var(--soft);
+}
+
+.matchCompact .railName{
+  font-size:11.5px;
+  text-align:left;
+}
+
+@media(max-width:390px){
+  .batchHead{padding:16px!important}
+  .matchSection{padding:10px 10px 0}
+  .teamRail{grid-template-columns:26px minmax(0,1fr) 14px minmax(0,1fr) 50px;gap:5px}
+  .railName{font-size:12px}
+  .inlineScore{width:50px!important}
+  .matchCompact{
+    grid-template-columns:31px 34px minmax(0,1fr) 11px minmax(0,1fr) 36px minmax(0,1fr) 11px minmax(0,1fr) 34px!important;
+    gap:3px!important;
+    padding:5px!important;
+  }
+  .compactCourt{font-size:10px;padding:0 5px}
+  .compactAction{font-size:10px}
+  .matchCompact .railName{font-size:10.5px}
+  .courtBadge,.matchNoBadge{font-size:11px;min-height:30px}
+}
+
 #screen-board.active{
   display:grid!important;
   grid-template-rows:auto auto minmax(0,1fr)!important;
@@ -923,7 +1399,7 @@ function completion(){const matches=state.batches.flatMap(b=>b.matches),scored=m
 function pairKey(a,b){return[a,b].sort().join('|')}function oppKey(a,b){return[a,b].sort().join('|')}function courtFor(i){const c=sortedCourts();return c[i%c.length]}function buildHistory(){const partner={},opp={};state.batches.forEach(b=>b.matches.forEach(m=>{partner[pairKey(m.teamA[0],m.teamA[1])]=(partner[pairKey(m.teamA[0],m.teamA[1])]||0)+1;partner[pairKey(m.teamB[0],m.teamB[1])]=(partner[pairKey(m.teamB[0],m.teamB[1])]||0)+1;m.teamA.forEach(a=>m.teamB.forEach(bb=>opp[oppKey(a,bb)]=(opp[oppKey(a,bb)]||0)+1))}));return{partner,opp}}function combos4(arr){const out=[];for(let a=0;a<arr.length-3;a++)for(let b=a+1;b<arr.length-2;b++)for(let c=b+1;c<arr.length-1;c++)for(let d=c+1;d<arr.length;d++)out.push([arr[a],arr[b],arr[c],arr[d]]);return out}function choosePairing(group,partner,opp){const ids=group.map(p=>p.id),patterns=[[[ids[0],ids[1]],[ids[2],ids[3]]],[[ids[0],ids[2]],[ids[1],ids[3]]],[[ids[0],ids[3]],[ids[1],ids[2]]]];function pen(x){const[A,B]=x;let s=(partner[pairKey(A[0],A[1])]||0)*14+(partner[pairKey(B[0],B[1])]||0)*14;A.forEach(a=>B.forEach(b=>s+=(opp[oppKey(a,b)]||0)*3));return s}return patterns.sort((a,b)=>pen(a)-pen(b))[0]}
 function generateAmericanoBatch(matchCount,label){const n=state.players.length;if(n<4){toast('Need at least 4 players');return}if(!sortedCourts().length){toast('Select at least one court');return}if((4*matchCount)%n!==0){toast('Match count must keep players balanced');return}const h=buildHistory(),remaining={};state.players.forEach(p=>remaining[p.id]=4*matchCount/n);const matches=[],start=state.batches.flatMap(b=>b.matches).length;for(let mm=0;mm<matchCount;mm++){const eligible=state.players.filter(p=>remaining[p.id]>0);let group;if(eligible.length===4)group=eligible;else{const cand=combos4(eligible);cand.sort((g1,g2)=>scoreGroup(g1)-scoreGroup(g2));group=cand[0]||eligible.slice(0,4)}function scoreGroup(g){const ids=g.map(p=>p.id);let s=-ids.reduce((sum,id)=>sum+remaining[id],0)*80;for(let i=0;i<ids.length;i++)for(let j=i+1;j<ids.length;j++)s+=(h.opp[oppKey(ids[i],ids[j])]||0)*2;return s}const[teamA,teamB]=choosePairing(group,h.partner,h.opp);teamA.concat(teamB).forEach(id=>remaining[id]--);h.partner[pairKey(teamA[0],teamA[1])]=(h.partner[pairKey(teamA[0],teamA[1])]||0)+1;h.partner[pairKey(teamB[0],teamB[1])]=(h.partner[pairKey(teamB[0],teamB[1])]||0)+1;teamA.forEach(a=>teamB.forEach(b=>h.opp[oppKey(a,b)]=(h.opp[oppKey(a,b)]||0)+1));matches.push({id:uid('m'),matchNo:start+matches.length+1,court:courtFor(start+matches.length),teamA,teamB,scoreA:null,scoreB:null})}const batch={id:uid('b'),number:state.batches.length+1,type:'americano',label,matches};state.batches.push(batch);state.expanded={};state.expanded[batch.id]=true;state.screen='matches';save();render();toast(label)}function generateInitial(){readSetup();state.format==='americano'?generateAmericanoBatch(recommendedInitialMatches(state.players.length),'Initial balanced cycle'):generateMexicanoNext()}function generateMoreAmericano(){const n=state.players.length,m=state.moreCycle==='duration'?recommendedInitialMatches(n):fairBatchMatches(n);generateAmericanoBatch(m,state.moreCycle==='duration'?'Extra duration block':'Extra fair cycle')}
 function leaderboard(){const stats={};state.players.forEach(p=>stats[p.id]={id:p.id,name:p.name,points:0,diff:0,played:0,wins:0,draws:0,losses:0,avg:0});state.batches.forEach(b=>b.matches.forEach(m=>{if(!Number.isFinite(m.scoreA)||!Number.isFinite(m.scoreB))return;const aw=m.scoreA>m.scoreB,bw=m.scoreB>m.scoreA,dr=m.scoreA===m.scoreB;m.teamA.forEach(id=>{if(!stats[id])return;stats[id].points+=m.scoreA;stats[id].diff+=m.scoreA-m.scoreB;stats[id].played++;stats[id].wins+=aw?1:0;stats[id].draws+=dr?1:0;stats[id].losses+=bw?1:0});m.teamB.forEach(id=>{if(!stats[id])return;stats[id].points+=m.scoreB;stats[id].diff+=m.scoreB-m.scoreA;stats[id].played++;stats[id].wins+=bw?1:0;stats[id].draws+=dr?1:0;stats[id].losses+=aw?1:0})}));Object.values(stats).forEach(s=>s.avg=s.played?+(s.points/s.played).toFixed(1):0);return Object.values(stats).sort((a,b)=>b.points-a.points||b.diff-a.diff||b.wins-a.wins||a.name.localeCompare(b.name))}function batchComplete(b){return b.matches.length&&b.matches.every(m=>Number.isFinite(m.scoreA)&&Number.isFinite(m.scoreB))}function latestComplete(){const b=state.batches[state.batches.length-1];return !b||batchComplete(b)}function shuffle(arr){const out=[...arr];for(let i=out.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[out[i],out[j]]=[out[j],out[i]]}return out}function generateMexicanoNext(){readSetup();if(state.players.length<4){toast('Need at least 4 players');return}if(!latestComplete()){toast('Score current round first');return}let ranked=state.batches.length?leaderboard().map(x=>byId(x.id)).filter(Boolean):(state.mexicanoFirst==='shuffle'?shuffle(state.players):[...state.players].sort((a,b)=>a.name.localeCompare(b.name)));const cap=Math.min(Math.floor(ranked.length/4)*4,sortedCourts().length*4),active=ranked.slice(0,cap),start=state.batches.flatMap(b=>b.matches).length,matches=[];for(let i=0;i<active.length;i+=4){const g=active.slice(i,i+4);matches.push({id:uid('m'),matchNo:start+matches.length+1,court:courtFor(start+matches.length),teamA:[g[0].id,g[3].id],teamB:[g[1].id,g[2].id],scoreA:null,scoreB:null})}const batch={id:uid('b'),number:state.batches.length+1,type:'mexicano',label:'Ranking round',matches,sitouts:ranked.slice(cap).map(p=>p.id)};state.batches.push(batch);state.expanded={};state.expanded[batch.id]=true;state.screen='matches';save();render();toast(batch.number===1?'Mexicano first round generated':'Next Mexicano round generated')}
-function autoScore(id,side){const a=$('scoreA_'+id),b=$('scoreB_'+id);if(!a||!b)return;const src=side==='A'?a:b;let v=src.value===''?'':clamp(src.value,0,state.points,0);if(src.value!==''&&String(v)!==src.value)src.value=v;if(v===''){(side==='A'?b:a).value='';return}(side==='A'?b:a).value=state.points-v}function saveScore(id){const m=state.batches.flatMap(b=>b.matches).find(x=>x.id===id);if(!m)return;const a=clamp($('scoreA_'+id).value,0,state.points,0),b=clamp($('scoreB_'+id).value,0,state.points,0);if(a+b!==state.points){toast(`Score must total ${state.points}`);return}m.scoreA=a;m.scoreB=b;const batch=state.batches.find(bb=>bb.matches.some(x=>x.id===id));if(batch&&batchComplete(batch))state.expanded[batch.id]=false;save();render();toast('Score saved')}function clearScore(id){const m=state.batches.flatMap(b=>b.matches).find(x=>x.id===id);if(!m)return;m.scoreA=null;m.scoreB=null;const batch=state.batches.find(bb=>bb.matches.some(x=>x.id===id));if(batch)state.expanded[batch.id]=true;save();render();toast('Score cleared')}function toggleBatch(id,open){state.expanded[id]=open;save();render()}function batchSummary(b){const pts={};state.players.forEach(p=>pts[p.id]=0);b.matches.forEach(m=>{if(!Number.isFinite(m.scoreA)||!Number.isFinite(m.scoreB))return;m.teamA.forEach(id=>pts[id]+=m.scoreA);m.teamB.forEach(id=>pts[id]+=m.scoreB)});const best=Object.entries(pts).sort((a,b)=>b[1]-a[1])[0];return !best||best[1]===0?'No points recorded':`${playerName(best[0])} +${best[1]} this batch`}
+function autoScore(id,side){const a=$('scoreA_'+id),b=$('scoreB_'+id);if(!a||!b)return;const src=side==='A'?a:b,dst=side==='A'?b:a;if(src.value===''){dst.value='';return}const v=clamp(src.value,0,state.points,0);if(String(v)!==src.value)src.value=v;dst.value=state.points-v}function saveScore(id){const m=state.batches.flatMap(b=>b.matches).find(x=>x.id===id);if(!m)return;const a=clamp($('scoreA_'+id).value,0,state.points,0),b=clamp($('scoreB_'+id).value,0,state.points,0);if(a+b!==state.points){toast(`Score must total ${state.points}`);return}m.scoreA=a;m.scoreB=b;const batch=state.batches.find(bb=>bb.matches.some(x=>x.id===id));if(batch&&batchComplete(batch))state.expanded[batch.id]=false;save();render();toast('Score saved')}function clearScore(id){const m=state.batches.flatMap(b=>b.matches).find(x=>x.id===id);if(!m)return;m.scoreA=null;m.scoreB=null;const batch=state.batches.find(bb=>bb.matches.some(x=>x.id===id));if(batch)state.expanded[batch.id]=true;save();render();toast('Score cleared')}function toggleBatch(id,open){state.expanded[id]=open;save();render()}function batchSummary(b){const pts={};state.players.forEach(p=>pts[p.id]=0);b.matches.forEach(m=>{if(!Number.isFinite(m.scoreA)||!Number.isFinite(m.scoreB))return;m.teamA.forEach(id=>pts[id]+=m.scoreA);m.teamB.forEach(id=>pts[id]+=m.scoreB)});const best=Object.entries(pts).sort((a,b)=>b[1]-a[1])[0];return !best||best[1]===0?'No points recorded':`${playerName(best[0])} +${best[1]} this batch`}
 function shareText(){const c=completion(),title=state.eventName||'Kinetik Padel',venue=state.venue?` at ${state.venue}`:'';const lines=[`${title}${venue}`,`${state.format==='mexicano'?'Mexicano':'Americano'} · ${state.points} pts · Courts ${sortedCourts().join(', ')} · ${state.players.length} players · ${c.scored}/${c.total} matches scored`,'','Leaderboard'];const ranks=leaderboard().slice(0,8);if(!ranks.length)lines.push('No scores yet.');ranks.forEach((p,i)=>lines.push(`${i+1}. ${p.name} — ${p.points} pts, diff ${p.diff>=0?'+':''}${p.diff}`));lines.push('','Powered by Kinetik Padel');return lines.join('\n')}async function copy(t){try{await navigator.clipboard.writeText(t);toast('Copied')}catch(e){const x=document.createElement('textarea');x.value=t;document.body.appendChild(x);x.select();document.execCommand('copy');x.remove();toast('Copied')}}function reset(){if(!confirm('Reset this event?'))return;const dark=state.dark;state=blank();state.dark=dark;save();render();toast('Event reset')}
 function detectNames(raw){const text=raw.trim();if(!text)return{mode:'None',names:[]};const comma=text.indexOf(','),nl=text.search(/[\r\n]/),sp=text.search(/[ \t]+/),c=[];if(comma>=0)c.push({mode:'Comma',index:comma,splitter:/,/});if(nl>=0)c.push({mode:'Line break',index:nl,splitter:/[\r\n]+/});if(sp>=0)c.push({mode:'Space',index:sp,splitter:/[ \t]+/});if(!c.length)return{mode:'Single name',names:[text]};c.sort((a,b)=>a.index-b.index);return{mode:c[0].mode,names:text.split(c[0].splitter).map(x=>x.trim()).filter(Boolean)}}function roundRect(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath()}function fit(ctx,t,w,s,fw,f){let z=s;do{ctx.font=`${fw} ${z}px ${f}`;if(ctx.measureText(t).width<=w)return z;z-=2}while(z>20);return z}
 function resultImage(){const canvas=$('resultCanvas'),ctx=canvas.getContext('2d'),W=canvas.width,H=canvas.height,f='-apple-system,BlinkMacSystemFont,Segoe UI,Arial',ranks=leaderboard(),c=completion(),title=state.eventName||'Kinetik Padel',venue=state.venue||'Private circle',format=state.format==='mexicano'?'Mexicano':'Americano',champ=ranks[0];let bg=ctx.createLinearGradient(0,0,W,H);bg.addColorStop(0,'#08111f');bg.addColorStop(.45,'#153b8f');bg.addColorStop(1,'#54c7ec');ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);let glow=ctx.createRadialGradient(150,120,10,150,120,520);glow.addColorStop(0,'rgba(94,231,255,.55)');glow.addColorStop(1,'rgba(94,231,255,0)');ctx.fillStyle=glow;ctx.fillRect(0,0,W,H);ctx.save();ctx.translate(710,170);ctx.rotate(-.18);ctx.strokeStyle='rgba(255,255,255,.25)';ctx.lineWidth=8;roundRect(ctx,0,0,450,280,46);ctx.stroke();ctx.beginPath();ctx.moveTo(225,0);ctx.lineTo(225,280);ctx.moveTo(0,140);ctx.lineTo(450,140);ctx.moveTo(96,0);ctx.lineTo(96,280);ctx.moveTo(354,0);ctx.lineTo(354,280);ctx.stroke();ctx.restore();ctx.fillStyle='rgba(255,255,255,.92)';ctx.font=`900 42px ${f}`;ctx.fillText('KINETIK PADEL',70,94);ctx.fillStyle='rgba(255,255,255,.68)';ctx.font=`700 28px ${f}`;ctx.fillText(`${format} · ${state.points} pts · Court ${sortedCourts().join(', ')}`,70,134);ctx.fillStyle='#fff';ctx.font=`900 ${fit(ctx,title,860,78,'900',f)}px ${f}`;ctx.fillText(title,70,245);ctx.fillStyle='rgba(255,255,255,.74)';ctx.font=`700 30px ${f}`;ctx.fillText(venue,70,292);roundRect(ctx,70,350,940,265,52);ctx.fillStyle='rgba(255,255,255,.15)';ctx.fill();ctx.strokeStyle='rgba(255,255,255,.24)';ctx.lineWidth=2;ctx.stroke();ctx.fillStyle='rgba(255,255,255,.68)';ctx.font=`800 26px ${f}`;ctx.fillText('CHAMPION',110,410);if(champ){ctx.fillStyle='#fff';ctx.font=`900 ${fit(ctx,champ.name,620,70,'900',f)}px ${f}`;ctx.fillText(champ.name,110,500);ctx.fillStyle='rgba(255,255,255,.78)';ctx.font=`700 28px ${f}`;ctx.fillText(`${champ.wins}-${champ.losses}-${champ.draws} · Diff ${champ.diff>=0?'+':''}${champ.diff}`,110,552);ctx.fillStyle='#5ee7ff';ctx.font=`900 90px ${f}`;ctx.textAlign='right';ctx.fillText(String(champ.points),960,512);ctx.fillStyle='rgba(255,255,255,.68)';ctx.font=`800 24px ${f}`;ctx.fillText('POINTS',960,552);ctx.textAlign='left'}else{ctx.fillStyle='#fff';ctx.font=`900 58px ${f}`;ctx.fillText('No scores yet',110,500)}ctx.fillStyle='#fff';ctx.font=`900 46px ${f}`;ctx.fillText('Toplist',70,700);ranks.slice(0,7).forEach((p,i)=>{const y=762+i*70;ctx.fillStyle=i===0?'rgba(94,231,255,.95)':'rgba(255,255,255,.13)';roundRect(ctx,70,y-42,940,58,18);ctx.fill();ctx.fillStyle=i===0?'#08111f':'#fff';ctx.font=`900 27px ${f}`;ctx.fillText(`${i+1}.`,95,y-5);ctx.font=`850 30px ${f}`;ctx.fillText(p.name.length>20?p.name.slice(0,19)+'…':p.name,150,y-5);ctx.font=`800 24px ${f}`;ctx.textAlign='right';ctx.fillText(`${p.wins}-${p.losses}-${p.draws}`,690,y-5);ctx.fillText(`${p.diff>=0?'+':''}${p.diff}`,820,y-5);ctx.font=`900 30px ${f}`;ctx.fillText(String(p.points),970,y-5);ctx.textAlign='left'});roundRect(ctx,70,1190,940,92,28);ctx.fillStyle='rgba(255,255,255,.14)';ctx.fill();ctx.fillStyle='rgba(255,255,255,.82)';ctx.font=`800 25px ${f}`;ctx.fillText(`${state.players.length} players`,110,1246);ctx.fillText(`${c.total} matches`,380,1246);ctx.fillText(`Court ${sortedCourts().join(', ')}`,670,1246);ctx.fillStyle='rgba(255,255,255,.66)';ctx.font=`700 21px ${f}`;ctx.textAlign='right';ctx.fillText('Generated by Kinetik',1010,1312);ctx.textAlign='left';return canvas}
@@ -940,7 +1416,7 @@ ctx.fillStyle='rgba(255,255,255,.74)';ctx.font=`700 22px ${f}`;ctx.fillText('Gen
 function openPhoto(){$('photoSheet').classList.add('show');setTimeout(photoResult,60)}
 function loadPhoto(e){const file=e.target.files&&e.target.files[0];if(!file)return;const img=new Image(),url=URL.createObjectURL(file);img.onload=()=>{photoImg=img;URL.revokeObjectURL(url);photoResult();toast('Photo loaded')};img.src=url;e.target.value=''}
 function downloadPhoto(){if(!photoImg){toast('Choose or take a photo first');return}const a=document.createElement('a');a.download='kinetik-padel-photo-result.png';a.href=photoResult().toDataURL('image/png');document.body.appendChild(a);a.click();a.remove();toast('Downloaded to files')}
-async function sharePhoto(){if(!photoImg){toast('Choose or take a photo first');return}photoResult().toBlob(async blob=>{if(!blob){toast('Image not ready');return}const file=new File([blob],'kinetik-padel-photo-result.png',{type:'image/png'});if(navigator.canShare&&navigator.canShare({files:[file]})){try{await navigator.share({files:[file],title:'Kinetik Padel Group Photo',text:shareText()});toast('Use Save Image from the share sheet')}catch(e){}}else{downloadPhoto()}},'image/png')}
+async function sharePhoto(){if(!photoImg){toast('Choose or take a photo first');return}photoResult().toBlob(async blob=>{if(!blob){toast('Image not ready');return}const file=new File([blob],'kinetik-padel-photo-result.png',{type:'image/png'});if(navigator.share&&(!navigator.canShare||navigator.canShare({files:[file]}))){try{await navigator.share({files:[file],title:'Kinetik Padel Group Photo',text:shareText()});toast('Use Save Image from the share sheet')}catch(e){}}else{downloadPhoto()}},'image/png')}
 function openShare(){$('shareSheet').classList.add('show');setTimeout(resultImage,60)}function downloadImage(){const a=document.createElement('a');a.download='kinetik-padel-result.png';a.href=resultImage().toDataURL('image/png');document.body.appendChild(a);a.click();a.remove()}async function shareImage(){resultImage().toBlob(async blob=>{if(!blob){toast('Image not ready');return}const file=new File([blob],'kinetik-padel-result.png',{type:'image/png'});if(navigator.canShare&&navigator.canShare({files:[file]})){try{await navigator.share({files:[file],title:'Kinetik Padel Result',text:shareText()})}catch(e){}}else{downloadImage();toast('Image downloaded')}},'image/png')}
 
 function paceLabel(){return (state.pace||'normal').charAt(0).toUpperCase()+(state.pace||'normal').slice(1)}
@@ -961,10 +1437,14 @@ function activeMatchesForBatch(batch){const slots=activeCourtSlots(),manual=batc
 function toggleMatch(id){const batch=state.batches.find(b=>b.matches.some(m=>m.id===id));if(batch)state.expanded[batch.id]=true;state.openMatchId=id;save();render()}
 function saveScore(id){const m=state.batches.flatMap(b=>b.matches).find(x=>x.id===id);if(!m)return;const a=clamp($('scoreA_'+id).value,0,state.points,0),b=clamp($('scoreB_'+id).value,0,state.points,0);if(a+b!==state.points){toast(`Score must total ${state.points}`);return}m.scoreA=a;m.scoreB=b;const batch=state.batches.find(bb=>bb.matches.some(x=>x.id===id));if(batch){state.openMatchId=null;state.expanded[batch.id]=!batchComplete(batch)}save();render();toast('Score saved')}
 function clearScore(id){const m=state.batches.flatMap(b=>b.matches).find(x=>x.id===id);if(!m)return;m.scoreA=null;m.scoreB=null;const batch=state.batches.find(bb=>bb.matches.some(x=>x.id===id));if(batch)state.expanded[batch.id]=true;state.openMatchId=id;save();render();toast('Score cleared')}
-function matchCompact(m){const scored=matchScored(m),score=scored?`${m.scoreA} : ${m.scoreB}`:'Queued',teams=`${teamName(m.teamA)} vs ${teamName(m.teamB)}`;return scored?`<button class="matchCompact" onclick="toggleMatch('${m.id}')" type="button"><div><b>Match #${m.matchNo} · Court ${m.court}</b><small>${safe(teams)}</small></div><span class="scorePill">${score}</span></button>`:`<div class="matchCompact locked"><div><b>Match #${m.matchNo} · Court ${m.court}</b><small>${safe(teams)}</small></div><span class="scorePill">${score}</span></div>`}
-function matchCard(m,open){const scored=matchScored(m),total=scored?m.scoreA+m.scoreB:0;if(!open)return matchCompact(m);return`<article class="match"><div class="matchTop"><div class="court"><span class="courtIcon">${ICONS.court}</span> Match #${m.matchNo} · Court ${m.court}</div><span class="badge ${scored?'good':'hot'}">${scored?'Editing':'Open'}</span></div><div class="teams"><div class="team"><label>Team A</label><b>${safe(teamName(m.teamA))}</b></div><div class="team"><label>Team B</label><b>${safe(teamName(m.teamB))}</b></div></div><div class="score"><div><label>A</label><input id="scoreA_${m.id}" type="number" min="0" max="${state.points}" inputmode="numeric" value="${scored?m.scoreA:''}" oninput="autoScore('${m.id}','A')"></div><div class="colon">:</div><div><label>B</label><input id="scoreB_${m.id}" type="number" min="0" max="${state.points}" inputmode="numeric" value="${scored?m.scoreB:''}" oninput="autoScore('${m.id}','B')"></div></div><div class="matchActions"><span class="hint ${scored?'good':''}">${scored?`Total ${total}/${state.points}`:`Auto-completes to ${state.points}`}</span><span class="row"><button class="btn small soft" onclick="clearScore('${m.id}')" type="button">Clear</button><button class="btn small primary" onclick="saveScore('${m.id}')" type="button">${ICONS.check}<span>Save</span></button></span></div></article>`}
+function railName(id){return`<span class="railName">${safe(playerName(id))}</span>`}
+function teamRail(ids){return`${railName(ids[0])}<span class="railPlus">+</span>${railName(ids[1])}`}
+function matchCompact(m){const scored=matchScored(m),score=scored?`${m.scoreA}-${m.scoreB}`:'VS',stateClass=scored?'scored':'locked',action=scored?'Edit':'Open';return`<button class="matchCompact ${stateClass}" onclick="toggleMatch('${m.id}')" type="button"><span class="compactMatch">#${m.matchNo}</span><span class="compactCourt">Court ${m.court}</span>${teamRail(m.teamA)}<span class="railScore">${score}</span>${teamRail(m.teamB)}<span class="compactAction">${action}</span></button>`}
+function scoreRow(m,side,ids,value){return`<div class="teamRail"><span class="railSide">${side}</span>${teamRail(ids)}<input class="inlineScore" id="score${side}_${m.id}" type="number" min="0" max="${state.points}" inputmode="numeric" value="${value}" oninput="autoScore('${m.id}','${side}')"></div>`}
+function matchCard(m,open){const scored=matchScored(m);if(!open)return matchCompact(m);return`<article class="match liveMatch"><div class="matchTop"><div class="liveMeta"><span class="courtBadge">Court ${m.court}</span><span class="matchNoBadge">Match #${m.matchNo}</span></div><span class="matchHeaderActions"><button class="miniPill" onclick="clearScore('${m.id}')" type="button">Clear</button><button class="miniPill primary" onclick="saveScore('${m.id}')" type="button">${ICONS.check}<span>Save</span></button></span></div><div class="scoreRows">${scoreRow(m,'A',m.teamA,scored?m.scoreA:'')}${scoreRow(m,'B',m.teamB,scored?m.scoreB:'')}</div></article>`}
 function matchesSubtitle(){const c=completion(),courtText=sortedCourts().map(n=>'Court '+n).join(', '),slots=activeCourtSlots();return state.batches.length?`${state.players.length} players · ${slots} court${slots===1?'':'s'} live · ${state.batches.length} batch${state.batches.length===1?'':'es'} · ${c.scored}/${c.total} scored · ${state.points} points · ${courtText}.`:`${state.players.length} players · ${slots} court${slots===1?'':'s'} live · ${state.points} points · ${courtText}. Generate matches from the Players screen.`}
-function batches(){if($('matchHint'))$('matchHint').textContent=matchesSubtitle();if($('exportMatchesBtn'))$('exportMatchesBtn').disabled=!state.batches.length;if(!state.batches.length){$('batchesList').innerHTML=`<div class="empty"><div><b>No matches yet.</b><br>Add at least 4 players, select courts, then generate matches.</div></div>`;return}$('batchesList').innerHTML=state.batches.map(b=>{const done=batchComplete(b),open=state.expanded[b.id]||!done,sc=b.matches.filter(matchScored).length,label=b.type==='mexicano'?`Round #${b.number}`:`Batch #${b.number}`,active=activeMatchesForBatch(b);if(done&&!open)return`<section class="batch"><div class="collapsed"><div class="summaryGrid"><div><b style="font-size:17px;letter-spacing:-.04em">${label} completed</b><div class="summaryWinner">${b.matches.length} match${b.matches.length===1?'':'es'} · ${state.points} pts · ${safe(batchSummary(b))}</div></div><span class="badge good">Done</span></div><div class="summaryActions"><button class="btn small soft" onclick="toggleBatch('${b.id}',true)" type="button">${ICONS.eye}<span>View</span></button></div></div></section>`;return`<section class="batch"><div class="batchHead"><div><b>${label}</b><span>${b.label} · ${sc}/${b.matches.length} scored · ${activeCourtSlots()} court${activeCourtSlots()===1?'':'s'} live</span></div><span class="badge ${done?'good':'hot'}">${done?'Complete':'In play'}</span></div>${b.matches.map(m=>matchCard(m,active.has(m.id))).join('')}${done?`<div style="padding:0 14px 14px"><button class="btn soft full" onclick="toggleBatch('${b.id}',false)" type="button">Collapse ${b.type==='mexicano'?'round':'batch'}</button></div>`:''}</section>`}).join('')}
+function matchSection(title,items){return items.length?`<div class="matchSection"><div class="matchSectionLabel">${title}</div>${items.join('')}</div>`:''}
+function batches(){if($('matchHint'))$('matchHint').textContent=matchesSubtitle();if($('exportMatchesBtn'))$('exportMatchesBtn').disabled=!state.batches.length;if(!state.batches.length){$('batchesList').innerHTML=`<div class="empty"><div><b>No matches yet.</b><br>Add at least 4 players, select courts, then generate matches.</div></div>`;return}$('batchesList').innerHTML=state.batches.map(b=>{const done=batchComplete(b),sc=b.matches.filter(matchScored).length,label=b.type==='mexicano'?`Round #${b.number}`:`Batch #${b.number}`,active=activeMatchesForBatch(b),live=[],next=[],completed=[];b.matches.forEach(m=>{if(active.has(m.id))live.push(matchCard(m,true));else if(matchScored(m))completed.push(matchCompact(m));else next.push(matchCompact(m))});const list=matchSection('Live now',live)+matchSection('Up next',next)+matchSection('Completed',completed);return`<section class="batch"><div class="batchHead"><div><b>${label}</b><span>${b.label} · ${sc}/${b.matches.length} scored · ${activeCourtSlots()} court${activeCourtSlots()===1?'':'s'} live</span></div><span class="badge ${done?'good':'hot'}">${done?'Complete':'In play'}</span></div>${list}</section>`}).join('')}
 function leaderboardTable(rows,title){if(!rows.length)return`<div class="empty"><div><b>No ranking yet.</b><br>Save scores to update the board.</div></div>`;return`<div class="tableCard"><div class="title"><div><h2>${safe(title)}</h2><p>Ranked by points, then differential.</p></div></div><div class="leaderHeader"><div></div><div>Player</div><div>W-L-T</div><div>Diff</div><div>P</div></div><div class="leaderScroll">${rows.map((p,i)=>`<div class="leaderRow ${i===0?'first':''}"><div class="rankNo">${i+1}</div><div class="name">${safe(p.name)}</div><div class="num">${p.wins}-${p.losses}-${p.draws}</div><div class="num">${p.diff>=0?'+':''}${p.diff}</div><div class="num">${p.points}</div></div>`).join('')}</div></div>`}
 function board(){$('boardTable').innerHTML=leaderboardTable(leaderboard(),'Official table')}
 function drawMatchesImage(){const canvas=$('matchesCanvas'),ctx=canvas.getContext('2d'),W=canvas.width,H=canvas.height,f='-apple-system,BlinkMacSystemFont,Segoe UI,Arial',matches=completion().matches,title=state.eventName||'Kinetik Padel',format=state.format==='mexicano'?'Mexicano':'Americano',courtText=sortedCourts().join(', '),c=completion();let bg=ctx.createLinearGradient(0,0,W,H);bg.addColorStop(0,'#08111f');bg.addColorStop(.48,'#173d8e');bg.addColorStop(1,'#5ee7ff');ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);let glow=ctx.createRadialGradient(880,120,10,880,120,520);glow.addColorStop(0,'rgba(255,255,255,.28)');glow.addColorStop(1,'rgba(255,255,255,0)');ctx.fillStyle=glow;ctx.fillRect(0,0,W,H);ctx.fillStyle='rgba(255,255,255,.9)';ctx.font=`900 42px ${f}`;ctx.fillText('KINETIK PADEL',70,92);ctx.fillStyle='rgba(255,255,255,.72)';ctx.font=`750 27px ${f}`;ctx.fillText(`${format} · ${state.points} pts · ${state.players.length} players · Court ${courtText}`,70,134);ctx.fillStyle='#fff';ctx.font=`900 ${fit(ctx,title,850,72,'900',f)}px ${f}`;ctx.fillText(title,70,235);roundRect(ctx,70,285,940,96,28);ctx.fillStyle='rgba(255,255,255,.14)';ctx.fill();ctx.fillStyle='#fff';ctx.font=`900 31px ${f}`;ctx.fillText(`${c.scored}/${c.total} scored`,110,345);ctx.fillStyle='rgba(255,255,255,.72)';ctx.font=`800 23px ${f}`;ctx.fillText(`${state.batches.length} batch${state.batches.length===1?'':'es'} · ${state.players.length} players`,390,344);ctx.font=`900 42px ${f}`;ctx.fillStyle='#fff';ctx.fillText('Matches',70,455);matches.slice(0,11).forEach((m,i)=>{const y=525+i*68,scored=matchScored(m);ctx.fillStyle=scored?'rgba(94,231,255,.92)':'rgba(255,255,255,.13)';roundRect(ctx,70,y-44,940,56,18);ctx.fill();ctx.fillStyle=scored?'#07111f':'#fff';ctx.font=`900 23px ${f}`;ctx.fillText(`#${m.matchNo}`,96,y-8);ctx.font=`800 22px ${f}`;ctx.fillText(`Court ${m.court}`,160,y-8);ctx.font=`800 22px ${f}`;ctx.fillText(`${teamName(m.teamA).slice(0,25)} vs ${teamName(m.teamB).slice(0,25)}`,285,y-8);ctx.textAlign='right';ctx.font=`900 25px ${f}`;ctx.fillText(scored?`${m.scoreA}:${m.scoreB}`:'Open',970,y-8);ctx.textAlign='left'});if(matches.length>11){ctx.fillStyle='rgba(255,255,255,.72)';ctx.font=`800 24px ${f}`;ctx.fillText(`+ ${matches.length-11} more matches in app`,90,1292)}ctx.fillStyle='rgba(255,255,255,.66)';ctx.font=`700 21px ${f}`;ctx.textAlign='right';ctx.fillText('Generated by Kinetik',1010,1312);ctx.textAlign='left';return canvas}
