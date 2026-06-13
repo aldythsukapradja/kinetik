@@ -240,6 +240,13 @@ input.fld:focus,select.fld:focus{border-color:var(--acc)}
 .dayblock h4 .dnum{font-size:17px}
 .dayblock h4 .wkb{font-size:9.5px;font-weight:800;color:var(--warn);border:1px solid color-mix(in srgb,var(--warn) 45%,transparent);border-radius:99px;padding:1px 7px}
 .empty-day{font-size:12.5px;color:var(--faint);padding:3px 0}
+/* duration picker */
+.durchips{display:flex;flex-wrap:wrap;gap:7px}
+.durcustom{display:flex;gap:8px;margin-top:9px}
+.durcustom input{max-width:96px}
+.durprev{font-size:12.5px;color:var(--dim);margin-top:8px}
+.durprev b{color:var(--acc);font-weight:700}
+.evchip.multi{background:repeating-linear-gradient(135deg,var(--acc),var(--acc) 7px,color-mix(in srgb,var(--acc) 78%,#000) 7px,color-mix(in srgb,var(--acc) 78%,#000) 14px)}
 /* ============ ASK (full-screen overlay, WhatsApp pattern) ============ */
 #askScreen{position:fixed;inset:0;z-index:60;display:none;flex-direction:column;
   background:radial-gradient(120% 80% at 80% -10%,color-mix(in srgb,var(--acc) 13%,transparent),transparent 55%),
@@ -872,15 +879,20 @@ const Cal={
         participants:r.participantPersonIds||[],coach:r.teacherCoach,prep:r.preparation||[],category:r.category,recurring:true,date:dateIso});
     });
     DataAPI.list("events",{circleId}).forEach(e=>{
-      if(e.date!==dateIso)return;
-      out.push({key:e.id,eventId:e.id,title:e.title,start:e.startTime,end:e.endTime,
-        participants:e.participantPersonIds||[],coach:"",prep:e.preparation||[],category:e.category||"event",recurring:false,date:dateIso});
+      const sDate=e.date,eDate=e.endDate||e.date;
+      if(dateIso<sDate||dateIso>eDate)return;
+      const multi=eDate>sDate;
+      out.push({key:e.id+(multi?"_"+dateIso:""),eventId:e.id,title:e.title,
+        start:multi&&dateIso!==sDate?"00:00":e.startTime,
+        end:multi&&dateIso!==eDate?"23:59":e.endTime,
+        participants:e.participantPersonIds||[],coach:"",prep:e.preparation||[],category:e.category||"event",
+        recurring:false,multiDay:multi,spanStart:sDate,spanEnd:eDate,date:dateIso});
     });
     out.sort((a,b)=>mins(a.start)-mins(b.start));
-    /* conflict detection: same participant, overlapping time */
+    /* conflict detection: same participant, overlapping time (skip all-day spans) */
     for(let i=0;i<out.length;i++)for(let j=i+1;j<out.length;j++){
       const a=out[i],b=out[j];
-      if(mins(b.start)<mins(a.end)&&mins(a.start)<mins(b.end)&&a.participants.some(p=>b.participants.includes(p))){a.conflict=b.conflict=true;}
+      if(!a.multiDay&&!b.multiDay&&mins(b.start)<mins(a.end)&&mins(a.start)<mins(b.end)&&a.participants.some(p=>b.participants.includes(p))){a.conflict=b.conflict=true;}
     }
     return out;
   },
@@ -1035,10 +1047,12 @@ function tmrwChip(tomorrow){
   return `<button class="tmrw glass" onclick="openTomorrow()"><span>Tomorrow · <b>${tomorrow.length} event${tomorrow.length!==1?"s":""}</b>${p?` · ${p} prep item${p>1?"s":""}`:""}</span><span style="color:var(--acc);font-weight:700">›</span></button>`;
 }
 const untilTxt=(now,st)=>{const d=st-now;if(d<=0)return "now";const h=Math.floor(d/60),m=d%60;return "in "+(h?h+"h ":"")+(m?m+"m":"");};
+/* multi-day events show the start time on day 1, "All day" on continuation days */
+const timeLabel=a=>a.multiDay?(a.date===a.spanStart?fmtT(a.start):"All day"):fmtT(a.start);
 function tlRow(a){
-  return `<button class="tl" onclick="openDetail('${a.key}')"><time>${fmtT(a.start).replace(" ","")}</time>
+  return `<button class="tl" onclick="openDetail('${a.key}')"><time>${timeLabel(a).replace(" ","")}</time>
   <span class="bar" style="background:${personColor(a.participants[0])}"></span>
-  <span><b>${esc(a.title)}</b><small>${a.participants.map(personName).map(esc).join(", ")}${a.coach?" · "+esc(a.coach):""}</small></span>
+  <span><b>${esc(a.title)}${a.multiDay?' <span style="font-size:9px;font-weight:800;color:var(--acc)">MULTI-DAY</span>':""}</b><small>${a.participants.map(personName).map(esc).join(", ")}${a.coach?" · "+esc(a.coach):""}</small></span>
   ${a.conflict?'<span class="cf">CLASH</span>':""}</button>`;
 }
 function ckRow(p){
@@ -1097,20 +1111,81 @@ window.openDetail=key=>{
 };
 window.openEdit=it=>{
   const w=document.createElement("div");
+  const initMin=it.durationMin||Math.max(15,mins(it.end)-mins(it.start))||60;
   w.innerHTML=`<input class="fld" id="eT" value="${esc(it.title)}">
-  ${it.recurring?"":`<input class="fld" id="eD" type="date" value="${it.date}">`}
-  <div class="row"><input class="fld" id="eS" type="time" value="${it.start}"><input class="fld" id="eE" type="time" value="${it.end}"></div>
+  ${it.recurring?"":`<input class="fld" id="eD" type="date" value="${it.spanStart||it.date}">`}
+  <div class="row"><input class="fld" id="eS" type="time" value="${it.start==="00:00"&&it.multiDay?(DataAPI.get("events",it.eventId)||{}).startTime||"09:00":it.start}"></div>
+  <div class="lbl">Duration</div><div id="eDur"></div>
   ${it.recurring?'<p style="font-size:12px;color:var(--faint)">Applies to every week of this routine.</p>':""}
   <button class="btn" id="eGo">Save changes</button>`;
   Sheet.open("Edit · "+it.title,w);
+  const dateGet=()=>it.recurring?iso(new Date()):(w.querySelector("#eD").value||it.date);
+  const startGet=()=>w.querySelector("#eS").value;
+  const dur=mountDuration(w.querySelector("#eDur"),initMin,dateGet,startGet,!it.recurring);
   w.querySelector("#eGo").onclick=()=>{
-    const t=w.querySelector("#eT").value.trim()||it.title;
-    const s=w.querySelector("#eS").value,e2=w.querySelector("#eE").value;
-    if(it.recurring)DataAPI.update("routines",it.routineId,{title:t,startTime:s,endTime:e2});
-    else DataAPI.update("events",it.eventId,{title:t,startTime:s,endTime:e2,date:w.querySelector("#eD").value});
+    const t=w.querySelector("#eT").value.trim()||it.title,s=startGet();
+    const{amount,unit}=dur.get();const e=computeEnd(dateGet(),s,amount,unit);
+    if(it.recurring)DataAPI.update("routines",it.routineId,{title:t,startTime:s,endTime:e.endTime,durationMin:e.durationMin});
+    else DataAPI.update("events",it.eventId,{title:t,startTime:s,endTime:e.endTime,date:dateGet(),endDate:e.endDate,durationMin:e.durationMin});
     Sheet.close();Toast.show("Updated ✓");EventBus.emit("calendar:eventUpdated");renderAll();
   };
 };
+
+/* ---------------- Duration (replaces end-time) ---------------- */
+const DUR_CHIPS=[["15m",15],["30m",30],["1h",60],["1h30",90],["2h",120]];
+function computeEnd(dateIso,startTime,amount,unit){
+  const base=new Date(dateIso+"T00:00:00");
+  if(unit==="minutes"||unit==="hours"){
+    const durMin=unit==="hours"?Math.round(amount*60):Math.round(amount);
+    let endM=mins(startTime)+durMin,endDate=dateIso;
+    if(endM>1439){const extra=Math.floor(endM/1440);endM=endM%1440;endDate=iso(addDays(base,extra));}
+    return {durationMin:durMin,endTime:pad(Math.floor(endM/60))+":"+pad(endM%60),endDate,multiDay:endDate!==dateIso};
+  }
+  let end=new Date(base);
+  if(unit==="days")end=addDays(base,amount);
+  else if(unit==="weeks")end=addDays(base,amount*7);
+  else if(unit==="months")end.setMonth(end.getMonth()+amount);
+  return {durationMin:amount*1440,endTime:startTime,endDate:iso(end),multiDay:true};
+}
+function durText(amount,unit){
+  const u={minutes:"min",hours:amount>1?"hrs":"hr",days:amount>1?"days":"day",weeks:amount>1?"weeks":"week",months:amount>1?"months":"month"}[unit];
+  if(unit==="minutes"&&amount>=60&&amount%60===0)return (amount/60)+(amount/60>1?" hrs":" hr");
+  if(unit==="minutes"&&amount>60)return Math.floor(amount/60)+"h "+(amount%60)+"m";
+  return amount+" "+u;
+}
+/* mounts the picker into a container; returns {get:()=>({amount,unit})}. allowMulti
+   gates days/weeks/months (routines are weekly, so sub-day only). */
+function mountDuration(host,initMin,dateGet,startGet,allowMulti){
+  let amount=initMin||60,unit="minutes";
+  if(initMin&&initMin%60===0&&initMin<=240){amount=initMin;unit="minutes";}
+  const units=allowMulti?["minutes","hours","days","weeks","months"]:["minutes","hours"];
+  host.innerHTML=`<div class="durchips" id="dCh">
+    ${DUR_CHIPS.map(([l,m])=>`<button type="button" class="chip" data-min="${m}">${l}</button>`).join("")}
+    <button type="button" class="chip" data-custom="1">Custom</button></div>
+  <div class="durcustom hide" id="dCustom"><input class="fld" id="dAmt" type="number" min="1" value="1">
+    <select class="fld" id="dUnit">${units.map(u=>`<option value="${u}">${u}</option>`).join("")}</select></div>
+  <div class="durprev" id="dPrev"></div>`;
+  const chips=host.querySelector("#dCh"),custom=host.querySelector("#dCustom"),prev=host.querySelector("#dPrev");
+  const cur=()=>{
+    const on=chips.querySelector(".chip.on");
+    if(on&&on.dataset.min)return {amount:+on.dataset.min,unit:"minutes"};
+    return {amount:Math.max(1,+host.querySelector("#dAmt").value||1),unit:host.querySelector("#dUnit").value};
+  };
+  const refresh=()=>{const{amount:a,unit:u}=cur();const e=computeEnd(dateGet(),startGet(),a,u);
+    prev.innerHTML=e.multiDay?`Ends <b>${new Date(e.endDate+"T00:00").toLocaleDateString(undefined,{weekday:"short",day:"numeric",month:"short"})}</b> · ${durText(a,u)}`
+      :`Ends <b>${fmtT(e.endTime)}</b> · ${durText(a,u)}`;};
+  chips.querySelectorAll(".chip").forEach(c=>c.onclick=()=>{
+    chips.querySelectorAll(".chip").forEach(x=>x.classList.remove("on"));c.classList.add("on");
+    custom.classList.toggle("hide",!c.dataset.custom);refresh();
+  });
+  host.querySelector("#dAmt").oninput=refresh;host.querySelector("#dUnit").onchange=refresh;
+  /* preselect a chip matching initMin, else Custom */
+  const match=[...chips.querySelectorAll("[data-min]")].find(c=>+c.dataset.min===initMin);
+  if(match)match.classList.add("on");else{chips.querySelector("[data-custom]").classList.add("on");custom.classList.remove("hide");
+    if(initMin){if(initMin%60===0){host.querySelector("#dAmt").value=initMin/60;host.querySelector("#dUnit").value="hours";}else{host.querySelector("#dAmt").value=initMin;}}}
+  refresh();
+  return {get:cur};
+}
 
 /* Quick Add (FAB + inline day buttons) */
 window.openQuickAdd=dateIso=>{
@@ -1119,21 +1194,26 @@ window.openQuickAdd=dateIso=>{
   w.innerHTML=`<input class="fld" id="qaT" placeholder="What's happening?">
   <div class="lbl" style="margin-top:4px">Who</div>
   <div class="filters" id="qaP">${ppl.map(p=>`<button class="chip" data-p="${p.id}">${esc(p.displayName)}</button>`).join("")}</div>
-  <div class="row"><input class="fld" id="qaD" type="date" value="${dateIso||iso(new Date())}"><input class="fld" id="qaS" type="time" value="17:00"><input class="fld" id="qaE" type="time" value="18:00"></div>
+  <div class="row"><input class="fld" id="qaD" type="date" value="${dateIso||iso(new Date())}"><input class="fld" id="qaS" type="time" value="17:00"></div>
+  <div class="lbl">Duration</div><div id="qaDur"></div>
   <label class="row" style="font-size:13.5px;gap:8px"><input type="checkbox" id="qaR"> Repeat weekly</label>
   <button class="btn" id="qaGo">Add</button>`;
   Sheet.open("Quick Add",w);
   w.querySelectorAll("#qaP .chip").forEach(ch=>ch.onclick=()=>ch.classList.toggle("on"));
+  const dur=mountDuration(w.querySelector("#qaDur"),60,()=>w.querySelector("#qaD").value,()=>w.querySelector("#qaS").value,true);
+  /* repeat weekly only makes sense for sub-day durations */
+  const repBox=w.querySelector("#qaR");
   w.querySelector("#qaGo").onclick=()=>{
     const title=w.querySelector("#qaT").value.trim();if(!title)return Toast.show("Add a title");
     const persons=[...w.querySelectorAll("#qaP .chip.on")].map(c=>c.dataset.p);
-    const date=w.querySelector("#qaD").value,st=w.querySelector("#qaS").value,en=w.querySelector("#qaE").value;
-    if(w.querySelector("#qaR").checked){
-      DataAPI.create("routines",{circleId:S.circleId,title,participantPersonIds:persons.length?persons:[S.personId],responsiblePersonId:S.personId,dayOfWeek:new Date(date+"T00:00").getDay(),startTime:st,endTime:en,category:"activity",teacherCoach:"",preparation:[],active:true});
+    const date=w.querySelector("#qaD").value,st=w.querySelector("#qaS").value;
+    const{amount,unit}=dur.get();const e=computeEnd(date,st,amount,unit);
+    if(repBox.checked&&!e.multiDay){
+      DataAPI.create("routines",{circleId:S.circleId,title,participantPersonIds:persons.length?persons:[S.personId],responsiblePersonId:S.personId,dayOfWeek:new Date(date+"T00:00").getDay(),startTime:st,endTime:e.endTime,durationMin:e.durationMin,category:"activity",teacherCoach:"",preparation:[],active:true});
     }else{
-      DataAPI.create("events",{circleId:S.circleId,title,date,startTime:st,endTime:en,participantPersonIds:persons.length?persons:[S.personId],category:"event",preparation:[]});
+      DataAPI.create("events",{circleId:S.circleId,title,date,startTime:st,endTime:e.endTime,endDate:e.endDate,durationMin:e.durationMin,participantPersonIds:persons.length?persons:[S.personId],category:"event",preparation:[]});
     }
-    EventBus.emit("calendar:eventCreated");Sheet.close();Toast.show("Added ✓");renderAll();
+    EventBus.emit("calendar:eventCreated");Sheet.close();Toast.show(e.multiDay?"Multi-day event added ✓":"Added ✓");renderAll();
   };
 };
 $("#fab").onclick=()=>openQuickAdd(iso(new Date()));
@@ -1190,7 +1270,7 @@ function renderCal(){
     html+=`<div class="bcell bday ${today?"today":""} ${wk?"wknd":""}">${DOWS[d.dow]}<small>${d.date.getDate()}</small><button class="dayadd" onclick="openQuickAdd('${d.iso}')" aria-label="Add on ${DOWS[d.dow]}">+</button></div>`;
     cols.forEach(p=>{
       const its=d.items.filter(i=>i.participants.includes(p.id));
-      html+=`<div class="bcell ${wk?"wknd-row":""}">${its.map(i=>`<button class="evchip ${i.conflict?"cf":""}" style="background:${p.color}" onclick="openDetail('${i.key}')"><b>${esc(i.title)}</b><small>${fmtT(i.start)}</small></button>`).join("")}</div>`;
+      html+=`<div class="bcell ${wk?"wknd-row":""}">${its.map(i=>`<button class="evchip ${i.conflict?"cf":""} ${i.multiDay?"multi":""}" style="${i.multiDay?"":"background:"+p.color}" onclick="openDetail('${i.key}')"><b>${esc(i.title)}</b><small>${timeLabel(i)}</small></button>`).join("")}</div>`;
     });
   });
   html+="</div></div>";G.innerHTML=html;
