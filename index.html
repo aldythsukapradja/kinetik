@@ -396,7 +396,19 @@ input.fld:focus,select.fld:focus{border-color:var(--acc)}
 .post .pacts svg{width:23px;height:23px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;transition:all var(--dur1)}
 .post .pacts .bk{margin-left:auto}
 .post .cap{padding:4px 14px 13px;font-size:13.5px;line-height:1.5}
+.post .cap .ptitle{font-size:15px;font-weight:800;letter-spacing:-.01em;margin-bottom:2px}
+.post .cap .viewcmt{display:block;font-size:12px;color:var(--dim);margin-top:5px;font-weight:600;text-align:left}
 .post .cap small{display:block;color:var(--faint);font-size:10.5px;margin-top:5px;text-transform:uppercase;letter-spacing:.07em;font-weight:700}
+.post .pacts button{font-variant-numeric:tabular-nums}
+/* comments sheet */
+.cmtlist{display:flex;flex-direction:column;gap:12px;max-height:48vh;overflow-y:auto;padding:2px 0}
+.cmtrow{display:flex;gap:9px;align-items:flex-start}
+.cmtrow .bod{font-size:13.5px;line-height:1.45}
+.cmtrow .bod b{font-weight:700;margin-right:5px}
+.cmtrow .bod time{display:block;font-size:10px;color:var(--faint);margin-top:2px;font-variant-numeric:tabular-nums}
+.cmtempty{font-size:13px;color:var(--faint);text-align:center;padding:18px 0}
+.cmtbar{display:flex;gap:8px;align-items:flex-end;margin-top:6px}
+.cmtbar textarea{flex:1;resize:none;max-height:80px}
 /* skeletons */
 .skpost{border-radius:var(--radius-md);overflow:hidden;margin-bottom:16px}
 .skline{position:relative;overflow:hidden;background:var(--chip)}
@@ -828,8 +840,10 @@ const MomentsService={
   listMemoryLines(circleId,limit,cursor){return this.call("listMemoryLines",{circleId,limit:limit||20,cursor:cursor||""});},
   createMomentStory(p){return this.call("createMomentStory",p);},
   listMomentStories(circleId){return this.call("listMomentStories",{circleId});},
-  editMemoryLine(postId,caption){return this.call("editMemoryLine",{postId,caption});},
+  editMemoryLine(p){return this.call("editMemoryLine",p);},
   deleteMemoryLine(postId){return this.call("deleteMemoryLine",{postId});},
+  listComments(postId){return this.call("listComments",{postId});},
+  createComment(p){return this.call("createComment",p);},
   editMomentStory(p){return this.call("editMomentStory",p);},
   deleteMomentStory(storyId){return this.call("deleteMomentStory",{storyId});},
   healthCheck(){return this.call("healthCheck",{});},
@@ -1421,12 +1435,13 @@ function storyGroups(){
 function paintMoments(){
   const c=circle();if(!c)return;
   const B=$("#momentsBody");
-  const groups=storyGroups();
+  /* highlights: one bubble per moment, labeled by its short title */
   const stories=`<div class="stories">
     <button class="story add" onclick="Create.open('moment')"><span class="ring"><span>+</span></span><small>Your Moment</small></button>
-    ${groups.map(g=>`<button class="story" onclick="StoryView.open('${g.uid}')">
-      <span class="ring ${g.unseen?"unseen":""}"><span style="background:${g.author.color}">${esc(g.author.name[0])}</span>${g.items.length>1?`<span class="cnt">${g.items.length}</span>`:""}</span>
-      <small>${esc(g.author.name.split(" ")[0])}</small></button>`).join("")}
+    ${MomentsState.stories.map(s=>{const seen=MomentsState.seen[s.storyId];const a=authorOf(s.authorUserId);const thumb=s.media?driveThumb(s.media.driveFileId,200):"";
+      return `<button class="story" onclick="StoryView.open('${s.storyId}')">
+      <span class="ring ${seen?"":"unseen"}"><span style="background-color:${a.color};${thumb?`background-image:url('${thumb}')`:""}">${thumb?"":esc(a.name[0])}</span></span>
+      <small>${esc(s.title||a.name.split(" ")[0])}</small></button>`;}).join("")}
   </div>`;
   let feed;
   if(!MomentsState.memoryLines.length){
@@ -1454,9 +1469,11 @@ function postCard(p){
     <div class="pmedia">${media}</div>
     <div class="pacts">
       <button onclick="Toast.show('Reactions arrive in the next build')"><svg viewBox="0 0 24 24"><path d="M12 20s-7-4.6-9.2-8.8C1.2 8 3 4.5 6.6 4.5c2 0 3.6 1.1 4.4 2.6.8-1.5 2.4-2.6 4.4-2.6 3.6 0 5.4 3.5 3.8 6.7C19 15.4 12 20 12 20z"/></svg></button>
-      <button onclick="Toast.show('Comments arrive in the next build')"><svg viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-8 8H4l2.2-2.8A8 8 0 1 1 21 12z"/></svg></button>
+      <button onclick="Comments.open('${p.postId}')"><svg viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-8 8H4l2.2-2.8A8 8 0 1 1 21 12z"/></svg>${p.commentCount?p.commentCount:""}</button>
     </div>
-    <div class="cap"><b>${esc(a.name)}</b> ${esc(p.caption)}<small>${esc(relTime(p.createdAt))}</small></div>
+    <div class="cap">${p.title?`<div class="ptitle">${esc(p.title)}</div>`:""}<span><b>${esc(a.name)}</b> ${esc(p.caption)}</span>
+      ${p.commentCount?`<button class="viewcmt" onclick="Comments.open('${p.postId}')">View all ${p.commentCount} comment${p.commentCount>1?"s":""}</button>`:""}
+      <small>${esc(relTime(p.createdAt))}</small></div>
   </article>`;
 }
 /* hydrate Drive image fallbacks after paint */
@@ -1482,8 +1499,8 @@ const Create={type:"memory-line",file:null,mime:"",previewUrl:null,
     $("#createInner").innerHTML=`
     <div class="seg"><button data-t="memory-line" class="${!isMoment?"on":""}">Memory Line</button><button data-t="moment" class="${isMoment?"on":""}">Moment</button></div>
     <div id="mediaSlot">${this.file?this.previewHtml():this.dropHtml()}</div>
-    ${isMoment?`<div class="cfield"><div class="lbl">Title <span style="color:var(--bad)">*</span></div>
-      <input class="fld" id="cTitle" maxlength="40" placeholder="Name this moment"><div class="cc" id="ccTitle">0 / 40 · min 3</div></div>`:""}
+    <div class="cfield"><div class="lbl">Title <span style="color:var(--bad)">*</span></div>
+      <input class="fld" id="cTitle" maxlength="${isMoment?40:60}" placeholder="${isMoment?"Name this highlight":"Give this memory a name"}"><div class="cc" id="ccTitle">0 / ${isMoment?40:60} · min ${isMoment?3:2}</div></div>
     <div class="cfield"><div class="lbl">Caption${isMoment?"":' <span style="color:var(--bad)">*</span>'}</div>
       <textarea class="fld" id="cCap" rows="3" placeholder="${isMoment?"Add a note (optional)":"Write at least 10 characters…"}"></textarea>
       ${isMoment?"":'<div class="cc" id="ccCap">0 / min 10</div>'}</div>
@@ -1495,7 +1512,8 @@ const Create={type:"memory-line",file:null,mime:"",previewUrl:null,
     $$("#createInner .crad").forEach(b=>b.onclick=()=>{this.circleId=b.dataset.c;$$("#createInner .crad").forEach(x=>x.classList.toggle("on",x===b));this.validate();});
     const slot=$("#mediaSlot .dropzone");if(slot)slot.onclick=()=>$("#filePick").click();
     const rm=$("#mediaSlot .rm");if(rm)rm.onclick=()=>{this.file=null;if(this.previewUrl)URL.revokeObjectURL(this.previewUrl);this.previewUrl=null;this.render();this.validate();};
-    const tt=$("#cTitle");if(tt)tt.oninput=()=>{const n=tt.value.trim().length;$("#ccTitle").textContent=n+" / 40 · min 3";$("#ccTitle").classList.toggle("bad",n>0&&n<3);this.validate();};
+    const minT=isMoment?3:2,maxT=isMoment?40:60;
+    const tt=$("#cTitle");if(tt)tt.oninput=()=>{const n=tt.value.trim().length;$("#ccTitle").textContent=n+" / "+maxT+" · min "+minT;$("#ccTitle").classList.toggle("bad",n>0&&n<minT);this.validate();};
     const cc=$("#cCap");if(cc&&!isMoment)cc.oninput=()=>{const n=cc.value.trim().length;$("#ccCap").textContent=n+" / min 10";$("#ccCap").classList.toggle("bad",n>0&&n<10);this.validate();};
     this.validate();
   },
@@ -1541,8 +1559,9 @@ const Create={type:"memory-line",file:null,mime:"",previewUrl:null,
     $("#createPost").disabled=!ok;
   },
   textOk(){
-    if(this.type==="moment"){const t=$("#cTitle");return t&&t.value.trim().length>=3;}
-    const c=$("#cCap");return c&&c.value.trim().length>=10;
+    const t=$("#cTitle");
+    if(this.type==="moment")return t&&t.value.trim().length>=3;
+    const c=$("#cCap");return t&&t.value.trim().length>=2&&c&&c.value.trim().length>=10;
   },
   blobToBase64(blob){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(String(r.result).split(",")[1]);r.onerror=rej;r.readAsDataURL(blob);});},
   async post(){
@@ -1563,7 +1582,7 @@ const Create={type:"memory-line",file:null,mime:"",previewUrl:null,
       if(this.type==="moment"){
         await MomentsService.createMomentStory({circleId,authorUserId:S.userId,title:$("#cTitle").value.trim(),caption:$("#cCap").value.trim(),mediaId:up.mediaId});
       }else{
-        await MomentsService.createMemoryLine({circleId,authorUserId:S.userId,caption:$("#cCap").value.trim(),mediaIds:[up.mediaId]});
+        await MomentsService.createMemoryLine({circleId,authorUserId:S.userId,title:$("#cTitle").value.trim(),caption:$("#cCap").value.trim(),mediaIds:[up.mediaId]});
       }
       prog.style.width="100%";btn.textContent="✓";btn.classList.add("ok");
       MomentsState.uploading=false;
@@ -1600,20 +1619,21 @@ function burst(){
 
 /* ---------------- STORY VIEWER (permanent, one author at a time) ---------------- */
 const StoryView={items:[],i:0,timer:null,
-  open(uid){
-    const g=storyGroups().find(x=>x.uid===uid);if(!g||!g.items.length)return;
-    this.items=g.items.slice().reverse();/* newest→oldest within an author */
-    this.author=g.author;this.i=0;
+  open(storyId){
+    /* highlights: viewer plays across ALL moments, newest first, starting at the tapped one */
+    this.items=MomentsState.stories.slice();
+    const idx=this.items.findIndex(s=>s.storyId===storyId);if(idx<0)return;
     $("#storyView").classList.add("on");
     $("#storyBars").innerHTML=this.items.map(()=>'<i><b></b></i>').join("");
-    $("#storyAv").style.background=this.author.color;$("#storyAv").textContent=this.author.name[0];
-    $("#storyWho").textContent=this.author.name;
-    this.show(0);
+    this.show(idx);
   },
   show(idx){
     if(idx<0)idx=0;if(idx>=this.items.length)return this.close();
     this.i=idx;const s=this.items[idx];
     markStorySeen(s.storyId);
+    const a=authorOf(s.authorUserId);
+    $("#storyAv").style.background=a.color;$("#storyAv").textContent=a.name[0];
+    $("#storyWho").textContent=a.name;
     $("#storyMenu").style.display=canEditMoment(s.authorUserId)?"flex":"none";
     $("#storyWhen").textContent=relTime(s.createdAt);
     const m=s.media;
@@ -1644,7 +1664,7 @@ $("#storyPrev").onclick=()=>StoryView.show(StoryView.i-1);
 window.momentMenu=postId=>{
   const p=MomentsState.memoryLines.find(x=>x.postId===postId);if(!p)return;
   const w=document.createElement("div");
-  w.innerHTML=`<button class="me-row" id="pmEdit">✏️&nbsp; Edit caption<span class="end">›</span></button>
+  w.innerHTML=`<button class="me-row" id="pmEdit">✏️&nbsp; Edit title &amp; caption<span class="end">›</span></button>
   <button class="me-row" id="pmDel" style="color:var(--bad);font-weight:700">🗑&nbsp; Delete post<span class="end" style="color:var(--bad)">›</span></button>`;
   Sheet.open("Post options",w);
   w.querySelector("#pmEdit").onclick=()=>{Sheet.close();setTimeout(()=>editPost(postId),160);};
@@ -1653,20 +1673,22 @@ window.momentMenu=postId=>{
 function editPost(postId){
   const p=MomentsState.memoryLines.find(x=>x.postId===postId);if(!p)return;
   const w=document.createElement("div");
-  w.innerHTML=`<div class="cfield"><div class="lbl">Caption</div>
-    <textarea class="fld" id="epCap" rows="3">${esc(p.caption||"")}</textarea>
+  w.innerHTML=`<div class="cfield"><div class="lbl">Title</div><input class="fld" id="epT" maxlength="60" value="${esc(p.title||"")}"><div class="cc" id="epTC"></div></div>
+    <div class="cfield"><div class="lbl">Caption</div><textarea class="fld" id="epCap" rows="3">${esc(p.caption||"")}</textarea>
     <div class="cc" id="epCC"></div></div><button class="btn" id="epGo">Save</button>`;
   Sheet.open("Edit post",w);
-  const t=w.querySelector("#epCap"),cc=w.querySelector("#epCC"),go=w.querySelector("#epGo");
-  const upd=()=>{const n=t.value.trim().length;cc.textContent=n+" / min 10";cc.classList.toggle("bad",n<10);go.disabled=n<10;};
-  t.oninput=upd;upd();
+  const tt=w.querySelector("#epT"),tc=w.querySelector("#epTC"),t=w.querySelector("#epCap"),cc=w.querySelector("#epCC"),go=w.querySelector("#epGo");
+  const upd=()=>{const tn=tt.value.trim().length,cn=t.value.trim().length;
+    tc.textContent=tn+" / 60 · min 2";tc.classList.toggle("bad",tn<2);
+    cc.textContent=cn+" / min 10";cc.classList.toggle("bad",cn<10);go.disabled=tn<2||cn<10;};
+  tt.oninput=upd;t.oninput=upd;upd();
   go.onclick=async()=>{
-    const cap=t.value.trim();if(cap.length<10)return;
+    const title=tt.value.trim(),cap=t.value.trim();if(title.length<2||cap.length<10)return;
     go.disabled=true;go.textContent="Saving…";
     try{
-      await MomentsService.editMemoryLine(postId,cap);
-      p.caption=cap;MomentsService.writeCache(S.circleId,{stories:MomentsState.stories,posts:MomentsState.memoryLines});
-      Sheet.close();Toast.show("Caption updated ✓");paintMoments();
+      await MomentsService.editMemoryLine({postId,title,caption:cap});
+      p.title=title;p.caption=cap;MomentsService.writeCache(S.circleId,{stories:MomentsState.stories,posts:MomentsState.memoryLines});
+      Sheet.close();Toast.show("Post updated ✓");paintMoments();
     }catch(e){go.disabled=false;go.textContent="Save";Toast.show("Couldn't save: "+String(e.message||e).slice(0,60));}
   };
 }
@@ -1735,6 +1757,50 @@ function deleteStory(storyId){
     catch(e){Toast.show("Delete failed — restoring");loadMoments(true);}
   };
 }
+
+/* ---------------- COMMENTS (bottom sheet; members only) ---------------- */
+const Comments={postId:null,
+  open(postId){
+    this.postId=postId;
+    const w=document.createElement("div");
+    w.innerHTML=`<div class="cmtlist" id="cmtList"><div class="cmtempty">Loading…</div></div>
+    <div class="cmtbar"><textarea class="fld" id="cmtInput" rows="1" placeholder="Add a comment…"></textarea>
+      <button id="cmtSend" class="iconbtn" style="background:linear-gradient(135deg,var(--acc),var(--acc2))" aria-label="Send"><svg viewBox="0 0 24 24" style="stroke:#fff"><path d="M3.4 20.4l17.4-7.5c.9-.4.9-1.6 0-2L3.4 3.6c-.8-.3-1.6.4-1.4 1.2L3.6 11l9.4 1-9.4 1-1.6 6.2c-.2.8.6 1.5 1.4 1.2z" fill="#fff" stroke="none"/></svg></button></div>`;
+    Sheet.open("Comments",w);
+    const inp=w.querySelector("#cmtInput"),send=w.querySelector("#cmtSend");
+    inp.addEventListener("input",()=>{inp.style.height="auto";inp.style.height=Math.min(80,inp.scrollHeight)+"px";});
+    send.onclick=()=>this.send(inp);
+    inp.addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();this.send(inp);}});
+    this.load();
+  },
+  async load(){
+    try{const r=await MomentsService.listComments(this.postId);this.paint(r.items||[]);}
+    catch(e){this.paint(null);}
+  },
+  paint(items){
+    const list=$("#cmtList");if(!list)return;
+    if(items===null){list.innerHTML='<div class="cmtempty">Couldn\'t load comments.</div>';return;}
+    if(!items.length){list.innerHTML='<div class="cmtempty">No comments yet — be the first.</div>';return;}
+    list.innerHTML=items.map(c=>{const a=authorOf(c.authorUserId);
+      return `<div class="cmtrow"><span class="av" style="background:${a.color};width:30px;height:30px;font-size:11px">${esc(a.name[0])}</span>
+      <div class="bod"><b>${esc(a.name)}</b>${esc(c.text)}<time>${esc(relTime(c.createdAt))}</time></div></div>`;}).join("");
+    list.scrollTop=list.scrollHeight;
+  },
+  async send(inp){
+    const text=inp.value.trim();if(!text)return;
+    inp.value="";inp.style.height="auto";
+    /* optimistic append */
+    const list=$("#cmtList");const a=authorOf(S.userId);
+    if(list.querySelector(".cmtempty"))list.innerHTML="";
+    list.insertAdjacentHTML("beforeend",`<div class="cmtrow"><span class="av" style="background:${a.color};width:30px;height:30px;font-size:11px">${esc(a.name[0])}</span><div class="bod"><b>${esc(a.name)}</b>${esc(text)}<time>just now</time></div></div>`);
+    list.scrollTop=list.scrollHeight;
+    const post=MomentsState.memoryLines.find(x=>x.postId===this.postId);if(post){post.commentCount=(post.commentCount||0)+1;}
+    try{await MomentsService.createComment({circleId:S.circleId,postId:this.postId,authorUserId:S.userId,text});
+      MomentsService.writeCache(S.circleId,{stories:MomentsState.stories,posts:MomentsState.memoryLines});}
+    catch(e){Toast.show("Comment failed to send");}
+  }
+};
+window.Comments=Comments;
 
 /* ---------------- ASK ---------------- */
 const Ask={
