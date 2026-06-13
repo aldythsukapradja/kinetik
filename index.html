@@ -47,7 +47,9 @@ DO NOT:
   --font:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Segoe UI",sans-serif;
   --dur1:.2s;--dur2:.38s;--ease:cubic-bezier(.32,.72,.28,1);
   --sat:env(safe-area-inset-top,0px);--sab:env(safe-area-inset-bottom,0px);
-  --navh:calc(64px + var(--sab));
+  --safeb:max(var(--sab),8px);          /* never less than 8px of home-bar fill */
+  --navh:calc(64px + var(--safeb));
+  --app-height:100dvh;                  /* JS overrides with window.innerHeight on iOS */
 }
 html[data-theme="dark"]{
   --bg0:#05070f;--bg1:#0a1022;--bg2:#101a36;
@@ -68,12 +70,12 @@ html[data-theme="light"]{
 /* per-circle accent set by JS */
 html{--acc:#22d3ee;--acc2:#818cf8;}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html,body{height:100dvh;overscroll-behavior:none}
+html,body{height:var(--app-height);overscroll-behavior:none}
 body{font-family:var(--font);color:var(--text);background:
   radial-gradient(120% 90% at 80% -10%,color-mix(in srgb,var(--acc) 16%,transparent),transparent 55%),
   radial-gradient(120% 100% at 0% 100%,color-mix(in srgb,var(--acc2) 13%,transparent),transparent 55%),
   linear-gradient(170deg,var(--bg1),var(--bg0) 55%,var(--bg2));
-  position:fixed;inset:0;overflow:hidden;transition:background .6s;
+  position:fixed;top:0;left:0;right:0;height:var(--app-height);overflow:hidden;transition:background .6s;
   font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
 #bg3d{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.85}
 button{font-family:var(--font);color:inherit;background:none;border:none;cursor:pointer;font-size:inherit}
@@ -133,7 +135,7 @@ input.fld:focus,select.fld:focus{border-color:var(--acc)}
 .persona b{font-size:15px}.persona span:not(.av){display:block;font-size:12px;color:var(--dim)}
 #login .priv{font-size:12px;color:var(--faint);text-align:center;line-height:1.5}
 /* ============ SHELL ============ */
-#shell{position:fixed;inset:0;z-index:10;display:flex;flex-direction:column;padding-top:var(--sat)}
+#shell{position:fixed;top:0;left:0;right:0;height:var(--app-height);z-index:10;display:flex;flex-direction:column;padding-top:var(--sat)}
 #topbar{display:flex;align-items:center;justify-content:space-between;padding:12px 18px 10px;gap:10px}
 #topbar .brand{font-weight:800;font-size:19px;letter-spacing:-.02em}
 #topbar .brand i{font-style:normal;background:linear-gradient(120deg,var(--acc),var(--acc2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
@@ -149,7 +151,7 @@ input.fld:focus,select.fld:focus{border-color:var(--acc)}
    home-bar zone (env safe-area), glass + cradle notch + sliding pill */
 #nav{position:fixed;left:0;right:0;bottom:0;z-index:40;height:var(--navh);
   display:flex;align-items:stretch;justify-content:center;gap:2px;
-  padding:7px 12px calc(var(--sab) + 6px);border-radius:26px 26px 0 0;
+  padding:7px 12px var(--safeb);border-radius:26px 26px 0 0;
   background:var(--glass2);backdrop-filter:blur(28px) saturate(1.5);-webkit-backdrop-filter:blur(28px) saturate(1.5);
   border-top:1px solid var(--brd);box-shadow:0 -10px 40px rgba(20,35,70,.14);
   -webkit-mask:radial-gradient(circle 34px at 50% -10px,transparent 33px,#000 34px);
@@ -239,7 +241,7 @@ input.fld:focus,select.fld:focus{border-color:var(--acc)}
 .dayblock h4 .wkb{font-size:9.5px;font-weight:800;color:var(--warn);border:1px solid color-mix(in srgb,var(--warn) 45%,transparent);border-radius:99px;padding:1px 7px}
 .empty-day{font-size:12.5px;color:var(--faint);padding:3px 0}
 /* ============ ASK (full-screen overlay, WhatsApp pattern) ============ */
-#askScreen{position:fixed;inset:0;z-index:60;display:none;flex-direction:column;
+#askScreen{position:fixed;top:0;left:0;right:0;height:var(--app-height);z-index:60;display:none;flex-direction:column;
   background:radial-gradient(120% 80% at 80% -10%,color-mix(in srgb,var(--acc) 13%,transparent),transparent 55%),
   radial-gradient(110% 90% at 0% 100%,color-mix(in srgb,var(--acc2) 10%,transparent),transparent 55%),var(--bg0)}
 #askScreen.on{display:flex}
@@ -307,7 +309,7 @@ input.fld:focus,select.fld:focus{border-color:var(--acc)}
 .getbtn:active{transform:scale(.94)}
 .getbtn.soon{opacity:.45;pointer-events:none}
 /* store — full-screen app (back button, nav hidden) */
-#storeScreen{position:fixed;inset:0;z-index:60;display:none;flex-direction:column;
+#storeScreen{position:fixed;top:0;left:0;right:0;height:var(--app-height);z-index:60;display:none;flex-direction:column;
   background:radial-gradient(120% 80% at 80% -10%,color-mix(in srgb,var(--acc) 10%,transparent),transparent 55%),var(--bg0)}
 #storeScreen.on{display:flex}
 #storeBody{flex:1;overflow-y:auto;padding:16px 18px calc(28px + var(--sab));-webkit-overflow-scrolling:touch}
@@ -331,7 +333,7 @@ input.fld:focus,select.fld:focus{border-color:var(--acc)}
 /* board inline add */
 .dayadd{width:19px;height:19px;border-radius:50%;background:color-mix(in srgb,var(--acc) 13%,transparent);color:var(--acc);font-size:13px;font-weight:800;line-height:1;display:flex;align-items:center;justify-content:center;margin-top:3px}
 /* ============ MONTH (full-screen, HowAbout-style) ============ */
-#monthScreen{position:fixed;inset:0;z-index:60;display:none;flex-direction:column;
+#monthScreen{position:fixed;top:0;left:0;right:0;height:var(--app-height);z-index:60;display:none;flex-direction:column;
   background:radial-gradient(120% 80% at 80% -10%,color-mix(in srgb,var(--acc) 11%,transparent),transparent 55%),var(--bg0)}
 #monthScreen.on{display:flex}
 #monthBody{flex:1;overflow-y:auto;padding:14px 14px calc(26px + var(--sab));-webkit-overflow-scrolling:touch}
@@ -410,7 +412,7 @@ input.fld:focus,select.fld:focus{border-color:var(--acc)}
 .iconbtn:active{transform:scale(.88)}
 .iconbtn svg{width:20px;height:20px;stroke:var(--text);fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
 /* ============ CREATE MOMENT (full-screen) ============ */
-#createScreen{position:fixed;inset:0;z-index:62;display:none;flex-direction:column;
+#createScreen{position:fixed;top:0;left:0;right:0;height:var(--app-height);z-index:62;display:none;flex-direction:column;
   background:radial-gradient(120% 80% at 80% -10%,color-mix(in srgb,var(--acc) 11%,transparent),transparent 55%),var(--bg0)}
 #createScreen.on{display:flex}
 #createScreen .prog{height:3px;background:transparent;flex:0 0 auto}
@@ -437,7 +439,7 @@ input.fld:focus,select.fld:focus{border-color:var(--acc)}
 .crad .dot{width:9px;height:9px;border-radius:50%;background:var(--acc);margin-left:auto;opacity:0}
 .crad.on .dot{opacity:1}
 /* ============ STORY VIEWER ============ */
-#storyView{position:fixed;inset:0;z-index:72;display:none;flex-direction:column;background:#06080f}
+#storyView{position:fixed;top:0;left:0;right:0;height:var(--app-height);z-index:72;display:none;flex-direction:column;background:#06080f}
 #storyView.on{display:flex}
 #storyView .bars{display:flex;gap:4px;padding:calc(10px + var(--sat)) 12px 8px;flex:0 0 auto}
 #storyView .bars i{flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,.28);overflow:hidden}
@@ -454,7 +456,7 @@ input.fld:focus,select.fld:focus{border-color:var(--acc)}
 #storyView .nav span{flex:1}
 .confetti{position:fixed;width:9px;height:9px;z-index:73;pointer-events:none;border-radius:2px}
 /* app host */
-#appHost{position:fixed;inset:0;z-index:70;display:none;flex-direction:column;background:var(--bg0)}
+#appHost{position:fixed;top:0;left:0;right:0;height:var(--app-height);z-index:70;display:none;flex-direction:column;background:var(--bg0)}
 #appHost.on{display:flex}
 #appHostBar{display:flex;align-items:center;justify-content:space-between;padding:calc(10px + var(--sat)) 16px 10px;background:var(--glass2);backdrop-filter:blur(20px);border-bottom:1px solid var(--brd2)}
 #appHostBar b{font-size:15px}
@@ -497,7 +499,7 @@ input.fld:focus,select.fld:focus{border-color:var(--acc)}
 #logoutBtn:active{transform:scale(.97)}
 #logoutBtn svg{width:18px;height:18px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 /* ============ SHEETS & TOAST ============ */
-#sheetLayer{position:fixed;inset:0;z-index:80;display:none}
+#sheetLayer{position:fixed;top:0;left:0;right:0;height:var(--app-height);z-index:80;display:none}
 #sheetLayer.on{display:block}
 #scrim{position:absolute;inset:0;background:rgba(4,7,16,.45);backdrop-filter:blur(3px)}
 #sheet{position:absolute;left:0;right:0;bottom:0;max-height:84%;border-radius:var(--radius-lg) var(--radius-lg) 0 0;padding:10px 20px calc(22px + var(--sab));display:flex;flex-direction:column}
@@ -659,6 +661,20 @@ const fmtT=t=>{let[h,m]=String(t).split(":").map(Number);const ap=h>=12?"PM":"AM
 const DOW=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
 const DOWS=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 
+/* ---------------- iOS PWA viewport height (§72.19) ----------------
+   iOS reports 100vh / position:fixed inset:0 as the FULL screen, not the usable
+   viewport — leaving the nav under the home bar or a gap. Pin a real --app-height
+   from window.innerHeight and refresh on every event that can change it. */
+function setAppHeight(){
+  const h=(window.visualViewport&&window.visualViewport.height)||window.innerHeight;
+  document.documentElement.style.setProperty("--app-height",h+"px");
+}
+setAppHeight();
+addEventListener("resize",setAppHeight);
+addEventListener("orientationchange",()=>setTimeout(setAppHeight,100));
+if(window.visualViewport)window.visualViewport.addEventListener("resize",setAppHeight);
+addEventListener("pageshow",setAppHeight);
+
 /* ---------------- EventBus ---------------- */
 const EventBus={l:{},on(e,f){(this.l[e]=this.l[e]||[]).push(f);},emit(e,p){(this.l[e]||[]).forEach(f=>{try{f(p)}catch(x){console.warn(x)}});}};
 
@@ -792,17 +808,12 @@ const MomentsService={
     if(!j.ok)throw new Error(j.error||action+" failed");
     return j;
   },
-  /* XHR gives real upload progress events; fetch cannot */
-  uploadMedia(payload,onProgress){
-    return new Promise((resolve,reject)=>{
-      const xhr=new XMLHttpRequest();
-      xhr.open("POST",LIVE_API_URL,true);
-      xhr.setRequestHeader("Content-Type","text/plain;charset=utf-8");
-      if(xhr.upload&&onProgress)xhr.upload.onprogress=e=>{if(e.lengthComputable)onProgress(e.loaded/e.total);};
-      xhr.onload=()=>{try{const j=JSON.parse(xhr.responseText);j.ok?resolve(j):reject(new Error(j.error||"Upload failed"));}catch(e){reject(new Error("Bad upload response"));}};
-      xhr.onerror=()=>reject(new Error("Network error during upload"));
-      xhr.send(JSON.stringify({action:"uploadMedia",...payload}));
-    });
+  /* fetch only: attaching an XHR upload.onprogress listener forces a CORS
+     preflight (OPTIONS), which Apps Script web apps don't answer → the request
+     dies. Real byte-progress is impossible cross-origin to Apps Script anyway,
+     so the UI simulates a smooth ramp instead. */
+  async uploadMedia(payload){
+    return this.call("uploadMedia",payload);
   },
   createMemoryLine(p){return this.call("createMemoryLine",p);},
   listMemoryLines(circleId,limit,cursor){return this.call("listMemoryLines",{circleId,limit:limit||20,cursor:cursor||""});},
@@ -1247,12 +1258,20 @@ const relTime=iso=>{
   const d=Math.floor(s/86400);if(d===1)return"yesterday";if(d<7)return d+" days ago";
   return new Date(iso).toLocaleDateString(undefined,{day:"numeric",month:"short"});
 };
-/* lh3 CDN first (most reliable for link-shared Drive images), then thumbnail, then uc */
-const mediaSrc=m=>m.viewUrl||("https://lh3.googleusercontent.com/d/"+m.driveFileId);
+/* Drive image URLs. thumbnail endpoint is the most embed-friendly and least
+   rate-limited; lh3 + uc are fallbacks. A freshly uploaded file (or a transient
+   429) often succeeds on a short retry, so the chain loops once with a delay. */
+const driveThumb=(id,sz)=>"https://drive.google.com/thumbnail?id="+id+"&sz=w"+(sz||1600);
+const mediaSrc=m=>driveThumb(m.driveFileId,1600);
 function imgFallback(img,m){
-  const tries=["https://drive.google.com/thumbnail?id="+m.driveFileId+"&sz=w1600",
-               "https://drive.google.com/uc?export=view&id="+m.driveFileId];
-  let i=0;img.onerror=()=>{if(i<tries.length){img.src=tries[i++];}else{img.onerror=null;img.parentElement.innerHTML='<div class="broken"><svg viewBox="0 0 24 24"><path d="M3 5h18v14H3z"/><path d="M3 16l5-5 4 4 3-3 6 6"/></svg>Media unavailable</div>';}};
+  const id=m.driveFileId;
+  const chain=[driveThumb(id,1600),"https://lh3.googleusercontent.com/d/"+id,
+               "https://drive.google.com/uc?export=view&id="+id,driveThumb(id,1600)];
+  let i=0;
+  img.onerror=()=>{
+    if(i<chain.length){const next=chain[i++];const delay=i===chain.length?1400:0;setTimeout(()=>{img.src=next;},delay);}
+    else{img.onerror=null;img.parentElement.innerHTML='<div class="broken"><svg viewBox="0 0 24 24"><path d="M3 5h18v14H3z"/><path d="M3 16l5-5 4 4 3-3 6 6"/></svg>Media unavailable</div>';}
+  };
 }
 
 function skeletonFeed(){
@@ -1339,7 +1358,7 @@ function postCard(p){
   const a=authorOf(p.authorUserId),m=(p.media&&p.media[0])||null;
   const media=!m?"":(m.type==="video"
     ?`<video src="https://drive.google.com/uc?export=download&id=${m.driveFileId}" controls playsinline preload="metadata"></video>`
-    :`<img loading="lazy" src="${mediaSrc(m)}" alt="" onload="this.dataset.ok=1">`);
+    :`<img loading="lazy" src="${mediaSrc(m)}" data-fid="${m.driveFileId}" alt="" onload="this.dataset.ok=1">`);
   return `<article class="post glass" data-id="${p.postId}">
     <div class="ph"><span class="av" style="background:${a.color};width:32px;height:32px;font-size:12px">${esc(a.name[0])}</span>
       <div><b>${esc(a.name)}</b><small>${esc(circle().name)} · ${esc(relTime(p.createdAt))}</small></div></div>
@@ -1352,7 +1371,7 @@ function postCard(p){
   </article>`;
 }
 /* hydrate Drive image fallbacks after paint */
-function hydrateMedia(){$$("#momentsBody .pmedia img").forEach(img=>{const id=img.src.split("/d/")[1];if(id)imgFallback(img,{driveFileId:id});});}
+function hydrateMedia(){$$("#momentsBody .pmedia img[data-fid]").forEach(img=>imgFallback(img,{driveFileId:img.dataset.fid}));}
 
 /* ---------------- CREATE MOMENT (real upload) ---------------- */
 const MAX_IMG_MB=10,MAX_VID_MB=20,MAX_EDGE=1600;
@@ -1444,12 +1463,14 @@ const Create={type:"memory-line",file:null,mime:"",previewUrl:null,
     MomentsState.uploading=true;
     const btn=$("#createPost");btn.disabled=true;btn.textContent="0%";
     const prog=$("#createProg");
+    /* simulated ramp: ease toward 90% while the upload is in flight */
+    let pct=0;const ramp=setInterval(()=>{pct=Math.min(90,pct+Math.max(1,(90-pct)*0.12));prog.style.width=pct+"%";btn.textContent=Math.round(pct)+"%";},180);
     try{
       const base64=await this.blobToBase64(this.file);
       const up=await MomentsService.uploadMedia({
         circleId,ownerUserId:S.userId,target:this.type,mimeType:this.mime,fileName:this.fileName,base64
-      },f=>{const pct=Math.round(f*92);prog.style.width=pct+"%";btn.textContent=pct+"%";});
-      prog.style.width="96%";btn.textContent="Saving…";
+      });
+      clearInterval(ramp);prog.style.width="96%";btn.textContent="Saving…";
       if(this.type==="moment"){
         await MomentsService.createMomentStory({circleId,authorUserId:S.userId,title:$("#cTitle").value.trim(),caption:$("#cCap").value.trim(),mediaId:up.mediaId});
       }else{
@@ -1462,8 +1483,14 @@ const Create={type:"memory-line",file:null,mime:"",previewUrl:null,
         if(circleId!==S.circleId)setCircle(circleId);else{MomentsState.loadedCircle=null;switchTab("moments");loadMoments(true).then(()=>burst());}
       },520);
     }catch(e){
+      clearInterval(ramp);
       MomentsState.uploading=false;prog.style.width="0";btn.disabled=false;btn.textContent="Post";
-      console.error(e);Toast.show("Upload failed — try a smaller file or check connection");
+      console.error(e);
+      const msg=String(e&&e.message||e);
+      if(/permission|getRootFolder|drive|الأذونات|إذن/i.test(msg))
+        Toast.show("Drive not authorized yet — run ensureSetup in Apps Script & approve");
+      else if(/quota|too large|size/i.test(msg))Toast.show("File too large — try a smaller one");
+      else Toast.show("Upload failed: "+msg.replace(/^Exception:\s*/,"").slice(0,80));
     }
   }
 };
