@@ -337,6 +337,50 @@ input.fld:focus,select.fld:focus{border-color:var(--acc)}
 .shot{flex:0 0 72%;aspect-ratio:9/13;border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;font-size:56px;box-shadow:var(--shadow)}
 .sdsec{font-size:16px;font-weight:700;letter-spacing:-.01em;margin:4px 0 7px}
 .sdp{font-size:13.5px;color:var(--dim);line-height:1.6;margin-bottom:16px}
+/* ===== APP STORE clone ===== */
+.asearch{display:flex;align-items:center;gap:8px;background:var(--chip);border:1px solid var(--brd2);border-radius:12px;padding:9px 13px;margin:2px 0 16px}
+.asearch svg{width:17px;height:17px;stroke:var(--faint);fill:none;stroke-width:2;flex:0 0 auto}
+.asearch input{flex:1;background:none;border:none;outline:none;font-size:15px}
+.ascats{display:flex;gap:8px;overflow-x:auto;padding:0 0 14px;scrollbar-width:none}
+.ascats::-webkit-scrollbar{display:none}
+.ashero{position:relative;border-radius:var(--radius-lg);overflow:hidden;padding:18px 18px 17px;color:#fff;margin-bottom:22px;min-height:188px;display:flex;flex-direction:column;justify-content:flex-end;box-shadow:var(--shadow);cursor:pointer}
+.ashero:before{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.34),transparent 58%)}
+.ashero .tag{position:relative;font-size:10.5px;font-weight:800;letter-spacing:.14em;opacity:.92;text-transform:uppercase}
+.ashero h3{position:relative;font-size:25px;letter-spacing:-.02em;margin:3px 0 3px;line-height:1.08}
+.ashero p{position:relative;font-size:13px;opacity:.95;margin-bottom:13px;max-width:80%}
+.ashero .glyph{position:absolute;right:14px;top:14px;font-size:46px;filter:drop-shadow(0 8px 18px rgba(0,0,0,.3))}
+.ashero .row{position:relative;display:flex;align-items:center;gap:12px}
+.ashero .ic{width:52px;height:52px;border-radius:24%;background:rgba(255,255,255,.22);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;font-size:26px;flex:0 0 auto}
+.assec{display:flex;align-items:baseline;justify-content:space-between;margin:0 2px 11px}
+.assec b{font-size:19px;letter-spacing:-.02em}
+.assec span{font-size:12px;color:var(--faint);font-weight:600}
+.asrow{display:flex;gap:13px;overflow-x:auto;padding:0 0 8px;margin:0 -18px 22px;padding-left:18px;padding-right:18px;scrollbar-width:none;scroll-snap-type:x mandatory}
+.asrow::-webkit-scrollbar{display:none}
+.ascard{flex:0 0 150px;scroll-snap-align:start;display:flex;flex-direction:column;gap:9px;cursor:pointer;transition:transform var(--dur1)}
+.ascard:active{transform:scale(.96)}
+.ascard .art{aspect-ratio:1.18;border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;font-size:44px;box-shadow:0 10px 26px rgba(40,55,90,.18),inset 0 1px 0 rgba(255,255,255,.3);position:relative;overflow:hidden}
+.ascard .art:after{content:"";position:absolute;inset:0;background:radial-gradient(110% 80% at 25% 15%,rgba(255,255,255,.25),transparent 55%)}
+.ascard .rw{display:flex;align-items:center;gap:9px}
+.ascard .ic{width:38px;height:38px;border-radius:24%;display:flex;align-items:center;justify-content:center;font-size:19px;flex:0 0 auto;box-shadow:inset 0 1px 0 rgba(255,255,255,.35)}
+.ascard b{font-size:13px;letter-spacing:-.01em;display:block;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ascard small{font-size:11px;color:var(--faint);display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ascard .getbtn{margin-left:auto;padding:6px 16px;font-size:12px}
+/* detail hero (App Store product) */
+.adhero{position:relative;border-radius:0 0 var(--radius-lg) var(--radius-lg);margin:0 -18px 16px;padding:26px 18px 18px;color:#fff;overflow:hidden}
+.adhero:before{content:"";position:absolute;right:-30px;top:-40px;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,.16)}
+.adhero .r{position:relative;display:flex;gap:15px;align-items:center}
+.adhero .ic{width:84px;height:84px;border-radius:24%;background:rgba(255,255,255,.2);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;font-size:42px;flex:0 0 auto;box-shadow:0 12px 30px rgba(0,0,0,.22)}
+.adhero h2{font-size:22px;letter-spacing:-.02em;line-height:1.12}
+.adhero p{font-size:12.5px;opacity:.92;margin:3px 0 11px}
+.adhero .getbtn{background:rgba(255,255,255,.95);color:#0d1426;padding:8px 26px;font-size:14px}
+.adinfo{display:flex;border-radius:var(--radius-md);overflow:hidden;margin-bottom:18px;background:var(--glass);border:1px solid var(--brd)}
+.adinfo>div{flex:1;text-align:center;padding:12px 4px;border-right:1px solid var(--brd2);min-width:0}
+.adinfo>div:last-child{border-right:none}
+.adinfo .k{font-size:8.5px;font-weight:800;letter-spacing:.08em;color:var(--faint);text-transform:uppercase}
+.adinfo .v{font-size:13px;font-weight:700;margin-top:3px;text-transform:capitalize;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.adinfo .v svg{width:15px;height:15px;stroke:var(--acc);fill:none;stroke-width:2;vertical-align:-2px}
+.adchips{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:18px}
+.adchip{font-size:11.5px;font-weight:600;color:var(--dim);background:var(--chip);border:1px solid var(--brd2);border-radius:99px;padding:6px 12px}
 /* board inline add */
 .dayadd{width:19px;height:19px;border-radius:50%;background:color-mix(in srgb,var(--acc) 13%,transparent);color:var(--acc);font-size:13px;font-weight:800;line-height:1;display:flex;align-items:center;justify-content:center;margin-top:3px}
 /* ============ MONTH (full-screen, HowAbout-style) ============ */
@@ -742,38 +786,33 @@ const SHEET_COLLECTIONS={
   routines:"Calendar_Routines",events:"Calendar_Events",exceptions:"Calendar_Exceptions",
   appCatalog:"AppCatalog",circleApps:"CircleApps",appRecords:"AppRecords"
 };
-/* Offline/file:// fallback catalog — mirrors the in-file manifests so the Store still
-   works when same-folder fetch is blocked (file:// null origin). On http(s) the
-   AppRegistry auto-reads each App_*.html manifest and overrides this. */
+/* ===== APP CATALOG — AUTO-GENERATED. Do not hand-edit. =====
+   Run `node build_apps.mjs` (or the GitHub Action on push) to rescan every
+   App_*.html, read its kinetik-app+json manifest, and rewrite the array below.
+   This embeds the catalog IN index.html so the Store works everywhere — file://,
+   GitHub Pages, offline — without apps.json (browsers can't list a folder at runtime). */
+/*KINETIK_APPS_START*/
 const BUILTIN_APP_CATALOG=[
-  {id:"padel-americano",name:"Padel Americano",file:"App_PadelAmericano.html",glyph:"🎾",gradient:["#2f6bff","#54c7ec"],tagline:"Fair rounds. Real leaderboards.",status:"live",allowed:["family","friends"],active:true,category:"sports",
-    desc:"Run a fair Americano in seconds: automatic partner rotation, live scoring per round and a leaderboard that updates as you play. Export a result card and push the next session to the circle calendar."},
-  {id:"event-poll",name:"Event Poll",file:"App_EventPoll.html",glyph:"🗳️",gradient:["#8b5cf6","#d946ef"],tagline:"Find the best time, fast.",status:"live",allowed:["family","friends"],active:true,category:"productivity",
-    desc:"Propose dates, let everyone in your circle vote with one tap, and watch the bars race. Close the poll and the winning time lands on the shared calendar automatically."},
-  {id:"game-circle-chess",name:"Circle Chess",file:"App_GameCircleChess.html",glyph:"♟️",gradient:["#4f7cff","#63d6b5"],tagline:"Quiet strategy for your circle.",status:"live",allowed:["family","friends"],active:true,category:"games",
-    desc:"A polished chess match for family and friends. Play pass-and-play or challenge a simple local Kinetik AI with circle-ready leaderboard support."},
-  {id:"game-emoji-party",name:"Emoji Party",file:"App_GameEmojiParty.html",glyph:"😄",gradient:["#ffcf5a","#ff6fae"],tagline:"Guess the clue, beat the room.",status:"live",allowed:["family","friends"],active:true,category:"games",
-    desc:"A funny emoji guessing game for family and friends. Hundreds of local clues across music, cartoons, jokes, places, family life, holidays, and more."},
-  {id:"game-code-clash",name:"Code Clash",file:"App_GameCodeClash.html",glyph:"⚡",gradient:["#ff6fae","#6f8cff"],tagline:"Crack the color code.",status:"live",allowed:["family","friends"],active:true,category:"games",
-    desc:"A fast logic duel for family and friends. Guess the hidden color code with unlimited attempts, tactile marbles, hints, and a circle-ready leaderboard."}
+  {"id":"event-poll","name":"Event Poll","shortName":"Poll","file":"App_EventPoll.html","glyph":"🗳️","gradient":["#8b5cf6","#d946ef"],"tagline":"Find the best time, fast.","status":"live","allowed":["family","friends"],"active":true,"category":"productivity","audience":"all","worksWith":["calendar"],"minMembers":2,"desc":"Propose dates, let everyone in the circle vote with one tap, and watch the bars race. Close the poll and the winning time lands on the shared calendar automatically."},
+  {"id":"game-circle-chess","name":"Circle Chess","shortName":"Chess","file":"App_GameCircleChess.html","glyph":"♟️","gradient":["#4f7cff","#63d6b5"],"tagline":"Quiet strategy for your circle.","status":"live","allowed":["family","friends"],"active":true,"category":"games","audience":"all","worksWith":["offline","standalone"],"minMembers":1,"desc":"A polished chess match for family and friends. Play pass-and-play or challenge a simple local Kinetik AI with circle-ready leaderboard support."},
+  {"id":"game-code-clash","name":"Code Clash","shortName":"CodeClash","file":"App_GameCodeClash.html","glyph":"⚡","gradient":["#ff6fae","#6f8cff"],"tagline":"Crack the color code.","status":"live","allowed":["family","friends"],"active":true,"category":"games","audience":"all","worksWith":["offline","standalone"],"minMembers":1,"desc":"A fast logic duel for family and friends. Guess the hidden color code with unlimited attempts, tactile marbles, hints, and a circle-ready leaderboard."},
+  {"id":"game-emoji-party","name":"Emoji Party","shortName":"EmojiParty","file":"App_GameEmojiParty.html","glyph":"😄","gradient":["#ffcf5a","#ff6fae"],"tagline":"Guess the clue, beat the room.","status":"live","allowed":["family","friends"],"active":true,"category":"games","audience":"all","worksWith":["offline","standalone"],"minMembers":1,"desc":"A funny emoji guessing game for family and friends. Play hundreds of local clues across music, cartoons, jokes, places, family life, holidays, and more."},
+  {"id":"padel-americano","name":"Padel Americano","shortName":"Padel","file":"App_PadelAmericano.html","glyph":"🎾","gradient":["#2f6bff","#54c7ec"],"tagline":"Fair rounds. Real leaderboards.","status":"live","allowed":["family","friends"],"active":true,"category":"sports","audience":"all","worksWith":["calendar"],"minMembers":4,"desc":"Run a fair Americano in seconds: automatic partner rotation, live scoring per round, and a leaderboard that updates as you play. Export a result card and push the next session to the circle calendar."}
 ];
+/*KINETIK_APPS_END*/
 const EMPTY_DATA=()=>({
   users:[],people:[],circles:[],circleMembers:[],routines:[],events:[],exceptions:[],
   appCatalog:[],circleApps:[],appRecords:[],prepState:{},settings:{...DEFAULT_SETTINGS}
 });
-/* ---------------- AppRegistry: apps describe themselves (APP_BUILD_STANDARD §2) ----------------
-   Each App_*.html embeds a <script type="application/kinetik-app+json"> manifest.
-   apps.json lists the filenames; we fetch each, parse its manifest, build the catalog.
-   Static hosting can't list a folder, so apps.json is the only (one-line) glue. */
-/* "App_PadelAmericano.html" -> "Padel Americano" (mid-word capitals = spaces) */
-function prettyAppName(file){
-  let s=String(file||"").replace(/^App[_-]?/,"").replace(/\.html?$/i,"");
-  s=s.replace(/[_-]+/g," ").replace(/([a-z0-9])([A-Z])/g,"$1 $2").replace(/([A-Z]+)([A-Z][a-z])/g,"$1 $2");
-  return s.replace(/\s+/g," ").trim()||"App";
-}
+/* ---------------- AppRegistry — simple runtime autoloader (APP_BUILD_STANDARD §2/§3) ----------------
+   Drop any App_*.html in the folder and it loads automatically: fetch the folder's
+   directory listing, take every App_*.html link, fetch each, read its embedded
+   kinetik-app+json manifest. No apps.json, no build step. If a listing isn't available
+   (file://, or a host that serves index.html for "/"), fall back to the embedded
+   BUILTIN_APP_CATALOG above so the Store still works. */
 function manifestToCatalog(j,file){
-  const icon=String(j.icon||"✦"),pretty=prettyAppName(file);
-  return {id:j.appId||pretty.toLowerCase().replace(/\s+/g,"-"),name:j.name||pretty,shortName:j.shortName||j.name||pretty,file,
+  const icon=String(j.icon||"✦");
+  return {id:j.appId||file.toLowerCase(),name:j.name||file,shortName:j.shortName||j.name||file,file,
     glyph:icon.startsWith("svg:")?"✦":icon,iconSvg:icon.startsWith("svg:")?icon.slice(4):"",
     gradient:Array.isArray(j.gradient)&&j.gradient.length?j.gradient:["#6366f1","#22d3ee"],
     category:j.category||"lifestyle",tagline:j.tagline||"",desc:j.about||j.tagline||"",
@@ -782,42 +821,29 @@ function manifestToCatalog(j,file){
     minMembers:j.minMembers||1,active:true};
 }
 const AppRegistry={
-  KEY:"kinetik_app_catalog_v1",
-  parseManifest(html){
+  manifestOf(html){
     const m=html.match(/<script[^>]*type=["']application\/kinetik-app\+json["'][^>]*>([\s\S]*?)<\/script>/i);
     if(!m)return null;try{return JSON.parse(m[1].trim());}catch(e){return null;}
   },
-  /* Dynamically enumerate App_*.html by parsing the server's directory listing.
-     Works on any autoindexing host (npx serve, python http.server, Apache, Nginx).
-     Browsers can't list a folder on file:// or GitHub Pages -> BUILTIN fallback. */
-  async discover(){
-    if(location.protocol==="file:")return [];   /* file:// can't enumerate; skip (no console error) */
+  async listFiles(){
+    if(location.protocol==="file:")return [];
     try{
-      const html=await (await fetch("./?v="+Date.now(),{cache:"no-store"})).text();
-      const found=[...html.matchAll(/href="[^"]*?(App_[A-Za-z0-9_.-]+\.html)"/gi)].map(m=>m[1].split("/").pop());
-      return [...new Set(found)];
+      const html=await (await fetch("./?_="+Date.now(),{cache:"no-store"})).text();
+      const names=[...html.matchAll(/href="[^"]*?(App_[^"\/?#]+\.html)"/gi)].map(m=>decodeURIComponent(m[1]));
+      return [...new Set(names)];
     }catch(e){return [];}
   },
   async load(){
-    const files=await this.discover();
-    if(!files.length)return this.fallback();
-    const bust="?v="+Date.now(),cat=[];
-    await Promise.all(files.map(async f=>{
-      try{const res=await fetch(f+bust,{cache:"no-store"});if(!res.ok)return;
-        const man=this.parseManifest(await res.text());
-        if(man&&man.appId)cat.push(manifestToCatalog(man,f));
-        else console.warn("AppRegistry: no valid manifest in",f);
-      }catch(e){console.warn("AppRegistry: fetch failed",f,e);}
-    }));
-    if(cat.length){
-      const seen={},uniq=cat.filter(a=>seen[a.id]?false:(seen[a.id]=1));  /* dedupe by appId */
-      DB.d.appCatalog=uniq;try{localStorage.setItem(this.KEY,JSON.stringify(uniq));}catch(e){}
-    } else this.fallback();
-  },
-  fallback(){
-    try{const c=JSON.parse(localStorage.getItem(this.KEY));if(c&&c.length){DB.d.appCatalog=c;return;}}catch(e){}
-    if(!DB.d.appCatalog||!DB.d.appCatalog.length)
-      DB.d.appCatalog=BUILTIN_APP_CATALOG.map(a=>({...a,gradient:[...a.gradient],allowed:[...a.allowed]}));
+    const files=await this.listFiles();
+    if(files.length){
+      const cat=[],bust="?_="+Date.now();
+      await Promise.all(files.map(async f=>{
+        try{const r=await fetch(f+bust,{cache:"no-store"});if(!r.ok)return;
+          const j=this.manifestOf(await r.text());if(j&&j.appId)cat.push(manifestToCatalog(j,f));}catch(e){}
+      }));
+      if(cat.length){const seen={};DB.d.appCatalog=cat.filter(a=>seen[a.id]?false:(seen[a.id]=1));return;}
+    }
+    DB.d.appCatalog=BUILTIN_APP_CATALOG.map(a=>({...a,gradient:[...a.gradient],allowed:[...(a.allowed||["family","friends"])]}));
   }
 };
 const boolVal=v=>v===true||String(v).toLowerCase()==="true";
@@ -2114,9 +2140,11 @@ function renderApps(){
   ${installed.length?"":'<p style="color:var(--dim);font-size:13.5px;margin-top:14px;text-align:center">No apps yet — open the Kinetik Store to get one.</p>'}`;
   Motion.stagger("#appsBody .appico");
 }
-const Store={view:"list",detailId:null,
+const CAT_LABEL={games:"Games",sports:"Sports",cooking:"Cooking",lifestyle:"Lifestyle",habits:"Self-Improvement",kids:"Kids & Education",entertainment:"Entertainment",health:"Health",finance:"Money",productivity:"Productivity",travel:"Travel",faith:"Faith",memories:"Memories",music:"Music"};
+const catLabel=c=>CAT_LABEL[c]||(c?c[0].toUpperCase()+c.slice(1):"Apps");
+const Store={view:"list",detailId:null,query:"",cat:"all",
   open(){
-    this.view="list";this.detailId=null;
+    this.view="list";this.detailId=null;this.query="";this.cat="all";
     $("#storeSub").textContent="Apps for "+(circle()?circle().name:"your circle");
     this.render();
     $("#storeScreen").classList.add("on");
@@ -2130,49 +2158,84 @@ const Store={view:"list",detailId:null,
     const style=light?'style="background:rgba(255,255,255,.94);color:#0d1426"':"";
     return `<button class="getbtn ${soon?"soon":""}" ${style} onclick="event.stopPropagation();${inst?`storeOpen('${a.id}')`:`storeGet('${a.id}')`}">${soon?"SOON":inst?"OPEN":"GET"}</button>`;
   },
+  grad(a){return `linear-gradient(135deg,${a.gradient[0]},${a.gradient[1]})`;},
+  card(a){
+    return `<div class="ascard" onclick="Store.detail('${a.id}')">
+      <div class="art" style="background:${this.grad(a)}">${a.glyph}</div>
+      <div class="rw"><span class="ic" style="background:${this.grad(a)}">${a.glyph}</span>
+        <div style="min-width:0"><b>${esc(a.name)}</b><small>${esc(catLabel(a.category))}</small></div>${this.getBtn(a)}</div>
+    </div>`;
+  },
+  listRow(a){
+    const inst=this.isInst(a.id),soon=a.status==="soon";
+    return `<div class="strow" style="cursor:pointer" onclick="Store.detail('${a.id}')"><span class="ic" style="background:${this.grad(a)}">${a.glyph}</span>
+      <div style="min-width:0"><b>${esc(a.name)}</b><p>${esc(a.tagline)}</p>${inst&&!soon?`<button class="rm" onclick="event.stopPropagation();storeRm('${a.id}')">Remove from circle</button>`:`<p style="font-size:10.5px;color:var(--faint);font-weight:700">${esc(catLabel(a.category))}</p>`}</div>
+      ${this.getBtn(a)}</div>`;
+  },
   render(){
     if(this.view==="detail")return this.renderDetail();
     const c=circle(),B=$("#storeInner");
     const avail=DB.d.appCatalog.filter(a=>a.allowed.includes(c.type));
-    const featured=avail.find(a=>a.status==="live"&&!this.isInst(a.id))||avail.find(a=>a.status==="live");
-    const rows=avail.length?avail.map(a=>{
-      const inst=this.isInst(a.id),soon=a.status==="soon";
-      return `<div class="strow" style="cursor:pointer" onclick="Store.detail('${a.id}')"><span class="ic" style="background:linear-gradient(135deg,${a.gradient[0]},${a.gradient[1]})">${a.glyph}</span>
-      <div style="min-width:0"><b>${esc(a.name)}</b><p>${esc(a.tagline)}</p>${inst&&!soon?`<button class="rm" onclick="event.stopPropagation();storeRm('${a.id}')">Remove from circle</button>`:`<p style="font-size:10.5px;color:var(--faint);font-weight:700">${esc(a.category||"App")}</p>`}</div>
-      ${this.getBtn(a)}</div>`;
-    }).join(""):`<p style="padding:12px 0;color:var(--dim);font-size:13.5px">No apps are available for this circle type yet.</p>`;
-    B.innerHTML=`
-    ${featured?`<div class="feat" style="background:linear-gradient(135deg,${featured.gradient[0]},${featured.gradient[1]});cursor:pointer" onclick="Store.detail('${featured.id}')">
-      <span class="k">FEATURED</span><h3>${esc(featured.name)}</h3><p>${esc(featured.tagline)}</p>
-      <div class="fr"><span class="ic">${featured.glyph}</span>${this.getBtn(featured,true)}</div></div>`:""}
-    <div class="lbl" style="margin:4px 2px 9px">All apps</div>
-    <div class="me-sec glass" style="padding:4px 16px">${rows}</div>
-    <p style="font-size:11.5px;color:var(--faint);margin-top:12px;text-align:center">Apps install per circle · removing keeps your data</p>`;
-    Motion.stagger("#storeInner .feat, #storeInner .strow");
+    const cats=[...new Set(avail.map(a=>a.category))];
+    const q=this.query.trim().toLowerCase();
+    const searchOpen=`<div class="asearch"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      <input id="asQ" placeholder="Search apps" value="${esc(this.query)}" autocomplete="off"></div>`;
+    const chips=`<div class="ascats">
+      <button class="chip ${this.cat==="all"?"on":""}" onclick="Store.setCat('all')">All</button>
+      ${cats.map(cat=>`<button class="chip ${this.cat===cat?"on":""}" onclick="Store.setCat('${cat}')">${esc(catLabel(cat))}</button>`).join("")}</div>`;
+    /* filtered view (search or category chip) -> vertical list */
+    if(q||this.cat!=="all"){
+      const hits=avail.filter(a=>(this.cat==="all"||a.category===this.cat)&&(!q||[a.name,a.tagline,a.category,a.desc].some(v=>String(v||"").toLowerCase().includes(q))));
+      B.innerHTML=searchOpen+chips+`<div class="me-sec glass" style="padding:4px 16px">${hits.length?hits.map(a=>this.listRow(a)).join(""):'<p style="padding:14px 0;color:var(--dim);font-size:13.5px">No apps match.</p>'}</div>`;
+      this.wire();return;
+    }
+    /* home: featured hero + per-category rows */
+    const featured=avail.find(a=>a.status==="live"&&!this.isInst(a.id))||avail.find(a=>a.status==="live")||avail[0];
+    let html=searchOpen+chips;
+    if(featured)html+=`<div class="ashero" style="background:${this.grad(featured)}" onclick="Store.detail('${featured.id}')">
+      <span class="glyph">${featured.glyph}</span><span class="tag">Featured</span><h3>${esc(featured.name)}</h3><p>${esc(featured.tagline)}</p>
+      <div class="row"><span class="ic">${featured.glyph}</span><div style="flex:1;min-width:0"><b style="font-size:14px">${esc(featured.name)}</b><div style="font-size:11px;opacity:.85">${esc(catLabel(featured.category))}</div></div>${this.getBtn(featured,true)}</div></div>`;
+    cats.forEach(cat=>{
+      const apps=avail.filter(a=>a.category===cat);if(!apps.length)return;
+      html+=`<div class="assec"><b>${esc(catLabel(cat))}</b>${apps.length>2?`<span onclick="Store.setCat('${cat}')" style="cursor:pointer">See all ›</span>`:""}</div>
+        <div class="asrow">${apps.map(a=>this.card(a)).join("")}</div>`;
+    });
+    html+=`<p style="font-size:11.5px;color:var(--faint);margin:6px 0 4px;text-align:center">Apps install per circle · removing keeps your data</p>`;
+    B.innerHTML=html;this.wire();
+    Motion.stagger("#storeInner .ascard, #storeInner .ashero");
   },
-  detail(id){this.view="detail";this.detailId=id;this.renderDetail();
-    $("#storeBody").scrollTop=0;},
+  wire(){
+    const q=$("#asQ");if(q)q.oninput=e=>{this.query=e.target.value;clearTimeout(this._t);this._t=setTimeout(()=>{const p=q.selectionStart;this.render();const n=$("#asQ");if(n){n.focus();try{n.setSelectionRange(p,p);}catch(e){}}},160);};
+  },
+  setCat(cat){this.cat=cat;this.render();$("#storeBody").scrollTop=0;},
+  detail(id){this.view="detail";this.detailId=id;this.renderDetail();$("#storeBody").scrollTop=0;},
   renderDetail(){
     const a=DataAPI.get("appCatalog",this.detailId);if(!a)return this.back();
     const B=$("#storeInner"),soon=a.status==="soon";
     $("#storeSub").textContent=esc(a.name);
+    const madeFor=(a.allowed||[]).map(t=>t[0].toUpperCase()+t.slice(1)).join(" · ")||"Circles";
+    const works=(a.worksWith||["standalone"]).map(w=>w[0].toUpperCase()+w.slice(1));
     B.innerHTML=`
-    <div class="sdhead">
-      <span class="ic" style="background:linear-gradient(135deg,${a.gradient[0]},${a.gradient[1]})">${a.glyph}</span>
-      <div style="min-width:0"><h2>${esc(a.name)}</h2><p>${esc(a.tagline)}</p>${this.getBtn(a)}</div>
+    <div class="adhero" style="background:${this.grad(a)}">
+      <div class="r"><span class="ic">${a.glyph}</span>
+        <div style="min-width:0"><h2>${esc(a.name)}</h2><p>${esc(a.tagline)}</p>${this.getBtn(a,true)}</div></div>
     </div>
-    <div class="sdinfo glass">
-      <div><div class="k">Rating</div><div class="v">${esc(a.rating||"—")}<small> ★</small></div></div>
-      <div><div class="k">Category</div><div class="v" style="font-size:12px">${esc(a.category||"App")}</div></div>
-      <div><div class="k">Made for</div><div class="v" style="font-size:12px">Circles</div></div>
-      <div><div class="k">Version</div><div class="v">${esc(a.version||"1.0")}</div></div>
+    <div class="adinfo">
+      <div><div class="k">Category</div><div class="v">${esc(catLabel(a.category))}</div></div>
+      <div><div class="k">Made for</div><div class="v">${esc(madeFor)}</div></div>
+      <div><div class="k">Works with</div><div class="v">${esc(works[0]||"Standalone")}</div></div>
+      <div><div class="k">Privacy</div><div class="v"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg> Circle</div></div>
     </div>
+    <div class="sdsec">Preview</div>
     <div class="shots">
       <div class="shot" style="background:linear-gradient(160deg,${a.gradient[0]},${a.gradient[1]})">${a.glyph}</div>
       <div class="shot" style="background:linear-gradient(20deg,${a.gradient[1]},${a.gradient[0]})">${a.glyph}</div>
+      <div class="shot" style="background:linear-gradient(120deg,${a.gradient[0]},${a.gradient[1]})">${a.glyph}</div>
     </div>
     <div class="sdsec">About</div>
     <p class="sdp">${esc(a.desc||a.tagline)}</p>
+    <div class="sdsec">Works with</div>
+    <div class="adchips">${works.map(w=>`<span class="adchip">${esc(w)}</span>`).join("")}${a.audience&&a.audience!=="all"?`<span class="adchip">${esc(a.audience[0].toUpperCase()+a.audience.slice(1))}</span>`:""}${a.minMembers>1?`<span class="adchip">${a.minMembers}+ players</span>`:""}</div>
     <div class="sdsec">Privacy</div>
     <p class="sdp">All data stays inside <b>${esc(circle().name)}</b>. Members of other circles never see it.</p>
     ${this.isInst(a.id)&&!soon?`<button class="rm" style="font-size:12.5px" onclick="storeRm('${a.id}')">Remove from circle</button>`:""}`;
